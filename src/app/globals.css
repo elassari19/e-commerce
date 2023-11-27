@@ -4,27 +4,44 @@
  
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210deg 20% 98.04%;
+    --foreground: 0deg 0% 100%;
+ 
+    --primary: 159.64deg 80.49% 40.2%;
+    --primary-foreground: 160.99deg 89.87% 30.98%;
+    --primary-dark: 174.63deg 82.72% 31.76%;
+    --primary-light: 148.57deg 84% 90.2%;
+ 
+    --info: 217.22deg 91.22% 59.8%;
+    --info-foreground: 191.23deg 93.44% 35.88%;
+    --info-dark: 191.23deg 93.44% 35.88%;
+    --info-light: 216deg 94.59% 92.75%;
 
+    --warning: 54.92deg 96.72% 88.04%;
+    --warning-foreground: 26.87deg 96.97% 61.18%;
+    --warning-dark: 48.05deg 88.98% 50.2%;
+    --warning-light: 34.29deg 100% 91.76%;
+
+    --error: 0deg 100% 50%;
+    --error-foreground: 5.61deg 78.08% 57.06%;
+    --error-dark: 5.61deg 78.08% 57.06%;
+    --error-light: 5.61deg 78.08% 57.06%;
+
+    --secondary: 220deg 8.94% 46.08%;
+    --secondary-foreground: 34.29deg 100% 91.76%;
+ 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
  
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
- 
-    --primary: #000;
-    --primary-foreground: #0005;
- 
-    --secondary: 12.99deg 100% 50.2%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
-    --muted: 210 40% 96.1%;
+
+    --muted: 220deg 8.94% 46.08%;
     --muted-foreground: 215.4 16.3% 46.9%;
  
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
@@ -72,11 +89,11 @@
   }
 
   html {
-    font-size: 62.5%;
+    font-size: 100%;
   }
 
   body {
-    @apply bg-background min-w-[100vw] min-h-[100vh];
+    @apply bg-background min-w-[100vw] min-h-[100vh] bg-background;
   }
 
   ::-webkit-scrollbar {

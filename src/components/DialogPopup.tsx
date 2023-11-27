@@ -12,18 +12,17 @@ import {
 import { cn } from "../lib/utils"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDialogElement> {
-  children: React.ReactNode,
-  parentNode: React.ReactNode,
+  dialogTrigger: React.ReactNode,
   dialogTitle?: React.ReactNode,
   dialogDescription?: React.ReactNode,
   dialogFooter?: React.ReactNode,
 }
 
-const DialogNav = ({ children, parentNode, dialogTitle, dialogDescription, dialogFooter, className }: Props) => {
+const DialogPopup = ({ children, dialogTrigger, dialogTitle, dialogDescription, dialogFooter, className }: Props) => {
   return (
     <Dialog>
       <DialogTrigger className="block w-full">
-        {parentNode}
+        {dialogTrigger}
       </DialogTrigger>
       <DialogContent className={cn("sm:max-w-[425px] md:max-w-[50%] lg:max-w-[40%] px-28", className)}>
         <DialogHeader>
@@ -32,9 +31,7 @@ const DialogNav = ({ children, parentNode, dialogTitle, dialogDescription, dialo
             {dialogDescription}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          {children}
-        </div>
+        {children}
         <DialogFooter>
           {dialogFooter}
         </DialogFooter>
@@ -43,4 +40,4 @@ const DialogNav = ({ children, parentNode, dialogTitle, dialogDescription, dialo
   )
 }
 
-export default DialogNav
+export default DialogPopup

@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/components/Providers'
+import HeaderSection from '@/components/headerSection'
 
 const inter = Inter({ subsets: ['cyrillic'] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: Props) {
     <html lang="en">
       <body className={inter.className}>
         <Providers>
+          <HeaderSection />
           {children}
         </Providers>
       </body>
