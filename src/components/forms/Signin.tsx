@@ -1,22 +1,19 @@
 "use client"
 
-import React, { use, useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { ColStack, RowStack } from '../layout'
 import { Button } from '../ui/button'
 import { Formik, Form } from 'formik';
 import FormikField from '../inputs/FormikField'
 import { signinSchema, signinType } from '../../schema'
 import { signIn, useSession } from 'next-auth/react'
-import { useToast } from '../ui/use-toast'
 import { useRouter } from 'next/navigation'
-import { FcGoogle } from "@/assets/icons"
-import Typography from '../layout/typography'
+import toast from 'react-hot-toast';
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
 const Signin = ({  }: Props) => {
   const router = useRouter()
-  const { toast } = useToast()
   const { data } = useSession()
 
   useLayoutEffect(() => {
@@ -44,10 +41,10 @@ const Signin = ({  }: Props) => {
     const data = await signIn('credentials', { redirect: false, ...values })
 
     if(data?.error) {
-      toast({ variant: "destructive", title: 'Failed', description: 'Something wrong' });
+      toast.error('Something wrong' );
       return;
     }
-    toast({ variant: "success", title: 'success', description: 'Sign in successeeded' })
+    toast.success('Sign in successeeded')
     router.refresh()
   };
 
@@ -93,7 +90,6 @@ const Signin = ({  }: Props) => {
                   <hr className='flex-1'/>
                 </RowStack>
 
-                {/* social section */}
                 </ColStack>
               </Form>
             )

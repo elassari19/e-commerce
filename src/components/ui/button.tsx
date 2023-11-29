@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react"
 import Link from "next/link"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300",
+  "w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300",
   {
     variants: {
       variant: {
@@ -17,15 +17,15 @@ const buttonVariants = cva(
           "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
         outline:
           "border border-slate-200 bg-inherit hover:bg-primary-forground/30 hover:text-primary-forground/50 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
-        ghost: "border-0 text-gray-400 dark:hover:bg-slate-800 dark:hover:text-slate-50",
+        ghost: "border-0 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
         dark: "text-white bg-black"
       },
       size: {
-        default: "h-20 px-4 py-2",
-        sm: "h-12 rounded-md px-6",
-        lg: "h-24 rounded-md px-8 text-lg",
-        icon: "h-36 w-28",
+        default: "h-20 px-4",
+        sm: "h-8 rounded-md px-2",
+        lg: "h-14 rounded-md text-lg",
+        icon: "h-10 w-28",
       },
     },
     defaultVariants: {

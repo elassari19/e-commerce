@@ -1,4 +1,4 @@
-import { Aperture, Compass, LayoutDashboard, Settings, Store, User, Users } from "lucide-react";
+import { Aperture, Compass, LayoutDashboard, LogOut, Minus, Settings, Store, User, Users } from "lucide-react";
 
 export const menuOptions = [
   { href: "/dashboard", title: "Dashboard", Icon: LayoutDashboard },
@@ -8,4 +8,15 @@ export const menuOptions = [
   { href: "/our-staf", title: "Our Staf", Icon: User },
   { href: "/settings", title: "Settings", Icon: Settings },
   { href: "/", title: "Store", Icon: Store },
+]
+
+export const userOptions = [
+  { href: "/dashboard", title: "Dashboard", Icon: LayoutDashboard },
+  { href: "/edit-profile", title: "Edit Profile", Icon: Settings },
+]
+
+export const catalog = [
+  { href: "/products", title: "Products", Icon: Minus },
+  { href: "/categores", title: "Gategores", Icon: Minus },
+  { href: "/attributes", title: "Attributes", Icon: Minus }
 ]

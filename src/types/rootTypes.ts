@@ -1,4 +1,3 @@
-export type rootModalsType = "searchModal" | "loginModal" | "signupModal" | "openMenu" | "openCategories" | "authNav" | "root.authNav"
 
 export type stateType = {
     country: {

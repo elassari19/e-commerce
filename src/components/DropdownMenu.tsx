@@ -5,21 +5,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import Link from "next/link"
-import { menuType } from "@/types/menu"
-import Image from "next/image"
+import { cn } from "../lib/utils"
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   menuTrigger: React.ReactNode,
+  menuHeader?: React.ReactNode,
   menuContent: React.ReactNode[]
 }
 
-const Dropdown = ({ menuTrigger, menuContent }: Props) => {
-  return <DropdownMenu >
+const Dropdown = ({ className, menuTrigger, menuHeader, menuContent }: Props) => {
+  return <DropdownMenu>
   <DropdownMenuTrigger className='px-2 outline-none row-stack gap-1'>
     {menuTrigger}
   </DropdownMenuTrigger>
-  <DropdownMenuContent className="mt-4">
+  <DropdownMenuContent className={cn("mt-4", className)}>
+    {menuHeader}
     {
       menuContent.map((item, idx) => {
         return (

@@ -3,9 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 
 export const initialState = {
-  panel: 0,
-  rootSearch: "",
-  active: false,
+  dashboardNav: false
 };
 
 const states = {
@@ -16,17 +14,14 @@ export const dashboardSlice = createSlice({
   name: "dashboard",
   initialState: states,
   reducers: {
-    handlePanel: (state: any, { payload }) => {
-      return { ...state, ...payload };
-    },
-    handleDashboardSchange: (state: any, { payload }) => {
+    dashboardHandler: (state: any, { payload }) => {
       return { ...state, ...payload };
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { handlePanel, handleDashboardSchange } = dashboardSlice.actions;
+export const { dashboardHandler } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
 

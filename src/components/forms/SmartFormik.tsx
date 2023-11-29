@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { useDispatch } from "react-redux"
 import { useFormik } from "formik"
 import { InferType } from "yup"
-import { reduxActionType } from "../../types/reduxActionType"
+import { reduxActionType } from "../../types/sliceActionType"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode

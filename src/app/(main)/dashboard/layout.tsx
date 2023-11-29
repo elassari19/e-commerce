@@ -1,7 +1,8 @@
-import Link from "next/link"
 import { getAuthSession } from "../../../lib/getAuthSession"
-import Typography from "../../../components/layout/typography"
+import HeaderSection from "@/components/nav/headerSection"
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
+import Design from "./Design"
 
 interface Props {
   children: React.ReactNode
@@ -14,24 +15,15 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: Props) => {
   // todo: check the user role (admin/gest/user)
   const session = await getAuthSession()
-  const role = session
-  console.log("role", role)
+  if(!session?.user){
+    return redirect("/sign-in")
+  }
+
   return (
-    <div>
-      {
-        [
-          { name: "Home", href: "/" },
-          { name: "Product", href: "/product" },
-          { name: "Admins", href: "/admin" },
-          { name: "Bills", href: "/bill" }
-        ].map(({ name, href }, idx) => (
-          <Link href={href} key={idx}>
-            <Typography font="bold">{name}</Typography>
-          </Link>
-        ))
-      }
+    <Design>
+      <HeaderSection />
       {children}
-    </div>
+    </Design>
   )
 }
 
