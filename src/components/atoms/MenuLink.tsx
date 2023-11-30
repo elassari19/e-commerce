@@ -2,7 +2,6 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Typography from "../layout/typography"
-import { motion } from "framer-motion"
 import { cn } from "../../lib/utils"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -24,7 +23,7 @@ const MenuLink = ({ className, href, Icon, title, isNav=true }: Props) => {
       href={href}
     >
       <Icon size={25} />
-      <motion.div animate={{ x: isNav ? 0 : -200 }} initial={{ x: -200 }} exit={{ x: 0 }}>
+      {/* <motion.div animate={{ x: isNav ? 0 : -200 }} initial={{ x: -200 }} exit={{ x: 0 }}> */}
         <Typography
           className={`
             text-secondary text-sm
@@ -33,7 +32,7 @@ const MenuLink = ({ className, href, Icon, title, isNav=true }: Props) => {
             ${!isNav && "hidden"}
           `}
         >{title}</Typography>
-      </motion.div>
+      {/* </motion.div> */}
     </Link>
   )
 }

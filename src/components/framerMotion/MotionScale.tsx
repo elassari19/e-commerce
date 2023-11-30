@@ -14,7 +14,6 @@ const MotionScale = ({ children }: Props) => {
         ease: [0, 0.71, 0.2, 1.01],
         scale: {
           type: "spring",
-          damping: 5,
         }
       }}
     >

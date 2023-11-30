@@ -1,10 +1,11 @@
 import SignIn from "./SignIn"
 import DropdownMenu from "../DropdownMenu"
-import MotionScale from "../framerMotion/MotionScale"
-import { userOptions } from "../../helpers/constants/Categories"
+import MotionSlide from "../framerMotion/MotionSlide"
+import { userOptions } from "@/helpers/constants/Categories"
 import Link from "next/link"
 import Typography from "../layout/typography"
 import SignOut from "./SignOut"
+import { slideInFromTop } from "@/helpers/constants/animations"
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   pathname: string
@@ -23,9 +24,9 @@ const UserAuth = ({ pathname, session }: Props) => {
         <DropdownMenu
           className="p-2 w-60 rounded-xl"
           menuTrigger={
-            <MotionScale>
+            <MotionSlide top="100">
               <div className="h-8 w-8 bg-primary rounded-full" />
-            </MotionScale>
+            </MotionSlide>
           }
           menuContent={
             [

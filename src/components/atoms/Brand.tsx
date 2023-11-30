@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { Store } from "lucide-react"
 import { RowStack } from "../layout"
 import Typography from "../layout/typography"
-import { easeInOut, motion } from "framer-motion"
+import { motion } from "framer-motion"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   nav?: boolean

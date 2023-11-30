@@ -1,21 +1,25 @@
 import React from "react"
-import { motion } from "framer-motion"
+import { easeIn, easeInOut, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  left?: boolean
-  right?: boolean
-  top?: boolean
-  bottom?: boolean
-  scale?: boolean
+  top?: string | number
+  bottom?: string | number
+  left?: string | number
+  right?: string | number
+  delay?: undefined | number
 }
 
-const MotionSlide = ({ children, className }: Props) => {
+const MotionSlide = ({ children, className, top, bottom, left, right, delay }: Props) => {
+  const yslide = top ? -100 : bottom ? 100 : 0
+  const xslide = left ? -100 : right ? 100 : 0
+
   return (
     <motion.div
-      transition={{ duration: .2, ease: "easeInOut" }}
-      layout
+      initial={{ y: yslide, x: xslide }}
+      animate={{ y: 0, x: 0 }}
+      transition={{ duration: .5, delay: delay ||.2, ease: "easeInOut", type: "spring", damping: 9 }}
       className={cn("", className)}
     >
       {children}

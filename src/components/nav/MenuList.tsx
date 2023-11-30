@@ -10,24 +10,28 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const MenuList = ({ nav }: Props) => {
   return (
-    <div className="p-4 py-8">
+    <ul className="p-4 py-8">
     {
       menuOptions.map((item , idx) => {
         if(idx == 1) return (
-          <AccordionTree
-            accordionTrigger={
-              <MenuLink Icon={Aperture} isNav={nav} title="Catalog" href="" />
-            }
-            accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} className="py-1" />))}
-          />
+          <li key={idx}>
+              <AccordionTree
+              accordionTrigger={
+                <MenuLink Icon={Aperture} isNav={nav} title="Catalog" href="" />
+              }
+              accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} className="py-1" />))}
+            />
+          </li>
         )
         return (
-          <MotionScale key={idx}>
-            <MenuLink {...item} isNav={nav} />
-          </MotionScale>
+          <li key={idx}>
+            <MotionScale>
+              <MenuLink {...item} isNav={nav} />
+            </MotionScale>
+          </li>
       )})
     }
-    </div>
+    </ul>
   )
 }
 

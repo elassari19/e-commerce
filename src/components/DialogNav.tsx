@@ -9,11 +9,12 @@ import { cn } from "@/lib/utils"
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   dialogTrigger: React.ReactNode
+  dialogContent: React.ReactNode
   dialogHeader?: React.ReactNode
   dialogFooter?: React.ReactNode
 }
 
-const DialogNav = ({ children, className, dialogTrigger, dialogHeader, dialogFooter }: IProps) => {
+const DialogNav = ({ className, dialogTrigger, dialogContent, dialogHeader, dialogFooter }: IProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -23,7 +24,7 @@ const DialogNav = ({ children, className, dialogTrigger, dialogHeader, dialogFoo
         <DialogHeader>
           {dialogHeader}
         </DialogHeader>
-        {children}
+        {dialogContent}
         <DialogFooter>
           {dialogFooter}
         </DialogFooter>
