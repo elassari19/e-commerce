@@ -17,7 +17,7 @@ const MenuList = ({ nav }: Props) => {
           <li key={idx}>
               <AccordionTree
               accordionTrigger={
-                <MenuLink Icon={Aperture} isNav={nav} title="Catalog" href="" />
+                <MenuLink Icon={Aperture} isNav={nav} title="Catalog" href="" className="py-5" />
               }
               accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} className="py-1" />))}
             />
@@ -26,7 +26,7 @@ const MenuList = ({ nav }: Props) => {
         return (
           <li key={idx}>
             <MotionScale>
-              <MenuLink {...item} isNav={nav} />
+              <MenuLink {...item} isNav={nav} className="py-5" />
             </MotionScale>
           </li>
       )})

@@ -1,16 +1,17 @@
-import { BadgeAlert, BadgeCheck, BadgeDollarSign, CalendarClock, Car, Check, RefreshCcw, ShoppingCart } from "lucide-react"
-import CardOverview from "../../../components/cards/CardOverview"
-import Typography from "../../../components/layout/typography"
-import GridContainer from "../../../components/layout/GridContainer"
-import CardOrders from "../../../components/cards/CardOrders"
-import GridItems from "../../../components/layout/GridItems"
+import { BadgeAlert, BadgeCheck, BadgeDollarSign, CalendarClock, Check, RefreshCcw, ShoppingCart, Truck } from "lucide-react"
+import CardOverview from "@/components/cards/CardOverview"
+import Typography from "@/components/layout/typography"
+import GridContainer from "@/components/layout/GridContainer"
+import CardOrders from "@/components/cards/CardOrders"
+import GridItems from "@/components/layout/GridItems"
+import HighCharts from "../../../components/cards/HighCharts"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
 const page = ({  }: Props) => {
-  return <main className="min-h-screen p-8 py-4">
+  return <main className="min-h-screen p-8 py-4 flex flex-col gap-6">
     <section className="flex flex-col gap-6">
-      <Typography heading="h2" className="font-bold text-lg text-secondary">Dashboard Overview</Typography>
+      <Typography heading="h2" className="font-semibold text-lg">Dashboard Overview</Typography>
       <GridContainer>
       {
         [
@@ -32,7 +33,7 @@ const page = ({  }: Props) => {
           [
             { variant: "orange", Icon: ShoppingCart, status: "Total Order", total: "625" },
             { variant: "info", Icon: RefreshCcw, status: "Total Order", total: "625", amount: 458054.45 },
-            { variant: "infoDark", Icon: Car, status: "Total Order", total: "625" },
+            { variant: "infoDark", Icon: Truck, status: "Total Order", total: "625" },
             { variant: "primary", Icon: Check, status: "Total Order", total: "625" },
           ].map((item, idx) => (
             <GridItems key={idx} className="md:col-span-3 xl:col-span-3">
@@ -42,6 +43,41 @@ const page = ({  }: Props) => {
           ))
         }
       </GridContainer>
+    </section>
+    <section className="grid grid-cols-12 gap-4">
+      <div className="col-span-12 md:col-span-6 p-4 border-xl bg-foreground border rounded-xl">
+        <HighCharts
+          type="line"
+          title="Weekly Sales"
+          series={[{
+            name: "Sales",
+            color: "#f007",
+            data: [34, 43, 56, 73, 53, 35, 40, 90, 34]
+          }]}
+        />
+      </div>
+
+      <div className="col-span-12 md:col-span-6 p-4 border-xl bg-foreground border rounded-xl">
+        <HighCharts
+          type="pie"
+          title="Best Selling Products"
+          series={[{
+            data: [
+              { name: "Iphone 15 Pro Max", color: "#0f08", y: 5 },
+              { name: "Samsung Ultra S23", color: "#f007", y: 15 },
+              { name: "Haiwy Mate 20", color: "#00f8", y: 25 },
+              { name: "Nokia N71", color: "#0f48", y: 45 },
+              { name: "Sony Expirya", color: "#0f0", y: 10 },
+            ]
+          }]}
+        />
+      </div>
+    </section>
+
+    {/* Recent Order */}
+    <section className="flex flex-col gap-6">
+      <Typography heading="h2" className="font-semibold text-lg">Recent Order</Typography>
+      <div>table todo</div>
     </section>
   </main>
 }
