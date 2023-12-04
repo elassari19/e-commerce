@@ -4,7 +4,9 @@ import Typography from "@/components/layout/typography"
 import GridContainer from "@/components/layout/GridContainer"
 import CardOrders from "@/components/cards/CardOrders"
 import GridItems from "@/components/layout/GridItems"
-import HighCharts from "../../../components/cards/HighCharts"
+import HighCharts from "@/components/cards/HighCharts"
+import OrdersTable from "@/components/tabls/OrdersTable"
+import fakeData from "@/helpers/constants/fakeData.json"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
@@ -77,7 +79,7 @@ const page = ({  }: Props) => {
     {/* Recent Order */}
     <section className="flex flex-col gap-6">
       <Typography heading="h2" className="font-semibold text-lg">Recent Order</Typography>
-      <div>table todo</div>
+      <OrdersTable data={fakeData} />
     </section>
   </main>
 }
