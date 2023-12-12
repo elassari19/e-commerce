@@ -19,7 +19,7 @@ const MenuList = ({ nav }: Props) => {
               accordionTrigger={
                 <MenuLink Icon={Aperture} isNav={nav} title="Catalog" href="" className="py-5" />
               }
-              accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} className="py-1" />))}
+              accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} href={item.href} className="py-1" />))}
             />
           </li>
         )

@@ -3,9 +3,10 @@ import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
 import Typography from "../layout/typography"
 import { LucideIcon } from "lucide-react"
+import MainCard from "./MainCard"
 
 const Variants = cva(
-  "flex flex-col justify-start items-center border rounded-xl gap-4 p-4 text-white text-center",
+  "flex flex-col justify-start items-center gap-4 text-white text-center",
   {
     variants: {
       variant: {
@@ -39,7 +40,7 @@ VariantProps<typeof Variants> {
 
 const CardOverview = ({ className, variant, size, Icon, title, amount, cash, card, credit }: Props) => {
   return (
-    <div
+    <MainCard
       className={cn('',Variants({ variant, size }), className)}
     >
       {Icon && <Icon size={32} />}
@@ -62,7 +63,7 @@ const CardOverview = ({ className, variant, size, Icon, title, amount, cash, car
           )))
         }
       </div>
-    </div>
+    </MainCard>
   )
 }
 

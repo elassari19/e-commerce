@@ -16,7 +16,7 @@ export const userOptions = [
 ]
 
 export const catalog = [
-  { href: "/products", title: "Products", Icon: Minus },
-  { href: "/categores", title: "Gategores", Icon: Minus },
-  { href: "/attributes", title: "Attributes", Icon: Minus }
+  { href: "/dashboard/products", title: "Products", Icon: Minus },
+  { href: "/dashboard/categories", title: "categories", Icon: Minus },
+  { href: "/dashboard/attributes", title: "Attributes", Icon: Minus }
 ]

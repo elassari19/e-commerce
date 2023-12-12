@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
 import Typography from "../layout/typography"
 import { LucideIcon } from "lucide-react"
+import MainCard from "./MainCard"
 
 const Variants = cva(
   "rounded-full p-4",
@@ -32,8 +33,8 @@ VariantProps<typeof Variants> {
 
 const CardOrders = ({ className, variant, Icon, status, amount, total }: Props) => {
   return (
-    <div
-      className={cn('flex gap-6 p-4 items-center border bg-foreground rounded-lg', className)}
+    <MainCard
+      className={cn('flex gap-6 p-4 items-center', className)}
     >
       <div className={cn('',Variants({ variant }))}>
         <Icon size={20} />
@@ -43,7 +44,7 @@ const CardOrders = ({ className, variant, Icon, status, amount, total }: Props) 
         {amount && <Typography heading="p" variant="h5" className="text-red-600 font-semibold">({amount})</Typography>}
         <Typography heading="p" variant="h3" className="font-bold">{total}</Typography>
       </div>
-    </div>
+    </MainCard>
   )
 }
 

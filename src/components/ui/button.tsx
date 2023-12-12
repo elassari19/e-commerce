@@ -6,25 +6,23 @@ import { Loader2 } from "lucide-react"
 import Link from "next/link"
 
 const buttonVariants = cva(
-  "w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300",
+  "w-full inline-flex items-center justify-center gap-2 text-sm rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300",
   {
     variants: {
       variant: {
-        default: "bg-primary-foreground hover:bg-primary",
+        default: "bg-foreground hover:bg-background",
+        primary: "bg-primary-foreground/60 hover:bg-primary text-slate-50",
         secondary:
-          "bg-secondary text-white hover:bg-secondary-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80",
+          "bg-secondary text-white hover:bg-secondary-200 dark:bg-slate-800",
         destructive:
-          "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
+          "bg-red-500 text-slate-50 hover:bg-red-500/90",
         outline:
-          "border border-slate-200 bg-inherit hover:bg-primary-forground/30 hover:text-primary-forground/50 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
-        ghost: "border-0 dark:hover:bg-slate-800 dark:hover:text-slate-50",
-        link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
-        dark: "text-white bg-black"
+          "border border-slate-300 bg-inherit hover:bg-background",
       },
       size: {
-        default: "h-20 px-4",
-        sm: "h-8 rounded-md px-2",
-        lg: "h-14 rounded-md text-lg",
+        default: "h-12",
+        sm: "h-8 px-2",
+        lg: "h-14 text-lg",
         icon: "h-10 w-28",
       },
     },
