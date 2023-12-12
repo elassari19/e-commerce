@@ -7,6 +7,7 @@ import GridItems from "@/components/layout/GridItems"
 import HighCharts from "@/components/cards/HighCharts"
 import OrdersTable from "@/components/tabls/OrdersTable"
 import fakeData from "@/helpers/constants/fakeData.json"
+import MainCard from "@/components/cards/MainCard"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
@@ -46,8 +47,10 @@ const page = ({  }: Props) => {
         }
       </GridContainer>
     </section>
+
+    {/* charts section */}
     <section className="grid grid-cols-12 gap-4">
-      <div className="col-span-12 md:col-span-6 p-4 border-xl bg-foreground border rounded-xl">
+      <MainCard className="col-span-12 md:col-span-6">
         <HighCharts
           type="line"
           title="Weekly Sales"
@@ -57,9 +60,9 @@ const page = ({  }: Props) => {
             data: [34, 43, 56, 73, 53, 35, 40, 90, 34]
           }]}
         />
-      </div>
+      </MainCard>
 
-      <div className="col-span-12 md:col-span-6 p-4 border-xl bg-foreground border rounded-xl">
+      <MainCard className="col-span-12 md:col-span-6">
         <HighCharts
           type="pie"
           title="Best Selling Products"
@@ -73,13 +76,13 @@ const page = ({  }: Props) => {
             ]
           }]}
         />
-      </div>
+      </MainCard>
     </section>
 
     {/* Recent Order */}
     <section className="flex flex-col gap-6">
       <Typography heading="h2" className="font-semibold text-lg">Recent Order</Typography>
-      <OrdersTable data={fakeData} />
+      <OrdersTable data={fakeData} action="order" />
     </section>
   </main>
 }
