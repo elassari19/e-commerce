@@ -39,19 +39,22 @@ model Session {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
   role      String?
   name      String?
-  email     String    @unique
+  email     String      @unique
   password  String
   image     String?
   code      String
   city      String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
   accounts  Account[]
   sessions  Session[]
-  Product   Product[]
+  product   Product[]
+  category  Category[]
+  Reviews   Reviews[]
+  CreatedBy CreatedBy[]
 }
 
 model VerificationToken {
@@ -64,20 +67,64 @@ model VerificationToken {
 }
 
 model Product {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  category      String
-  brand         String?
-  name          String
-  description   String
-  imageUrl      String[]
-  price         String
-  stock         String
-  isCoice       Boolean
-  isFreeChiping Boolean
-  size          String[]
-  color         String[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  User          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String?  @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  brand       String?
+  name        String
+  slug        String      @unique
+  description String
+  images      ImageUrl[]
+  price       String
+  reviews     Reviews[]
+  quantity    String
+  tags        String[]
+  barcode     String[]
+  size        String[]
+  color       String[]
+  createdBy   CreatedBy[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  User        User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?     @db.ObjectId
+  Category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?     @db.ObjectId
 }
+
+model CreatedBy {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?  @db.ObjectId
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
+}
+
+model Reviews {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?  @db.ObjectId
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
+}
+
+model ImageUrl {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  public_id  String
+  secure_url String
+  Product    Product? @relation(fields: [productId], references: [id])
+  productId  String?  @db.ObjectId
+}
+
+model Category {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String    @unique
+  description String
+  parentId    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  User        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?   @db.ObjectId
+  Product     Product[]
+}
+
+// npx prisma generate
+// npx prisma db push
