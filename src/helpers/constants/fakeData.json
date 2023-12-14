@@ -2,27 +2,6 @@
   "orders": [
       {
           "user_info": {
-              "name": "Hồ Hải",
-              "contact": "325435435",
-              "email": "hovanthu30041983@gmail.com",
-              "address": "24",
-              "country": "Việt Nam",
-              "city": "04",
-              "zipCode": "5353"
-          },
-          "discount": 0,
-          "_id": "656b1dd70e81100008629164",
-          "paymentMethod": "Cash",
-          "status": "Processing",
-          "subTotal": 615.9,
-          "shippingCost": 20,
-          "total": 635.9,
-          "createdAt": "2023-12-02T12:06:47.754Z",
-          "updatedAt": "2023-12-02T15:47:56.146Z",
-          "invoice": 10631
-      },
-      {
-          "user_info": {
               "name": "An Tran",
               "contact": "0946003444",
               "email": "phamtrangiaasdan27@asadgmail.com",

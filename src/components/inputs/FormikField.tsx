@@ -4,6 +4,10 @@ import { cn } from "@/lib/utils"
 import { VariantProps, cva } from "class-variance-authority"
 import { ErrorMessage, Field, FieldAttributes } from "formik"
 import { UseMemo } from "../layout"
+import { UploadCloud } from "lucide-react"
+import Typography from "../layout/typography"
+import Image from "next/image"
+import { Input } from "../ui/input"
 
 const InputVariants = cva(
   "flex border border-black-300 flex-row gap-4 items-center justify-center p-3 py-1 rounded-md text-md font-medium border outline-none",
@@ -33,6 +37,35 @@ export interface InputProps
 
 const FormikField = React.forwardRef<HTMLInputElement, InputProps>(
   ({ children, className, variant, preIcon, sufIcon, name, ...props }, ref) => {
+    
+    if (props.type === "file") {
+      return (
+        <UseMemo dependencies={[props.value]}>
+          <div
+            className={cn(InputVariants({ variant, className }), "h-40 relative border-2 border-dashed border-primary")}
+          >
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4">
+              <UploadCloud size={34} className="text-primary font-bold" />
+              <Typography heading="p">Drag your images here</Typography>
+              <Typography heading="p" variant="h6" className="text-gray-400">(Only *.jpeg, *.webp and *.png images will be accepted)</Typography>
+            </div>
+            <Field
+              id={name}
+              name={name}
+              value={props.value}
+              placeholder={props.placeholder}
+              {...props}
+              ref={ref}
+              className="w-full h-full absolute left-0 top-0 opacity-0 border"
+            />
+          </div>
+
+          <div className="text-sm relative text-red-800 left-0 bg-background h-4 text-start p-1 px-4 mb-2">
+            <ErrorMessage name={name} className="absolute z-10 top-0" />
+          </div>
+        </UseMemo>
+      )
+  }
 
     return (
       <UseMemo dependencies={[props.value]}>
@@ -44,17 +77,18 @@ const FormikField = React.forwardRef<HTMLInputElement, InputProps>(
           <Field
             id={name}
             name={name}
-            vlaue={props.value}
+            value={props.value}
             placeholder={props.placeholder}
             {...props}
             ref={ref}
-            className="flex-1 h-8 w-full bg-inherit px-3 py-2 text-sm placeholder:text-slate-500 outline-none"
+            className="flex-1 min-h-8 w-full bg-inherit px-3 py-2 text-sm placeholder:text-slate-500 outline-none"
           />
           {children}
           {sufIcon}
         </div>
-        <div className="text-xs text-red-800 h-4 text-center ">
-          <ErrorMessage name={name} />
+        
+        <div className="text-sm relative text-red-800 left-0 bg-background h-4 text-start p-1 px-4 mb-2">
+          <ErrorMessage name={name} className="absolute z-10 top-0" />
         </div>
       </UseMemo>
     )

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ZoomInIcon } from "lucide-react";
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
 import { useDispatch, useSelector } from "react-redux";
-import { dashboardHandler, deleteProductHandler } from "@/store/dashboard";
+import { dashboardHandler } from "@/store/dashboard";
 import { RootState } from "@/store";
 import { Action } from "@/store/actions/dashboardStoreActions";
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
@@ -51,7 +51,7 @@ const OrdersTable = ({ className, data, action }: Props) => {
     width: 140
   }), [])
 
-  // select item based on state name ex: state.dashboard.catagories
+  // @ts-ignore select state based on state name ex: state.dashboard.catagories
   const dashboard = useSelector((state: RootState) => state.dashboard[action])
   const dispatch = useDispatch()
 
@@ -71,7 +71,7 @@ const OrdersTable = ({ className, data, action }: Props) => {
   return <div className={cn("ag-theme-quartz min-h-screen", className)} style={{ height: 100 }}>
     <AgGridReact
       defaultColDef={defaultColDef}
-      rowData={rowData}
+      rowData={[...rowData, ...rowData, ...rowData, ...rowData, ...rowData]}
       
       // @ts-ignore
       columnDefs={colDefs}
@@ -81,6 +81,8 @@ const OrdersTable = ({ className, data, action }: Props) => {
       pagination={true}
       rowSelection="multiple"
       className="h-full"
+      paginationPageSize={20}
+      onPaginationChanged={e => console.log(e)}
     /> 
   </div>
 }

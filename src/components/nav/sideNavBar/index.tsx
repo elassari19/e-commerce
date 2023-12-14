@@ -8,7 +8,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const index = ({ className, nav }: Props) => {
   return (
-    <nav className={cn(" flex flex-col p-2 gap-2 bg-foreground min-h-screen", className)}>
+    <nav className={cn("transition-all duration-200 flex flex-col p-2 gap-2 bg-foreground min-h-screen", className)}>
       <Brand nav={nav} />
       <MenuList nav={nav} />
     </nav>
