@@ -4,27 +4,37 @@ import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { db } from "@/lib/db";
 import { categorySchema } from "@/schema/productSchema";
 import { Button } from "../ui/button";
 import FormikField from "../inputs/FormikField";
 import * as SheetPrimitive from "@radix-ui/react-dialog"
+import { categoriesType } from "@/types/categories";
+import { Category } from "@prisma/client";
+import SelectInput from "../SelectInput";
+interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  categories: Category[]
+}
 
-interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {}
-
-const CategoryForm = ({ className }: Props) => {
+const CategoryForm = ({ className, categories }: Props) => {
   const router = useRouter()
 
-  const onSubmit = async (values: any) => {
-    const res = await db.category.create(values);
-    console.log("res.category", res)
-    if(res) {
-      toast.success(`create ${values.email} account successeeded`)
+  const onSubmit = async (values: categoriesType) => {
+    values.parentId = categories.filter((item) => item.slug === values.parentId)[0]?.id || ""
+
+    // console.log("values", values)
+    const res = await fetch("/api/dashboard/categories", {
+      method: "POST",
+      body: JSON.stringify({
+        ...values,
+      })
+    });
+
+    if(res.ok) {
+      toast.success(`create ${values.slug} Category successeeded`)
       router.refresh()
-      router.push('/sign-in')
-      return;
+      // router.replace('/dashboard/categories/')
     }
-    toast.error(`create ${values.email} account Faileded` )
+    toast.error(`create ${values.slug} Category Faileded` )
   };
 
   return (
@@ -34,7 +44,6 @@ const CategoryForm = ({ className }: Props) => {
       initialValues={{
         name: "",
         description: "",
-        images: [],
         parentId: ""
       }}
       className={cn('', className)}
@@ -45,8 +54,22 @@ const CategoryForm = ({ className }: Props) => {
           [
             { lable: "Category Title/Name", name: "name" },
             { lable: "Category Description", name: "description", component:"textarea", rows: 5 },
-            { lable: "Category Description", name: "description" },
+            { lable: "Parent Category", name: "parentId", categories },
           ].map(({ lable, name, ...rest }, idx) => {
+            if(name === "parentId") {
+              return (
+                <div key={idx} className="grid grid-cols-12 items-start w-full">
+                  <label htmlFor={name} className="col-span-4 text-sm mt-4">{lable}</label>
+                  <div className="col-span-8">
+                    <SelectInput
+                      placeholder="Select Category"
+                      data={categories}
+                      onSelect={(e) => formik.setFieldValue("parentId", e)}
+                    />
+                  </div>
+                </div>
+              )
+            }
             return (
               <div key={idx} className="grid grid-cols-12 items-start w-full">
                 <label htmlFor={name} className="col-span-4 text-sm mt-4">{lable}</label>
@@ -64,28 +87,28 @@ const CategoryForm = ({ className }: Props) => {
 
         {/* form action */}
         <div className="py-8 fixed p-8 bottom-0 left-0 right-0 bg-foreground shadow-md shadow-primary">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 md:col-span-6">
-            <Button
-              type="submit"
-              variant="primary"
-              size="sm"
-              className="h-14"
-              disabled={!formik.isValid && formik.isSubmitting}
-            >Add Product</Button>
-          </div>
-          <div className="col-span-12 md:col-span-6">
-            <SheetPrimitive.Close className="w-full">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-12 md:col-span-6">
               <Button
                 type="submit"
-                variant="outline-destructive"
+                variant="primary"
                 size="sm"
                 className="h-14"
                 disabled={!formik.isValid && formik.isSubmitting}
-              >Cancel</Button>
-            </SheetPrimitive.Close>
+              >Add Product</Button>
+            </div>
+            <div className="col-span-12 md:col-span-6">
+              <SheetPrimitive.Close className="w-full">
+                <Button
+                  type="submit"
+                  variant="outline-destructive"
+                  size="sm"
+                  className="h-14"
+                  disabled={!formik.isValid && formik.isSubmitting}
+                >Cancel</Button>
+              </SheetPrimitive.Close>
+            </div>
           </div>
-        </div>
         </div>
       </Form>)
       }

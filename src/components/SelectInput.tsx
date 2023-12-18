@@ -5,35 +5,33 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { RowStack } from "./layout"
+import { cn } from "../lib/utils"
 
 interface Props {
+  placeholder: React.ReactNode
   children?: React.ReactNode
-  defaultValue: React.ReactNode
-  items: any[]
+  data: any[]
+  onSelect: (event: any) => void
 }
 
-const SelectInput = ({ children, defaultValue, items }: Props) => {
+const SelectInput = ({ placeholder, data, onSelect }: Props) => {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a country" />
+    <Select onValueChange={onSelect}>
+      <SelectTrigger className={cn("w-full")}>
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>{defaultValue}</SelectLabel>
-          {children}
+        {/* {selectTrigger} */}
           {
-            items.map((item, idx) => (<SelectItem key={idx} value={item.name}>
-              <RowStack className="gap-4">
-                <span>{item.flag}</span>
-                <span>{item.name}</span>
-              </RowStack>
-            </SelectItem>))
+            data.map((item, idx) => (
+              <SelectItem key={idx} value={item.slug}>
+                {item.slug}
+              </SelectItem>
+            ))
           }
         </SelectGroup>
       </SelectContent>

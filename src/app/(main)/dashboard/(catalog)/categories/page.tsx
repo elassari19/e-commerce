@@ -2,18 +2,20 @@ import Typography from "@/components/layout/typography"
 import { Button } from "@/components/ui/button"
 import MainCard from "@/components/cards/MainCard"
 import { Download, Plus, Trash2, Upload } from "lucide-react"
-import OrdersTable from "@/components/tabls/OrdersTable"
-import fakeData from "@/helpers/constants/fakeData.json"
+import CategoriesTable from "@/components/tabls/CategoriesTable"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
 import CreateDialog from "@/components/modals/CreateDialog"
 import CategoryForm from "@/components/forms/CategoryForm"
+import { db } from "@/lib/db"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
-const page = ({  }: Props) => {
+const page = async ({  }: Props) => {
+  const categories = await db.category.findMany()
+  // console.log("categories", categories)
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">
-      <Typography heading="h2" className="font-semibold text-lg">Products</Typography>
+      <Typography heading="h2" className="font-semibold text-lg">Category</Typography>
 
       {/* event section */}
       <section>
@@ -34,10 +36,10 @@ const page = ({  }: Props) => {
           {/* add product button & open dialog (modal/sheet) when click */}
           <div className="col-span-12 md:col-span-4 lg:col-span-4">
             <CreateDialog
-              sheetTitle="Add Product"
-              sheetDescription="Add your product and necessary information from here"
-              sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Product</Button>}
-              sheetContent={<CategoryForm />}
+              sheetTitle="Add Category"
+              sheetDescription="Add your Category and necessary information from here"
+              sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Category</Button>}
+              sheetContent={<CategoryForm categories={categories} />}
               className="w-full md:w-3/4"
             />
           </div>
@@ -46,7 +48,7 @@ const page = ({  }: Props) => {
       </section>
 
       <section>
-        <OrdersTable data={fakeData} action="products" />
+        <CategoriesTable data={categories} />
       </section>
     </main>
   )

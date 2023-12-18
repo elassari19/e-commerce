@@ -1,7 +1,6 @@
-import { StaticImageData } from "next/image";
-
 export type categoriesType = {
   name: string;
-  image: StaticImageData;
-  href: string;
+  slug?: string;
+  description?: string;
+  parentId?: string | null;
 }

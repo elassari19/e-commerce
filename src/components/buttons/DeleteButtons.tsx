@@ -7,20 +7,39 @@ import { RootState } from "@/store"
 import { useDispatch, useSelector } from "react-redux"
 import { dashboardHandler, deleteProductHandler } from "@/store/dashboard"
 import { Action } from "@/store/actions/dashboardStoreActions"
+import { useCallback } from "react"
+import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   action: Action
 }
 
 const DeleteButtons = ({ className, action }: Props) => {
+  // @ts-ignore
   const dashboard = useSelector((state: RootState) => state.dashboard[action])
   const dispatch = useDispatch()
-  const handleDelete = () => {
-    console.log(`delete all selected ${action}`)
-    return dispatch(dashboardHandler({
-      [action]: { ...dashboard, remove: [] }
-    }))
-  }
+  const router = useRouter()
+
+  const handleDelete = useCallback(async () => {
+    const deletData = await dashboard.remove.map((item: any) => item.id)
+    const res = await fetch(`/api/dashboard/${action}`, {
+      method: "DELETE",
+      body: JSON.stringify(deletData)
+    })
+
+    if(res.ok){
+      toast.success(`delete selected categories was Succeeded`)
+      dispatch(dashboardHandler({
+        [action]: { ...dashboard, remove: [] }
+      }))
+
+      router.refresh()
+      router.push('/dashboard/categories/')
+    } else {
+      toast.error(`delete selected categories was Failed`)
+    }
+  }, [dashboard])
 
   return (
     <div
