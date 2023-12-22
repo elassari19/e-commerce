@@ -11,7 +11,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   sheetDescription: string
 }
 
-const CreateDialog = ({ className, sheetTitle, sheetTrigger, sheetDescription, sheetContent, sheetFooter }: Props) => {
+const DialogForm = ({ className, sheetTitle, sheetTrigger, sheetDescription, sheetContent, sheetFooter }: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -37,4 +37,4 @@ const CreateDialog = ({ className, sheetTitle, sheetTrigger, sheetDescription, s
   )
 }
 
-export default CreateDialog
+export default DialogForm

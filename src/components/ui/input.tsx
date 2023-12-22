@@ -2,10 +2,9 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { VariantProps, cva } from "class-variance-authority"
-import UseMemo from "../layout/UseMemo"
 
 const InputVariants = cva(
-  "flex flex-row gap-4 items-center justify-center p-4 rounded-md text-xl font-medium border outline-none",
+  "flex border border-black-300 flex-row gap-4 items-center justify-center p-3 py-1 rounded-md text-sm font-medium border outline-none",
   {
     variants: {
       variant: {
@@ -33,21 +32,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ children, className, variant, preIcon, sufIcon, ...props }, ref) => {
 
     return (
-      <UseMemo dependencies={[props.value]}>
-        {/* input section */}
         <div
           className={cn(InputVariants({ variant, className }))}
         >
           {preIcon}
           <input
-            className="flex-1 h-8 w-full bg-inherit text-xl placeholder:text-slate-500 outline-none"
+            className="flex-1 h-8 w-full bg-inherit placeholder:text-slate-500 outline-none"
             ref={ref}
             {...props}
           />
           {children}
           {sufIcon}
         </div>
-      </UseMemo>
     )
   }
 )

@@ -10,28 +10,45 @@ import { Button } from "../ui/button";
 import FormikField from "../inputs/FormikField";
 import { useState } from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import * as SheetPrimitive from "@radix-ui/react-dialog"
+import SelectInput from "../SelectInput";
+import { Category } from "@prisma/client";
+import Properties from "../Properties";
+import { Input } from "../ui/input";
 
-interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {}
+interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  categories: Category[]
+}
 
-const ProductForm = ({ className }: Props) => {
+const ProductForm = ({ className, categories }: Props) => {
   const router = useRouter()
 
+  const [images, setImages] = useState<any[]>([])
+  const [properties, setProperties] = useState<{name: string, value: string}[]>([
+      { name: "", value: "" }
+    ])
+
   const onSubmit = async (values: any) => {
-    const res = await db.product.create(values);
-    console.log("res", res)
-    if(res) {
-      toast.success(`create ${values.email} account successeeded`)
-      router.refresh()
-      router.push('/sign-in')
-      return;
-    }
-    toast.error(`create ${values.email} account Faileded` )
+    console.log("onSubmit", {...values, properties, images})
+    // const res = await db.product.create({
+    //   data: {
+    //     ...values,
+    //     properties
+    //   }
+    // });
+    // console.log("res", res)
+    // if(res) {
+    //   toast.success(`create ${values.email} account successeeded`)
+    //   router.refresh()
+    //   router.push('/sign-in')
+    //   return;
+    // }
+    // toast.error(`create ${values.email} account Faileded` )
   };
 
   const uploadImagesHandler = async (e: any) => {
-    const file = [...e.currentTarget.files].map(async (fl: any) => {
+    [...e.currentTarget.files].map(async (fl: any) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImages(pre => [...pre, { path: URL.createObjectURL(fl), file: reader.result }])
@@ -42,9 +59,7 @@ const ProductForm = ({ className }: Props) => {
     // console.log("uploadImages", res.body)
   }
 
-  const [images, setImages] = useState<any[]>([])
-
-  return (
+    return (
     <Formik
       onSubmit={onSubmit}
       validationSchema={productSchema}
@@ -52,13 +67,8 @@ const ProductForm = ({ className }: Props) => {
         name: "",
         description: "",
         images: [],
-        barcode: "",
         category: "",
         price: "0",
-        tags: "",
-        quantity: 0,
-        size: "md",
-        color: "black"
       }}
       className={cn('', className)}
     >
@@ -72,12 +82,38 @@ const ProductForm = ({ className }: Props) => {
             { lable: "Product Images", name: "images", type: "file", multiple: true,
               onChange: (e: any) => {uploadImagesHandler(e), formik.setFieldValue("images", images)}
             },
-            { lable: "Product Barcode", name: "barcode" },
             { lable: "Category", name: "category" },
             { lable: "Product Price", name: "price" },
             { lable: "Product Quantity", name: "quantity" },
-            { lable: "Product Tags", name: "tags" },
+            {
+              lable: "Product Properties", name: "properties",
+            },
           ].map(({ lable, name, ...rest }, idx) => {
+            if(name === "properties"){
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-12" key={idx}>
+                  <label htmlFor={name} className="col-span-full text-md my-4">{lable}</label>
+                  <Properties
+                    properties={properties}
+                    setProperties={setProperties}
+                  />
+                </div>
+              )
+            }
+            if(name === "category") {
+              return (
+                <div key={idx} className="grid grid-cols-12 items-start w-full">
+                  <label htmlFor={name} className="col-span-4 text-sm mt-4">{lable}</label>
+                  <div className="col-span-8">
+                    <SelectInput
+                      placeholder="Select Category"
+                      data={categories}
+                      onSelect={(e) => formik.setFieldValue("category", e)}
+                    />
+                  </div>
+                </div>
+              )
+            }
             return (
               <div key={idx} className="grid grid-cols-12 items-start w-full">
                 <label htmlFor={name} className="col-span-4 text-sm mt-4">{lable}</label>
@@ -127,16 +163,15 @@ const ProductForm = ({ className }: Props) => {
               size="sm"
               className="h-14"
               disabled={!formik.isValid && formik.isSubmitting}
+              isLoading={formik.isSubmitting}
             >Add Product</Button>
           </div>
           <div className="col-span-12 md:col-span-6">
             <SheetPrimitive.Close className="w-full">
               <Button
-                type="submit"
                 variant="outline-destructive"
                 size="sm"
                 className="h-14"
-                disabled={!formik.isValid && formik.isSubmitting}
               >Cancel</Button>
             </SheetPrimitive.Close>
           </div>

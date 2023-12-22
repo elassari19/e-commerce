@@ -67,26 +67,31 @@ model VerificationToken {
 }
 
 model Product {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   brand       String?
   name        String
-  slug        String      @unique
+  slug        String       @unique
   description String
   images      ImageUrl[]
   price       String
   reviews     Reviews[]
   quantity    String
-  tags        String[]
-  barcode     String[]
-  size        String[]
-  color       String[]
+  properties  Properties[]
   createdBy   CreatedBy[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  User        User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?     @db.ObjectId
-  Category    Category?   @relation(fields: [categoryId], references: [id])
-  categoryId  String?     @db.ObjectId
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  User        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?      @db.ObjectId
+  Category    Category?    @relation(fields: [categoryId], references: [id])
+  categoryId  String?      @db.ObjectId
+}
+
+model Properties {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  value     String
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
 }
 
 model CreatedBy {

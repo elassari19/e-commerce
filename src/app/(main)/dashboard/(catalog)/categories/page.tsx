@@ -4,7 +4,7 @@ import MainCard from "@/components/cards/MainCard"
 import { Download, Plus, Trash2, Upload } from "lucide-react"
 import CategoriesTable from "@/components/tabls/CategoriesTable"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
-import CreateDialog from "@/components/modals/CreateDialog"
+import DialogForm from "@/components/modals/DialogForm"
 import CategoryForm from "@/components/forms/CategoryForm"
 import { db } from "@/lib/db"
 
@@ -35,7 +35,7 @@ const page = async ({  }: Props) => {
           <DeleteButtons action="categories" />
           {/* add product button & open dialog (modal/sheet) when click */}
           <div className="col-span-12 md:col-span-4 lg:col-span-4">
-            <CreateDialog
+            <DialogForm
               sheetTitle="Add Category"
               sheetDescription="Add your Category and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Category</Button>}

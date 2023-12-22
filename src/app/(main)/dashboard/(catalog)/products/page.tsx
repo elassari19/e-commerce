@@ -2,15 +2,19 @@ import Typography from "@/components/layout/typography"
 import { Button } from "@/components/ui/button"
 import MainCard from "@/components/cards/MainCard"
 import { Download, Plus, Trash2, Upload } from "lucide-react"
-import OrdersTable from "@/components/tabls/OrdersTable"
+import ProductsTable from "@/components/tabls/ProductsTable"
 import fakeData from "@/helpers/constants/fakeData.json"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
-import CreateDialog from "@/components/modals/CreateDialog"
+import DialogForm from "@/components/modals/DialogForm"
 import ProductForm from "@/components/forms/ProductForm"
+import { db } from "../../../../../lib/db"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
-const page = ({  }: Props) => {
+const page = async ({  }: Props) => {
+  const Products = await db.product.findMany()
+  const Categories = await db.category.findMany()
+
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">
       <Typography heading="h2" className="font-semibold text-lg">Products</Typography>
@@ -28,16 +32,17 @@ const page = ({  }: Props) => {
             <Button variant="outline"><Download size={16} /> Import</Button>
           </div>
         </div>
+
         <div className="md:col-span-6 grid grid-cols-12 col-span-12 gap-1">
           {/* delete selected products */}
           <DeleteButtons action="products" />
           {/* add product button & opem dialog (modal/sheet) when click */}
           <div className="col-span-12 md:col-span-4 lg:col-span-4">
-            <CreateDialog
+            <DialogForm
               sheetTitle="Add Product"
               sheetDescription="Add your product and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Product</Button>}
-              sheetContent={<ProductForm />}
+              sheetContent={<ProductForm categories={Categories} />}
               className="w-full md:w-3/4"
             />
           </div>
@@ -46,7 +51,7 @@ const page = ({  }: Props) => {
       </section>
 
       <section>
-        <OrdersTable data={fakeData} action="products" />
+        <ProductsTable data={Products} />
       </section>
     </main>
   )
