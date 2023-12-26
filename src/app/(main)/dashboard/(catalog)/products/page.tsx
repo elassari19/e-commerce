@@ -14,6 +14,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 const page = async ({  }: Props) => {
   const Products = await db.product.findMany()
   const Categories = await db.category.findMany()
+  console.log("products", Products)
 
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">

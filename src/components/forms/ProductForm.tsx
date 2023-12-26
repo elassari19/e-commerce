@@ -30,21 +30,27 @@ const ProductForm = ({ className, categories }: Props) => {
     ])
 
   const onSubmit = async (values: any) => {
-    console.log("onSubmit", {...values, properties, images})
-    // const res = await db.product.create({
-    //   data: {
-    //     ...values,
-    //     properties
-    //   }
-    // });
-    // console.log("res", res)
-    // if(res) {
-    //   toast.success(`create ${values.email} account successeeded`)
-    //   router.refresh()
-    //   router.push('/sign-in')
-    //   return;
-    // }
-    // toast.error(`create ${values.email} account Faileded` )
+    const fls = images.map(fl => fl.file)
+    values.categoryId = categories.filter((item) => item.slug === values.category)[0]?.id || ""
+
+    delete values.category
+    // console.log("onSubmit", { ...values})
+    const res = await fetch("/api/dashboard/products", {
+      method: "POST",
+      body: JSON.stringify({
+        ...values,
+        properties,
+        images: fls
+      })
+    });
+    console.log("res", res)
+    if(res.ok) {
+      toast.success(`create ${values.email} account successeeded`)
+      router.refresh()
+      router.push('/dashboard/products')
+      return;
+    }
+    toast.error(`create ${values.email} account Faileded` )
   };
 
   const uploadImagesHandler = async (e: any) => {
@@ -162,7 +168,7 @@ const ProductForm = ({ className, categories }: Props) => {
               variant="primary"
               size="sm"
               className="h-14"
-              disabled={!formik.isValid && formik.isSubmitting}
+              disabled={formik.isSubmitting}
               isLoading={formik.isSubmitting}
             >Add Product</Button>
           </div>

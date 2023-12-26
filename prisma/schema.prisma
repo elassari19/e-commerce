@@ -77,12 +77,12 @@ model Product {
   reviews     Reviews[]
   quantity    String
   properties  Properties[]
-  createdBy   CreatedBy[]
+  createdBy   String
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   User        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?      @db.ObjectId
-  Category    Category?    @relation(fields: [categoryId], references: [id])
+  Category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String?      @db.ObjectId
 }
 
@@ -95,15 +95,14 @@ model Properties {
 }
 
 model CreatedBy {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?  @db.ObjectId
-  Product   Product? @relation(fields: [productId], references: [id])
-  productId String?  @db.ObjectId
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @db.ObjectId
 }
 
 model Reviews {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Int
   User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?  @db.ObjectId
   Product   Product? @relation(fields: [productId], references: [id])
@@ -114,6 +113,7 @@ model ImageUrl {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   public_id  String
   secure_url String
+  createdBy  String?
   Product    Product? @relation(fields: [productId], references: [id])
   productId  String?  @db.ObjectId
 }

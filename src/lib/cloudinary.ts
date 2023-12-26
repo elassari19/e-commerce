@@ -19,16 +19,27 @@ export type CloudinaryResource = {
   secure_url: string
 }
 
-export const uploadImages =async (image: any) => {
-  await new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(image, {}, (error, result) => {
-      if(error) {
-        console.log("error", error)
-        return reject(error);
-      }
-      console.log("result", result?.secure_url, result?.public_id)
-      return resolve(result)
+export const uploader = (image: string) => new Promise((resolve, reject) => {
+  cloudinary.uploader.upload(image,
+    {
+      folder: "my-ecom-app/products",
+    }, (error, result) => {
+    if(error) {
+      console.log("error", error)
+      return reject(error);
+    }
+
+    return resolve({
+      secure_url: result?.secure_url,
+      public_id: result?.public_id
     })
   })
-  revalidatePath("/")
-}
+})
+
+export const uploadImages = async (images: any) => new Promise((resolve, reject) => {
+  const upload = images.map((image: string) => uploader(image))
+  Promise.all(upload)
+    .then(val => resolve(val))
+    .catch(error => reject(error))
+
+})

@@ -54,7 +54,7 @@ const CategoryForm = ({ className, categories }: Props) => {
           [
             { lable: "Category Title/Name", name: "name" },
             { lable: "Category Description", name: "description", component:"textarea", rows: 5 },
-            { lable: "Parent Category", name: "parentId", categories },
+            { lable: "Category", name: "parentId" },
           ].map(({ lable, name, ...rest }, idx) => {
             if(name === "parentId") {
               return (
@@ -95,6 +95,7 @@ const CategoryForm = ({ className, categories }: Props) => {
                 size="sm"
                 className="h-14"
                 disabled={!formik.isValid && formik.isSubmitting}
+                isLoading={formik.isSubmitting}
               >Add Product</Button>
             </div>
             <div className="col-span-12 md:col-span-6">
