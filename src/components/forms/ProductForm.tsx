@@ -4,18 +4,16 @@ import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { db } from "../../lib/db";
 import { productSchema } from "../../schema/productSchema";
 import { Button } from "../ui/button";
 import FormikField from "../inputs/FormikField";
 import { useState } from "react";
 import Image from "next/image";
-import { Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import SelectInput from "../SelectInput";
 import { Category } from "@prisma/client";
 import Properties from "../Properties";
-import { Input } from "../ui/input";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
@@ -32,9 +30,8 @@ const ProductForm = ({ className, categories }: Props) => {
   const onSubmit = async (values: any) => {
     const fls = images.map(fl => fl.file)
     values.categoryId = categories.filter((item) => item.slug === values.category)[0]?.id || ""
-
     delete values.category
-    // console.log("onSubmit", { ...values})
+
     const res = await fetch("/api/dashboard/products", {
       method: "POST",
       body: JSON.stringify({
@@ -43,7 +40,7 @@ const ProductForm = ({ className, categories }: Props) => {
         images: fls
       })
     });
-    console.log("res", res)
+    // console.log("res", res)
     if(res.ok) {
       toast.success(`create ${values.email} account successeeded`)
       router.refresh()
@@ -61,8 +58,6 @@ const ProductForm = ({ className, categories }: Props) => {
       }
       reader.readAsDataURL(fl)
     })
-    // const res = await fetch("/api/dashboard/products", { method: "POST", body: JSON.stringify(images) })
-    // console.log("uploadImages", res.body)
   }
 
     return (
@@ -134,7 +129,7 @@ const ProductForm = ({ className, categories }: Props) => {
                       <div className="min-h-20 w-full flex gap-2">
                         {
                           images.length > 0 && images?.map((item) => (
-                            <div className="relative w-fit hover:scale-[250%] hover:z-10 transition-all duration-200" key={item.path}>
+                            <div className="relative w-fit hover:scale-[250%] hover:z-10 transition-all duration-200 hover:delay-200" key={item.path}>
                               <Image
                                 src={item.path}
                                 alt={"item"} width={40} height={40}

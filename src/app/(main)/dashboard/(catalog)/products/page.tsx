@@ -3,18 +3,17 @@ import { Button } from "@/components/ui/button"
 import MainCard from "@/components/cards/MainCard"
 import { Download, Plus, Trash2, Upload } from "lucide-react"
 import ProductsTable from "@/components/tabls/ProductsTable"
-import fakeData from "@/helpers/constants/fakeData.json"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
 import DialogForm from "@/components/modals/DialogForm"
 import ProductForm from "@/components/forms/ProductForm"
-import { db } from "../../../../../lib/db"
+import { db } from "@/lib/db"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
 const page = async ({  }: Props) => {
   const Products = await db.product.findMany()
   const Categories = await db.category.findMany()
-  console.log("products", Products)
+  // console.log("products", Products)
 
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">

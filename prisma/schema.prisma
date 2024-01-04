@@ -53,8 +53,8 @@ model User {
   sessions  Session[]
   product   Product[]
   category  Category[]
-  Reviews   Reviews[]
-  CreatedBy CreatedBy[]
+  reviews   Reviews[]
+  createdBy CreatedBy[]
 }
 
 model VerificationToken {
@@ -77,7 +77,6 @@ model Product {
   reviews     Reviews[]
   quantity    String
   properties  Properties[]
-  createdBy   String
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   User        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
