@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { GridStack } from "@/components/layout"
-import SideNavBar from "@/components/nav/sideNavBar"
+import SideNavBar from "@/components/nav/SideNavBar"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store"
 import MotionSlide from "@/components/framerMotion/MotionSlide"

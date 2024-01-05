@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils"
-import Brand from "../../atoms/Brand"
-import MenuList from "../MenuList"
+import Brand from "../atoms/Brand"
+import MenuList from "./MenuList"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   nav?: boolean
 }
 
-const index = ({ className, nav }: Props) => {
+const SideNavBar = ({ className, nav }: Props) => {
   return (
     <nav className={cn("transition-all duration-200 flex flex-col p-2 gap-2 bg-foreground min-h-screen", className)}>
       <Brand nav={nav} />
@@ -15,4 +15,4 @@ const index = ({ className, nav }: Props) => {
   )
 }
 
-export default index
+export default SideNavBar

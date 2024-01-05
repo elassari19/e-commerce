@@ -14,7 +14,7 @@ const page = async ({  }: Props) => {
   }
  return (
   <ColStack className="justify-center text-center my-20 gap-8 px-4 md:px-20 lg:px-[30vw]">
-    <Typography heading="h1" size="2xl" font="xbold">Create a new account</Typography>
+    <Typography heading="h1">Create a new account</Typography>
     <Register />
   </ColStack>
   )

@@ -2,14 +2,14 @@
 
 import { Bell, MenuIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
-import Brand from "../../atoms/Brand"
-import { RowStack } from "../../layout"
-import ReduxToggleItem from "../../reduxtHandler/ReduxToggleItem"
-import MotionSlide from "../../framerMotion/MotionSlide"
-import UserAuth from "../../auth/UserAuth"
+import Brand from "../atoms/Brand"
+import { RowStack } from "../layout"
+import ReduxToggleItem from "../reduxtHandler/ReduxToggleItem"
+import MotionSlide from "../framerMotion/MotionSlide"
+import UserAuth from "../auth/UserAuth"
 import { useSession } from "next-auth/react"
-import MenuList from "../MenuList"
-import DialogNav from "../../DialogNav"
+import MenuList from "./MenuList"
+import DialogNav from "../DialogNav"
 import { motion } from "framer-motion"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}

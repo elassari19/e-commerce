@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 import { Metadata } from "next"
 
-interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
+interface Props {
   children: React.ReactNode
 }
 
@@ -10,11 +10,9 @@ export const metadata: Metadata = {
   description: 'Sign in To User Account',
 }
 
-const CartLayout = ({ children, className }: Props) => {
+const CartLayout = ({ children }: Props) => {
   return (
-    <div
-      className={cn('', className)}
-    >
+    <div>
       {children}
     </div>
   )
