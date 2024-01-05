@@ -5,7 +5,6 @@ import { userOptions } from "@/helpers/constants/Categories"
 import Link from "next/link"
 import Typography from "../layout/typography"
 import SignOut from "./SignOut"
-import { slideInFromTop } from "@/helpers/constants/animations"
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   pathname: string
