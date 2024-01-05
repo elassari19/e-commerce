@@ -11,7 +11,7 @@ const SignOut = ({  }: Props) => {
   return (
     <Button
       onClick={() => signOut()}
-      variant='ghost' size='sm'
+      size='sm'
       className="w-full justify-start gap-2"
     >
       <LogOut size={24} /> <Typography className="text-secondary">Sign Out</Typography>
