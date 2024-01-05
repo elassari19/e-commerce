@@ -20,7 +20,6 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const ProductForm = ({ className, categories }: Props) => {
-  const router = useRouter()
 
   const [images, setImages] = useState<any[]>([])
   const [properties, setProperties] = useState<{name: string, value: string}[]>([
@@ -43,8 +42,7 @@ const ProductForm = ({ className, categories }: Props) => {
     // console.log("res", res)
     if(res.ok) {
       toast.success(`create ${values.email} account successeeded`)
-      router.refresh()
-      router.push('/dashboard/products')
+      window.location.reload()
       return;
     }
     toast.error(`create ${values.email} account Faileded` )

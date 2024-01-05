@@ -18,7 +18,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 const CategoryForm = ({ className, categories }: Props) => {
   const router = useRouter()
 
-  const onSubmit = async (values: categoriesType) => {
+  const onSubmit = async (values: categoriesType ) => {
     values.parentId = categories.filter((item) => item.slug === values.parentId)[0]?.id || ""
 
     // console.log("values", values)
@@ -31,8 +31,7 @@ const CategoryForm = ({ className, categories }: Props) => {
 
     if(res.ok) {
       toast.success(`create ${values.slug} Category successeeded`)
-      router.refresh()
-      // router.replace('/dashboard/categories/')
+      window.location.reload()
       return;
     }
     toast.error(`create ${values.slug} Category Faileded` )
@@ -40,7 +39,7 @@ const CategoryForm = ({ className, categories }: Props) => {
 
   return (
     <Formik
-      onSubmit={async (values, { resetForm }) => { await onSubmit(values) , resetForm() }}
+      onSubmit={onSubmit}
       validationSchema={categorySchema}
       initialValues={{
         name: "",
