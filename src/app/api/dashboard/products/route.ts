@@ -1,8 +1,12 @@
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import { uploadImages } from "@/lib/cloudinary";
+import { uploadImages, deleteImages } from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/getAuthSession";
+
+interface ExtendsRequest extends Request {
+  response: any
+}
 
 export async function POST(req: Request, res: NextApiResponse) {
   const data = await req.json();
@@ -46,4 +50,49 @@ export async function POST(req: Request, res: NextApiResponse) {
   return NextResponse.json({
     response
   }, { status: 201 })
+}
+
+export async function GET(req: Request) {
+  const data = await req.json();
+
+  data.response = await db.product.findMany()
+
+  return NextResponse.json({
+    product: data.response
+  }, { status: 200 })
+}
+
+export async function PATCH(req: ExtendsRequest) {
+  const data = await req.json();
+  const id = data.id
+  delete data.id
+
+  try {
+    req.response = await db.product.update({ where: { id }, data },)
+    return NextResponse.json({ product: req.response }, { status: 202 })
+
+  } catch (error) {
+    return NextResponse.json({ error })
+  }
+}
+
+export async function DELETE(req: Request) {
+  const data = await req.json();
+
+  // grab product images...
+  const products = await db.product.findMany({
+    where: { id: { in: data } },
+    include: { images: true }
+  })
+
+  try { // delete images from cloudinary
+    products.map(async (prod) => {
+      const remove = await deleteImages(prod.images)
+    })
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 400 })
+  }
+  const response = await db.product.deleteMany({ where: { id: { in: data } } })
+
+  return NextResponse.json({ product: response }, { status: 202 })
 }

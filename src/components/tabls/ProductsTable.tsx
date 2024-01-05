@@ -31,7 +31,7 @@ const ProductsTable = ({ data }: Props) => {
     <Table
       rowsData={data!}
       colsDefs={colDefs}
-      action="categories"
+      action="products"
     /> 
   )
 }

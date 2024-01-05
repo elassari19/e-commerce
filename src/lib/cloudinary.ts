@@ -41,5 +41,15 @@ export const uploadImages = async (images: any) => new Promise((resolve, reject)
   Promise.all(upload)
     .then(val => resolve(val))
     .catch(error => reject(error))
-
 })
+
+// delete list of image from cloudinary cloud
+export const deleteImages = async (images: any[]) => {
+  const resources = images.map((img) => img.public_id)
+  try {
+    const rem = await cloudinary.api.delete_resources(resources)
+    return 200
+  } catch (error) {
+    return 400
+  }
+}
