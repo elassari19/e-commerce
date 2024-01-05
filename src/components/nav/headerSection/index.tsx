@@ -14,7 +14,7 @@ import { motion } from "framer-motion"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
-const index = ({  }: Props) => {
+const HeaderSection = ({  }: Props) => {
 
   const pathname = usePathname()
   const { data } = useSession()
@@ -55,4 +55,4 @@ const index = ({  }: Props) => {
   </motion.header>
 }
 
-export default index
+export default HeaderSection

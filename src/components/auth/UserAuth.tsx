@@ -33,12 +33,12 @@ const UserAuth = ({ pathname, session }: Props) => {
               ...userOptions.map(({ Icon, href, title }, idx) => (
                 <Link
                   key={idx} href={href}
-                    className={`
-                      px-2 cursor-pointer flex items-center gap-2
-                      ${pathname === href && "text-primary"}
-                      ${pathname === "/" && href === "/" && "text-primary"}
-                    `}
-                  >
+                  className={`
+                    px-2 cursor-pointer flex items-center gap-2
+                    ${pathname === href && "text-primary"}
+                    ${pathname === "/" && href === "/" && "text-primary"}
+                  `}
+                >
                   <Icon size={25} />
                   <Typography
                     className={`
@@ -49,7 +49,7 @@ const UserAuth = ({ pathname, session }: Props) => {
                   >{title}</Typography>
                 </Link>
               )),
-              <SignOut />
+              <SignOut key={"h-8w-8bg-primaryrounded-full"} />
             ]
           }
         />
