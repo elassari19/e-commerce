@@ -14,8 +14,10 @@ export async function POST(req: Request, res: NextApiResponse) {
   const response = await db.category.create({
     data: {
       ...data,
-      slug: data?.name?.toLowerCase().replace(" ", "_"),
-      createdBy: userId
+      slug: data?.name?.toLowerCase().replace(" ", "_").replace("&", "and"),
+      User: {
+        connect: { id: userId }
+      },
     }
   })
 

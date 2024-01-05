@@ -6,7 +6,7 @@ import OrdersTable from "@/components/tabls/OrdersTable"
 import fakeData from "@/helpers/constants/fakeData.json"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
 
-interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
+interface Props {}
 
 const page = ({  }: Props) => {
   return (
@@ -33,7 +33,7 @@ const page = ({  }: Props) => {
         </MainCard>
       </section>
 
-      <OrdersTable data={fakeData} action="attributes" />
+      <OrdersTable data={fakeData} />
     </main>
   )
 }

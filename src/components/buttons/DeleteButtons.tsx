@@ -1,14 +1,13 @@
 "use client"
 
+import { useCallback } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { RootState } from "@/store"
 import { useDispatch, useSelector } from "react-redux"
-import { dashboardHandler, deleteProductHandler } from "@/store/dashboard"
+import { dashboardHandler } from "@/store/dashboard"
 import { Action } from "@/store/actions/dashboardStoreActions"
-import { useCallback } from "react"
-import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -19,7 +18,6 @@ const DeleteButtons = ({ className, action }: Props) => {
   // @ts-ignore
   const dashboard = useSelector((state: RootState) => state.dashboard[action])
   const dispatch = useDispatch()
-  const router = useRouter()
 
   const handleDelete = useCallback(async () => {
     const deletData = await dashboard.remove.map((item: any) => item.id)
@@ -34,8 +32,9 @@ const DeleteButtons = ({ className, action }: Props) => {
         [action]: { ...dashboard, remove: [] }
       }))
 
-      router.refresh()
-      router.push('/dashboard/categories/')
+      // router.refresh()
+      // router.push('/dashboard/categories/')
+      window.location.reload()
     } else {
       toast.error(`delete selected categories was Failed`)
     }

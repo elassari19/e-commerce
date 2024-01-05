@@ -8,7 +8,7 @@ import DialogForm from "@/components/modals/DialogForm"
 import CategoryForm from "@/components/forms/CategoryForm"
 import { db } from "@/lib/db"
 
-interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
+interface Props {}
 
 const page = async ({  }: Props) => {
   const categories = await db.category.findMany()

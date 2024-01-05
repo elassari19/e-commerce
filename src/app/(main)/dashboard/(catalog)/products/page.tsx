@@ -8,12 +8,18 @@ import DialogForm from "@/components/modals/DialogForm"
 import ProductForm from "@/components/forms/ProductForm"
 import { db } from "@/lib/db"
 
-interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
+interface Props {}
 
 const page = async ({  }: Props) => {
-  const Products = await db.product.findMany()
+  const Products = await db.product.findMany({
+    include: {
+      images: true,
+      Category: true,
+      properties: true
+    }
+  })
   const Categories = await db.category.findMany()
-  // console.log("products", Products)
+  console.log("products", Products)
 
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">

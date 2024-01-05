@@ -39,22 +39,21 @@ model Session {
 }
 
 model User {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
   role      String?
   name      String?
-  email     String      @unique
+  email     String     @unique
   password  String
   image     String?
   code      String
   city      String?
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   accounts  Account[]
   sessions  Session[]
   product   Product[]
   category  Category[]
   reviews   Reviews[]
-  createdBy CreatedBy[]
 }
 
 model VerificationToken {
@@ -93,12 +92,6 @@ model Properties {
   productId String?  @db.ObjectId
 }
 
-model CreatedBy {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String? @db.ObjectId
-}
-
 model Reviews {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   rating    Int
@@ -125,7 +118,6 @@ model Category {
   parentId    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  createdBy   String?
   Product     Product[]
   User        User?     @relation(fields: [userId], references: [id])
   userId      String?   @db.ObjectId

@@ -33,13 +33,14 @@ const CategoryForm = ({ className, categories }: Props) => {
       toast.success(`create ${values.slug} Category successeeded`)
       router.refresh()
       // router.replace('/dashboard/categories/')
+      return;
     }
     toast.error(`create ${values.slug} Category Faileded` )
   };
 
   return (
     <Formik
-      onSubmit={onSubmit}
+      onSubmit={async (values, { resetForm }) => { await onSubmit(values) , resetForm() }}
       validationSchema={categorySchema}
       initialValues={{
         name: "",
@@ -101,7 +102,6 @@ const CategoryForm = ({ className, categories }: Props) => {
             <div className="col-span-12 md:col-span-6">
               <SheetPrimitive.Close className="w-full">
                 <Button
-                  type="submit"
                   variant="outline-destructive"
                   size="sm"
                   className="h-14"
