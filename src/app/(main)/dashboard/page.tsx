@@ -9,7 +9,7 @@ import OrdersTable from "@/components/tabls/OrdersTable"
 import fakeData from "@/helpers/constants/fakeData.json"
 import MainCard from "@/components/cards/MainCard"
 
-interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
+interface Props {}
 
 const page = ({  }: Props) => {
   return <main className="min-h-screen p-8 py-4 flex flex-col gap-6">
@@ -82,7 +82,7 @@ const page = ({  }: Props) => {
     {/* Recent Order */}
     <section className="flex flex-col gap-6">
       <Typography heading="h2" className="font-semibold text-lg">Recent Order</Typography>
-      <OrdersTable data={fakeData} action="order" />
+      <OrdersTable data={fakeData} />
     </section>
   </main>
 }
