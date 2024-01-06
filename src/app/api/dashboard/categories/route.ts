@@ -25,16 +25,16 @@ export async function POST(req: Request, res: NextApiResponse) {
 }
 
 export async function GET(req: Request) {
-  const data = await req.json();
+  const { searchParams } = new URL(req.url)
+  const skip = +(searchParams.get("page") ?? 0)
+  const page = +(searchParams.get("skip") ?? 20)
 
-  if(data?.id) {
-    data.response = await db.category.findFirst({
-      where: { OR: [ {id: data?.id}, {name: data?.name} ] },
-    },)
-  
-  } else {
-    data.response = await db.category.findMany()
-  }
+  const data = await req.json();
+  data.response = await db.category.findMany({
+    skip: skip * page,
+    take: page,
+    
+  })
 
   return NextResponse.json({
     categories: data.response
@@ -43,11 +43,13 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
-  const id = data.id
-  delete data.id
+  console.log(data)
 
   try {
-    req.response = await db.category.update({ where: { id }, data },)
+    req.response = await db.category.update({
+      where: { id: data.id },
+      data: { [data.name]: data.value }
+    })
     return NextResponse.json({ categories: req.response }, { status: 202 })
 
   } catch (error) {

@@ -64,11 +64,13 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
-  const id = data.id
-  delete data.id
+  console.log(data)
 
   try {
-    req.response = await db.product.update({ where: { id }, data },)
+    req.response = await db.product.update({
+      where: { id: data.id },
+      data: { [data.name]: data.value }
+    })
     return NextResponse.json({ product: req.response }, { status: 202 })
 
   } catch (error) {
