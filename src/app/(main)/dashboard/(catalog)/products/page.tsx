@@ -14,7 +14,7 @@ const page = async ({  }: Props) => {
   const Products = await db.product.findMany({
     include: {
       images: true,
-      Category: true,
+      Category: { select: { id: true, name: true } },
       properties: true
     }
   })

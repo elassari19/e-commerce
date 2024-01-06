@@ -2,7 +2,8 @@
 
 import { Product } from "@prisma/client";
 import Table from "./Table";
-
+import View from "./View"
+import { ICellRendererParams } from "ag-grid-community";
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   data: Product[]
 }
@@ -15,16 +16,14 @@ const ProductsTable = ({ data }: Props) => {
     { field: "name" },
     { field: "description", },
     { field: "slug" },
-    { field: "brand" },
+    { field: "brand", cellRenderer: (p: ICellRendererParams) => p.data.Category.name },
     { field: "price" },
     { field: "quantity" },
-    { field: "tags" },
-    { field: "barcode" },
-    { field: "size" },
-    { field: "color" },
+    { field: "view", cellRenderer: View },
+    // { field: "color" },
     { field: "createdAt" },
     { field: "userId" },
-    { field: "categoryId" },
+    // { field: "categoryId" },
   ];
 
   return (

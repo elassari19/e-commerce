@@ -8,7 +8,7 @@ import { dashboardHandler } from "@/store/dashboard";
 import { RootState } from "@/store";import { Action } from "@/store/actions/dashboardStoreActions";
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { CellEditingStoppedEvent, CellValueChangedEvent } from "ag-grid-community";
+import { CellEditingStoppedEvent } from "ag-grid-community";
 import toast from "react-hot-toast";
 // import "ag-grid-enterprise"
 
@@ -59,7 +59,7 @@ const Table = ({ className, action, rowsData, colsDefs }: Props) => {
           name: [event.colDef.field]
         }
         rowUpdated = row[event.colDef.field as string] === event.newValue
-        console.log(rowUpdated)
+        // console.log(rowUpdated)
         return { ...row, [event.colDef.field as string]: event.newValue }
       }
     })
