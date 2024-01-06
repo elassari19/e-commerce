@@ -8,7 +8,7 @@ interface IProps {
 }
 
 const View = (props: ICellRendererParams) => {
-
+  console.log(props.data)
   return (
     <Link href={`/dashboard/product/${props.data.id}`} className='w-full h-full flex justify-start items-center'>
       <MousePointerSquare size={24} color='#000e' />

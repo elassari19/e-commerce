@@ -11,7 +11,11 @@ import { db } from "@/lib/db"
 interface Props {}
 
 const page = async ({  }: Props) => {
-  const categories = await db.category.findMany()
+  const categories = await db.category.findMany({
+    include: {
+      User: { select: { id: true, email: true } }
+    }
+  })
   // console.log("categories", categories)
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">

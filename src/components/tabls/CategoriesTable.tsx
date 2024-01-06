@@ -2,6 +2,7 @@
 
 import { Category } from "@prisma/client";
 import Table from "./Table";
+import { ICellRendererParams } from "ag-grid-community";
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   data: Category[]
@@ -16,8 +17,12 @@ const CategoriesTable = ({ data }: Props) => {
     { field: "name" },
     { field: "slug" },
     { field: "description", },
-    { field: "parentId" },
-    { field: "createdBy" },
+    { field: "Category",
+      cellRenderer: (p: ICellRendererParams) => {
+        return data.map(d => d.id === p.data.parentId && d.name)[0]
+      }
+    },
+    { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data.User.email },
   ];
 
   return (
