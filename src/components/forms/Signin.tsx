@@ -54,8 +54,8 @@ const Signin = ({  }: Props) => {
         onSubmit={onSubmit}
         validationSchema={signinSchema}
         initialValues={{
-          email: "",
-          password: ""
+          email: "elassari19@gmail.com",
+          password: "11111111"
         }}
       >
         {
@@ -68,11 +68,13 @@ const Signin = ({  }: Props) => {
                   <FormikField
                     name='email'
                     placeholder='Email'
+                    value="elassari19@gmail.com"
                   />
                   <FormikField
                     type="password"
                     name='password'
                     placeholder='Password'
+                    value="11111111"
                   />
 
                   <Button
