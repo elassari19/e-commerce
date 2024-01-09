@@ -14,6 +14,8 @@ import * as SheetPrimitive from "@radix-ui/react-dialog"
 import SelectInput from "../SelectInput";
 import { Category } from "@prisma/client";
 import Properties from "../Properties";
+import { uploadImagesHandler } from "../../helpers/methods/uploadImagesHandler";
+import CardImage from "../cards/CardImage";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
@@ -48,14 +50,9 @@ const ProductForm = ({ className, categories }: Props) => {
     toast.error(`create ${values.email} account Faileded` )
   };
 
-  const uploadImagesHandler = async (e: any) => {
-    [...e.currentTarget.files].map(async (fl: any) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages(pre => [...pre, { path: URL.createObjectURL(fl), file: reader.result }])
-      }
-      reader.readAsDataURL(fl)
-    })
+  const removeImageHandler = (item: any) => {
+    const remove = images.filter((pre: any) => pre.path != item.path && item)
+    setImages(remove)
   }
 
     return (
@@ -79,7 +76,7 @@ const ProductForm = ({ className, categories }: Props) => {
             { lable: "Product Title/Name", name: "name" },
             { lable: "Product Description", name: "description", component:"textarea", rows: 5 },
             { lable: "Product Images", name: "images", type: "file", multiple: true,
-              onChange: (e: any) => {uploadImagesHandler(e), formik.setFieldValue("images", images)}
+              onChange: (e: any) => {uploadImagesHandler(e, setImages), formik.setFieldValue("images", images)}
             },
             { lable: "Category", name: "category" },
             { lable: "Product Price", name: "price" },
@@ -127,20 +124,25 @@ const ProductForm = ({ className, categories }: Props) => {
                       <div className="min-h-20 w-full flex gap-2">
                         {
                           images.length > 0 && images?.map((item) => (
-                            <div className="relative w-fit hover:scale-[250%] hover:z-10 transition-all duration-200 hover:delay-200" key={item.path}>
-                              <Image
-                                src={item.path}
-                                alt={"item"} width={40} height={40}
-                                className="h-20 w-20 border border-primary rounded-md"
-                              />
-                              <X
-                                className="absolute -top-1 -right-1 bg-destructive text-white cursor-pointer rounded-sm"
-                                size={14} onClick={() => {
-                                  const remove = images.filter((pre: any) => pre.path != item.path && item)
-                                  setImages(remove)
-                                }}
-                              />
-                            </div>
+                            <CardImage
+                              key={item.path}
+                              path={item.path}
+                              onClick={() => removeImageHandler(item)}
+                            />
+                            // <div className="relative w-fit hover:scale-[125%] hover:z-10 transition-all duration-200 hover:delay-200" key={item.path}>
+                            //   <Image
+                            //     src={item.path}
+                            //     alt={"item"} width={40} height={40}
+                            //     className="h-20 w-20 border border-primary rounded-md"
+                            //   />
+                            //   <X
+                            //     className="absolute -top-1 -right-1 bg-destructive text-white cursor-pointer rounded-sm"
+                            //     size={14} onClick={() => {
+                            //       const remove = images.filter((pre: any) => pre.path != item.path && item)
+                            //       setImages(remove)
+                            //     }}
+                            //   />
+                            // </div>
                           ))
                         }
                       </div>
