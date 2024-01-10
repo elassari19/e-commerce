@@ -72,10 +72,11 @@ const Table = ({ className, action, rowsData, colsDefs }: Props) => {
       method: "PATCH",
       body: JSON.stringify(updateData)
     });
+    console.log(await res.json())
     if(res.ok) {
       toast.success(`Update ${action} ${event.colDef.field} Succeeded`)
     } else {
-      toast.success(`Update ${action} Failed`)
+      toast.error(`Update ${action} Failed`)
     }
   }, []);
 

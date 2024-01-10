@@ -32,7 +32,7 @@ const DeleteButtons = ({ className, action }: Props) => {
         [action]: { ...dashboard, remove: [] }
       }))
 
-      window.location.reload()
+      // window.location.reload()
     } else {
       toast.error(`delete ${action} was Failed`)
     }

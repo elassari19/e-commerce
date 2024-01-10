@@ -11,13 +11,14 @@ interface ExtendsRequest extends Request {
 export async function POST(req: Request, res: NextApiResponse) {
   const data = await req.json();
   const userId = await auth("id")
+
   // grab product category
   const category = data.categoryId
   delete data.categoryId
   // console.log("data", data)
 
   try { // awiat uploading images to cloudinary cloud
-    data.images = await uploadImages(data.images)
+    data.images = await uploadImages(data.images, "products")
   } catch (error) {
     return NextResponse.json({
       error
@@ -27,7 +28,7 @@ export async function POST(req: Request, res: NextApiResponse) {
   const response = await db.product.create({
     data: {
       ...data,
-      slug: data?.name?.toLowerCase().replace(" ", "_"),
+      slug: data?.name?.toLowerCase().replace(" ", "_").replace("&", "and"),
       User: {
         connect: { id: userId }
       },
