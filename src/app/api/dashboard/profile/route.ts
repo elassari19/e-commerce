@@ -18,7 +18,7 @@ export async function POST(req: Request, res: NextApiResponse) {
   )
 
   try { // awiat uploading images to cloudinary cloud
-    data.image = await uploadImages(data.image)
+    data.image = await uploadImages(data.image, "users")
   } catch (error) {
     return NextResponse.json({
       error
@@ -73,10 +73,10 @@ export async function POST(req: Request, res: NextApiResponse) {
 export async function GET(req: Request) {
   const data = await req.json();
 
-  data.response = await db.product.findMany()
+  data.response = await db.user.findMany()
 
   return NextResponse.json({
-    product: data.response
+    user: data.response
   }, { status: 200 })
 }
 
@@ -85,34 +85,39 @@ export async function PATCH(req: ExtendsRequest) {
   console.log(data)
 
   try {
-    req.response = await db.product.update({
+    req.response = await db.user.update({
       where: { id: data.id },
-      data: { [data.name]: data.value }
+      data: {
+        [data.name]: data.name[0] === "password"
+          ? jwt.sign(data.value, process.env.NEXTAUTH_SECRET!)
+          : data.value
+      }
     })
-    return NextResponse.json({ product: req.response }, { status: 202 })
+    return NextResponse.json({ user: req.response }, { status: 202 })
 
   } catch (error) {
-    return NextResponse.json({ error })
+    return NextResponse.json({ error }, { status: 402 })
   }
 }
 
 export async function DELETE(req: Request) {
   const data = await req.json();
 
+  console.log(data)
   // grab product images...
-  const products = await db.product.findMany({
+  const users = await db.user.findMany({
     where: { id: { in: data } },
-    include: { images: true }
+    include: { image: true }
   })
 
   try { // delete images from cloudinary
-    products.map(async (prod) => {
-      const remove = await deleteImages(prod.images)
+    users.map(async (user) => {
+      await deleteImages(user.image)
     })
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 })
   }
-  const response = await db.product.deleteMany({ where: { id: { in: data } } })
+  const response = await db.user.deleteMany({ where: { id: { in: data } } })
 
-  return NextResponse.json({ product: response }, { status: 202 })
+  return NextResponse.json({ users: response }, { status: 202 })
 }

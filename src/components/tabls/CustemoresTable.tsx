@@ -11,7 +11,6 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const CustemoresTable = ({ data }: Props) => {
 
-  console.log("cust", data)
   // Column Definitions: Defines & controls grid columns
   const colDefs = [
     { field: "id", checkboxSelection: true },
