@@ -3,10 +3,10 @@ import { Aperture, Compass, LayoutDashboard, LogOut, Minus, Settings, Store, Use
 export const menuOptions = [
   { href: "/dashboard", title: "Dashboard", Icon: LayoutDashboard },
   { href: "/catalog", title: "Catalog", Icon: Aperture },
-  { href: "/customers", title: "Customers", Icon: Users },
-  { href: "/orders", title: "Orders", Icon: Compass },
-  { href: "/our-staf", title: "Our Staf", Icon: User },
-  { href: "/settings", title: "Settings", Icon: Settings },
+  { href: "/dashboard/customers", title: "Customers", Icon: Users },
+  { href: "/dashboard/orders", title: "Orders", Icon: Compass },
+  { href: "/dashboard/our-staf", title: "Our Staf", Icon: User },
+  { href: "/dashboard/settings", title: "Settings", Icon: Settings },
   { href: "/", title: "Store", Icon: Store },
 ]
 

@@ -129,20 +129,6 @@ const ProductForm = ({ className, categories }: Props) => {
                               path={item.path}
                               onClick={() => removeImageHandler(item)}
                             />
-                            // <div className="relative w-fit hover:scale-[125%] hover:z-10 transition-all duration-200 hover:delay-200" key={item.path}>
-                            //   <Image
-                            //     src={item.path}
-                            //     alt={"item"} width={40} height={40}
-                            //     className="h-20 w-20 border border-primary rounded-md"
-                            //   />
-                            //   <X
-                            //     className="absolute -top-1 -right-1 bg-destructive text-white cursor-pointer rounded-sm"
-                            //     size={14} onClick={() => {
-                            //       const remove = images.filter((pre: any) => pre.path != item.path && item)
-                            //       setImages(remove)
-                            //     }}
-                            //   />
-                            // </div>
                           ))
                         }
                       </div>

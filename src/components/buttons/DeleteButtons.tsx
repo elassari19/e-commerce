@@ -27,16 +27,14 @@ const DeleteButtons = ({ className, action }: Props) => {
     })
 
     if(res.ok){
-      toast.success(`delete selected categories was Succeeded`)
+      toast.success(`delete ${action} was Succeeded`)
       dispatch(dashboardHandler({
         [action]: { ...dashboard, remove: [] }
       }))
 
-      // router.refresh()
-      // router.push('/dashboard/categories/')
       window.location.reload()
     } else {
-      toast.error(`delete selected categories was Failed`)
+      toast.error(`delete ${action} was Failed`)
     }
   }, [dashboard])
 
