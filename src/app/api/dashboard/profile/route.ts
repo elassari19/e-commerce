@@ -65,8 +65,6 @@ export async function POST(req: Request, res: NextApiResponse) {
     }
   })
 
-  console.log("response", response)
-
   return NextResponse.json({
     response
   }, { status: 201 })

@@ -5,7 +5,7 @@ import Image from "next/image"
 
 interface Props {
   path: string
-  onClick: React.MouseEventHandler<SVGSVGElement> | undefined
+  onClick?: React.MouseEventHandler<SVGSVGElement> | undefined
 }
 
 const CardImage = ({ path, onClick }: Props) => {
