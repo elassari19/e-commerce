@@ -22,7 +22,6 @@ export async function POST(req: Request, res: NextApiResponse) {
     // create new account
     const createNewUser = await db.user.create({
       data: {
-        code,
         email,
         password: hashPassword,
         role: "user"
