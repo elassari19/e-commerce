@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { uploadImages, deleteImages } from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/getAuthSession";
-import * as jwt from "jsonwebtoken"
+import { hash } from "bcryptjs";
 
 interface ExtendsRequest extends Request {
   response: any
@@ -25,6 +25,8 @@ export async function POST(req: Request, res: NextApiResponse) {
     }, { status: 400 })
   }
 
+  const hashPassword = await hash(data.password, 12)
+
   const response = await db.user.create({
     data: {
       role: data.role,
@@ -33,7 +35,7 @@ export async function POST(req: Request, res: NextApiResponse) {
       gender: data.gender,
       age: data.age,
       email: data.email,
-      password: jwt.sign(data.password, process.env.NEXTAUTH_SECRET!),
+      password: hashPassword,
       phone: data.phone,
       birthDate: new Date(data.birthDate),
       address: {
@@ -82,14 +84,16 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
-  console.log(data)
+  // console.log(data)
+
+  const hashPassword = hash(data.value, 12)
 
   try {
     req.response = await db.user.update({
       where: { id: data.id },
       data: {
         [data.name]: data.name[0] === "password"
-          ? jwt.sign(data.value, process.env.NEXTAUTH_SECRET!)
+          ? hashPassword
           : data.value
       }
     })
