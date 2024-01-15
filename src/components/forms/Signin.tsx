@@ -9,6 +9,7 @@ import { signinSchema, signinType } from '../../schema'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
@@ -16,26 +17,21 @@ const Signin = ({  }: Props) => {
   const router = useRouter()
   const { data } = useSession()
 
+  console.log("data", data)
   useLayoutEffect(() => {
-    if(data?.user?.email) {
+    if(data?.user) {
       return router.push("/")
     }
   }, [data])
 
-  // const signInWithGoogle = async () => {
-  //   try {
-  //     await signIn('google')
-  //     router.refresh()
-  //     router.push("/")
-  //   } catch (error) {
-  //     // console.log(error)
-  //     toast({
-  //       title: 'Error',
-  //       description: 'There was an error logging in with Google',
-  //       variant: 'destructive',
-  //     })
-  //   }
-  // }
+  const signInWithGoogle = async () => {
+    try {
+      await signIn('google')
+    } catch (error) {
+      // console.log(error)
+      toast.error(`Signing with Google Failed`)
+    }
+  }
 
   const onSubmit = async (values: signinType) => {
     const data = await signIn('credentials', { redirect: false, ...values })
@@ -49,7 +45,7 @@ const Signin = ({  }: Props) => {
   };
 
   return (
-    <ColStack className='gap-4'>
+    <div className='col-span-10 col-start-2 grid grid-cols-12'>
       <Formik
         onSubmit={onSubmit}
         validationSchema={signinSchema}
@@ -58,50 +54,53 @@ const Signin = ({  }: Props) => {
           password: "11111111"
         }}
       >
-        {
-          formik => {
-            return (
-              <Form>
-                {/* form section */}
-                <ColStack className='gap-4'>
+      {
+        formik => {
+          return (
+            <Form className='col-span-12'>
+              {/* form section */}
+              <ColStack className='gap-1'>
 
-                  <FormikField
-                    name='email'
-                    placeholder='Email'
-                    value="elassari19@gmail.com"
-                  />
-                  <FormikField
-                    type="password"
-                    name='password'
-                    placeholder='Password'
-                    value="11111111"
-                  />
+                <FormikField
+                  name='email'
+                  placeholder='Email'
+                  value="elassari19@gmail.com"
+                />
+                <FormikField
+                  type="password"
+                  name='password'
+                  placeholder='Password'
+                  value="11111111"
+                />
 
-                  <Button
-                    type="submit"
-                    variant="secondary"
-                    size="lg"
-                    className='rounded-full'
-                    disabled={!formik.isValid && formik.isSubmitting}
-                  >Sign in</Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  className='rounded-lg'
+                  disabled={!formik.isValid && formik.isSubmitting}
+                >Sign in</Button>
 
-                {/* divder section */}
-                <RowStack className='gap-8 my-4'>
-                  <hr className='flex-1'/>
-                  <span>Or continue with</span>
-                  <hr className='flex-1'/>
-                </RowStack>
+                <hr className='flex-1 my-6'/>
 
-                </ColStack>
-              </Form>
-            )
-          }
+              </ColStack>
+            </Form>
+          )
         }
-    </Formik>
-    {/* <Button onClick={signInWithGoogle} variant='outline' className="w-full h-full gap-4 rounded-full">
-      <FcGoogle className="w-8 h-8" /> Google
-    </Button> */}
-  </ColStack>
+      }
+      </Formik>
+      <div className='col-span-full my-4'>
+        <Button onClick={signInWithGoogle} variant='primary-outline' size="lg" className="gap-x-4 rounded-lg">
+          Continue with Google
+        </Button>
+
+        <div className='text-start my-4'>
+          <Link href="/forgot-password" className='text-primary/70 hover:text-primary text-sm'>Forgot Password</Link>
+          <br/>
+          <Link href="/sign-up" className='text-primary/70 hover:text-primary text-sm'>Create Account</Link>
+        </div>
+      </div>
+    </div>
 )
 }
 
