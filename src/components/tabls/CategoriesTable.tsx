@@ -22,7 +22,7 @@ const CategoriesTable = ({ data }: Props) => {
         return data.map(d => d.id === p.data.parentId && d.name)[0]
       }
     },
-    { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data.User.email },
+    { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data.User?.email },
   ];
 
   return (
