@@ -1,4 +1,4 @@
-import Signin from "@/components/forms/Signin"
+import Signup from "@/components/forms/Signup"
 import Typography from "@/components/layout/typography"
 import { getAuthSession } from "@/lib/getAuthSession"
 import Image from "next/image"
@@ -21,8 +21,8 @@ const page = async ({  }: Props) => {
           <Image src={imagesSrc} alt='login' objectFit="none" width={100} height={100} className="w-full h-full md:h-full" />
         </div>
         <div className="col-span-full md:col-span-6 grid grid-cols-12">
-          <Typography heading="h1" className="text-xl my-8 col-span-full font-bold">Sign in</Typography>
-          <Signin />
+          <Typography heading="h1" className="text-xl my-8 col-span-full font-bold">Create account</Typography>
+          <Signup />
         </div>
       </div>
     </div>

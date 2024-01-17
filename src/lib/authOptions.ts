@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
-    CredentialsProvider({
+    CredentialsProvider({ 
       name: "credentials",
       credentials: {
         email: {
@@ -67,5 +67,19 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
+    // async signIn({ profile, account }) {
+    //   try {
+    //     const userExist = await db.user.findUnique({
+    //       where: { email: profile?.email }
+    //     })
+    //     if(userExist) {
+    //       return true
+    //     }
+    //     } catch (error) {
+    //     console.log(error)
+    //     return false
+    //   }
+    //   return true
+    // },
   },
 };

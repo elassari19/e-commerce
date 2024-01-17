@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useLayoutEffect } from 'react'
-import { ColStack, RowStack } from '../layout'
+import { ColStack } from '../layout'
 import { Button } from '../ui/button'
 import { Formik, Form } from 'formik';
 import FormikField from '../inputs/FormikField'
-import { signinSchema, signinType } from '../../schema'
+import { signupSchema, signupType } from '../../schema'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast';
@@ -13,7 +13,7 @@ import Link from 'next/link';
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
-const Signin = ({  }: Props) => {
+const Signup = ({  }: Props) => {
   const router = useRouter()
   const { data } = useSession()
 
@@ -24,7 +24,7 @@ const Signin = ({  }: Props) => {
     }
   }, [data])
 
-  const signInWithGoogle = async () => {
+  const signUpWithGoogle = async () => {
     try {
       await signIn('google')
     } catch (error) {
@@ -33,25 +33,34 @@ const Signin = ({  }: Props) => {
     }
   }
 
-  const onSubmit = async (values: signinType) => {
-    const data = await signIn('credentials', { redirect: false, ...values })
-
-    if(data?.error) {
-      toast.error('Something wrong' );
-      return;
+  const onSubmit = async (values: signupType) => {
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        body: JSON.stringify(values)
+      })
+      if(res.ok) {
+        toast.success('Create account successeeded')
+        router.push("/sign-in")
+      }
+      } catch (error) {
+        console.log(error)
+        toast.error('Something wrong' );
+        return;
     }
-    toast.success('Sign in successeeded')
-    router.refresh()
   };
 
   return (
     <div className='col-span-10 col-start-2 grid grid-cols-12'>
       <Formik
         onSubmit={onSubmit}
-        validationSchema={signinSchema}
+        validationSchema={signupSchema}
         initialValues={{
-          email: "elassari19@gmail.com",
-          password: "11111111"
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          confirm: ""
         }}
       >
       {
@@ -60,6 +69,20 @@ const Signin = ({  }: Props) => {
             <Form className='col-span-12'>
               {/* form section */}
               <ColStack className='gap-1'>
+
+                {/* <div className='flex gap-2 w-full'> */}
+                  <FormikField
+                    name='firstName'
+                    placeholder='Frst Name'
+                    // value="elassari19@gmail.com"
+                  />
+
+                  <FormikField
+                    name='lastName'
+                    placeholder='Last Name'
+                    // value="elassari19@gmail.com"
+                  />
+                {/* </div> */}
 
                 <FormikField
                   name='email'
@@ -72,6 +95,12 @@ const Signin = ({  }: Props) => {
                   placeholder='Password'
                   // value="11111111"
                 />
+                <FormikField
+                  type="password"
+                  name='confirm'
+                  placeholder='Confirm Password'
+                  // value="11111111"
+                />
 
                 <Button
                   type="submit"
@@ -79,7 +108,7 @@ const Signin = ({  }: Props) => {
                   size="lg"
                   className='rounded-lg'
                   disabled={!formik.isValid && formik.isSubmitting}
-                >Sign in</Button>
+                >Sign Up</Button>
 
                 <hr className='flex-1 my-6'/>
 
@@ -90,18 +119,16 @@ const Signin = ({  }: Props) => {
       }
       </Formik>
       <div className='col-span-full my-4'>
-        <Button onClick={signInWithGoogle} variant='primary-outline' size="lg" className="gap-x-4 rounded-lg">
+        <Button onClick={signUpWithGoogle} variant='primary-outline' size="lg" className="gap-x-4 rounded-lg">
           Continue with Google
         </Button>
 
         <div className='text-start my-4'>
-          <Link href="/forgot-password" className='text-primary/70 hover:text-primary text-sm'>Forgot Password</Link>
-          <br/>
-          <Link href="/sign-up" className='text-primary/70 hover:text-primary text-sm'>Create Account</Link>
+          <Link href="/sign-in" className='text-primary/70 hover:text-primary text-sm'>Already have account</Link>
         </div>
       </div>
     </div>
 )
 }
 
-export default Signin
+export default Signup

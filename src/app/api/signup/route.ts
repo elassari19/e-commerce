@@ -7,7 +7,7 @@ import { NextApiResponse } from "next";
 export async function POST(req: Request, res: NextApiResponse) {
   try {
     const body = await req.json();
-    const { code, email, password } = registerSchema.parse(body);
+    const { firstName, lastName, email, password } = registerSchema.parse(body);
 
     // email already exists
     const user = await db.user.findUnique({
@@ -22,6 +22,8 @@ export async function POST(req: Request, res: NextApiResponse) {
     // create new account
     const createNewUser = await db.user.create({
       data: {
+        firstName,
+        lastName,
         email,
         password: hashPassword,
         role: "user"
