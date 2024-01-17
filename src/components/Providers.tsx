@@ -10,13 +10,12 @@ import { Toaster } from 'react-hot-toast';
 
 type Props = {
   children: React.ReactNode,
-  session: any
 }
 
-const index = ({ children, session }: Props) => {
+const index = ({ children }: Props) => {
   return (
     <ReduxProvider store={store}>
-      <SessionProvider session={session}>
+      <SessionProvider>
         <PersistGate loading={null} persistor={persistor}>
           {/* <SessionProvider> */}
             {children}
