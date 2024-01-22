@@ -15,17 +15,18 @@ interface Props {
   children?: React.ReactNode
   data: any[]
   onSelect: (event: any) => void
+  value?: string
 }
 
-const SelectInput = ({ placeholder, data, onSelect }: Props) => {
+const SelectInput = ({ placeholder, data, onSelect, value }: Props) => {
   return (
-    <Select onValueChange={onSelect}>
+    <Select onValueChange={onSelect} defaultValue={value}>
       <SelectTrigger className={cn("w-full")}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-        {/* {selectTrigger} */}
+        {/* {render select options} */}
           {
             data.map((item, idx) => (
               <SelectItem key={idx} value={item.slug}>
