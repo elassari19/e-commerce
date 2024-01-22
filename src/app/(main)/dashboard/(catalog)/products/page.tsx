@@ -11,7 +11,7 @@ import { db } from "@/lib/db"
 interface Props {}
 
 const page = async ({  }: Props) => {
-  const Products = await db.product.findMany({
+  const productsData = await db.product.findMany({
     include: {
       images: true,
       Category: { select: { id: true, name: true } },
@@ -20,7 +20,7 @@ const page = async ({  }: Props) => {
     }
   })
   const Categories = await db.category.findMany()
-  // console.log("products", Products)
+  // console.log("products", productsData)
 
   return (
     <main className="min-h-screen flex flex-col gap-4 p-8 px-4">
@@ -49,7 +49,7 @@ const page = async ({  }: Props) => {
               sheetTitle="Add Product"
               sheetDescription="Add your product and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Product</Button>}
-              sheetContent={<ProductForm categories={Categories} />}
+              sheetContent={<ProductForm categories={Categories} updateData={productsData[0]} />}
               className="w-full md:w-3/4"
             />
           </div>
@@ -58,7 +58,7 @@ const page = async ({  }: Props) => {
       </section>
 
       <section>
-        <ProductsTable data={Products} />
+        <ProductsTable data={productsData} />
       </section>
     </main>
   )
