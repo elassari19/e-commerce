@@ -10,7 +10,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const ProductsTable = ({ data }: Props) => {
-
+  console.log("data", data)
   // structure head table
   const colDefs = [
     { field: "id", checkboxSelection: true },
@@ -26,13 +26,13 @@ const ProductsTable = ({ data }: Props) => {
     { field: "name" },
     { field: "description", },
     { field: "slug" },
-    { field: "brand", cellRenderer: (p: ICellRendererParams) => p.data.Category.name },
+    { field: "brand", cellRenderer: (p: ICellRendererParams) => p.data?.Category?.name },
     { field: "price" },
     { field: "quantity" },
     { field: "view", cellRenderer: View },
     // { field: "color" },
     { field: "createdAt" },
-    { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data.User.email },
+    { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data?.User?.email },
     // { field: "categoryId" },
   ];
 
