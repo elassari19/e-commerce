@@ -10,7 +10,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const ProductsTable = ({ data }: Props) => {
-  console.log("data", data)
+
   // structure head table
   const colDefs = [
     { field: "id", checkboxSelection: true },

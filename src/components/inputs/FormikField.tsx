@@ -54,6 +54,7 @@ const FormikField = React.forwardRef<HTMLInputElement, InputProps>(
               name={name}
               value={props.value}
               placeholder={props.placeholder}
+              onChange={props.onChange}
               {...props}
               ref={ref}
               className="w-full h-full absolute left-0 top-0 opacity-0 border"

@@ -1,6 +1,6 @@
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { X } from "lucide-react"
+import { Plus, X } from "lucide-react"
 
 type Tpro = {
   name: string
@@ -64,13 +64,13 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
         </div>
       )})
     }
-      <div className="col-span-full md:col-span-3 md:col-start-10 mt-2">
+      <div className="col-span-full md:col-span-2 md:col-start-11 mt-2">
         <Button
           variant="primary"
           onClick={() => setProperties([...properties, {name: "", value: ""}])}
-          className="font-bold mt-4 md:mt-0"
+          className="mt-4 md:mt-0"
         >
-          Add Proporty
+          <Plus size={18}/> Add Proporty
         </Button>
       </div>
     </>

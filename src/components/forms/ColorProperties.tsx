@@ -1,46 +1,52 @@
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { X } from "lucide-react"
-import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler"
-import { useEffect, useState } from "react"
-import { ImageUrl } from "@prisma/client"
-
+import { Plus, X } from "lucide-react"
+import { productHandler } from "../../store/dashboard/product"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../../store"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  colors: Partial<ImageUrl>[]
-  setColors: (colors: Partial<ImageUrl>[]) => void
 }
 
-const ColorProperties = ({ colors, setColors }: Props) => {
+const ColorProperties = ({ }: Props) => {
+  const dispatch = useDispatch()
+  const { properties } = useSelector((state: RootState) => state.product)
 
-  const [images, setImages] = useState<Partial<ImageUrl>[]>(colors)
+  const propertiesHandler = (data: {}, index: number) => {
+    const updateData = properties.map((pro, idx) => (
+      idx == index 
+        ? { ...pro, ...data }
+        : pro
+    ))
+    dispatch(productHandler({// save the image to the global state
+      properties: updateData
+    }))
+  }
 
-  useEffect(() => {
-    setColors(
-      colors.map((p, n) => ({ ...p, ...images[n] } ))
-    )
-  }, [images])
+  const uploader = async (e: any, index: number) => [...e.currentTarget.files].map(async (fl: any) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      propertiesHandler({ secure_url: URL.createObjectURL(fl), file: reader.result }, index)
+    }
+    reader.readAsDataURL(fl)
+  })
 
   return (
     <>
     {
-      colors.map((pro, index) => {
+      properties.map((pro, index) => {
         return (
         <div
           key={"colors"+index.toString()}
           className="col-span-full grid md:grid-cols-12 items-start md:gap-4 my-1"
         >
-          <label className="col-span-full md:col-span-4 text-sm ml-4">property {index+1}</label>
+          <label className="col-span-full md:col-span-4 text-sm ml-4">color {index+1}</label>
           <div className="col-span-full md:col-span-8 grid grid-cols-12 gap-2">
             {/* color name */}
             <div className="col-span-full md:col-span-3">
               <Input
                 placeholder="name"
-                onChange={(e) => 
-                  setColors(
-                    colors.map((p, n) => n == index ? { ...p, color: e.currentTarget.value } : p)
-                  )
-                }
+                onChange={(e) => propertiesHandler({ color: e.target.value }, index)}
                 value={pro.color||""}
                 className="text-sm"
               />
@@ -50,7 +56,7 @@ const ColorProperties = ({ colors, setColors }: Props) => {
               <Input
                 placeholder="image"
                 type="file"
-                onChange={async (e) => await uploadImagesHandler(e, setImages)}
+                onChange={async (e) => await uploader(e, index)}
                 // value={pro.image?.[0]?.name}
                 className="text-sm flex-1"
               />
@@ -60,11 +66,7 @@ const ColorProperties = ({ colors, setColors }: Props) => {
             <div className="col-span-full md:col-span-2">
               <Input
                 placeholder="quantity"
-                onChange={(e) => {
-                  setColors(
-                    colors.map((p, n) => n == index ? { ...p, quantity: e.target.value } : p)
-                  )
-                }}
+                onChange={(e) => propertiesHandler({ quantity: e.target.value }, index)}
                 value={pro.quantity||""}
                 className="text-sm"
               />
@@ -74,9 +76,13 @@ const ColorProperties = ({ colors, setColors }: Props) => {
               <Button
                 variant="outline-destructive"
                 size="sm"
-                onClick={() => setColors(colors.slice(0, -1))}
+                onClick={() => dispatch(productHandler({
+                  properties: properties.length > 1
+                    ? properties.filter((_, idx) => idx != index)
+                    : [{ public_id: "", secure_url: "", color: "", quantity: "" }]
+                }))}
                 className="font-bold text-3xl h-10 rounded-full"
-                disabled={colors.length-1 != index}
+                disabled={properties.length-1 != index}
               >
                 <X />
               </Button>
@@ -85,13 +91,15 @@ const ColorProperties = ({ colors, setColors }: Props) => {
         </div>
       )})
     }
-      <div className="col-span-full md:col-span-3 md:col-start-10 mt-2">
+      <div className="col-span-full md:col-span-2 md:col-start-11 mt-2">
         <Button
           variant="primary"
-            onClick={() => setColors([...colors, {public_id: "", secure_url: "", color: "", quantity: ""}])}
-          className="font-bold mt-4 md:mt-0"
+            onClick={() => dispatch(productHandler(
+              { properties: [...properties, { public_id: "", secure_url: "", color: "", quantity: "" }]}
+          ))}
+          className="mt-4 md:mt-0"
         >
-          Add Proporty
+          <Plus size={18}/> Add Color
         </Button>
       </div>
     </>

@@ -1,0 +1,25 @@
+# add default which get from db to update
+
+√ 1- render product color properties on update form
+√ 2- fix image upload function
+
+# fix local storage problem
+  1- upload the images to the cloud from client side
+  2- retrive the public_id & scure_id and save them on global state
+  3- delete the image when update or remove the property
+====================================================================================
+
+# productForm
+√ 1- make recieve initial data optional
+  2- create the update functionality
+  3_ open product update form when click on the row of table product
+
+# category
+  1- make function helper toggle between category id to category name
+  2- open category update form when click on the row of table category
+
+# product (route api)
+  1- upload all images (contains color images) function
+  2- update route -> remove all product images then upload the new product images
+
+  here -> on testing update/create product from

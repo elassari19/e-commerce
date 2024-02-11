@@ -1,12 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 import authSlice from "./authSlice";
-import dashboardSlice from "./dashboard";
+import dashboardSlice from "./dashboard/dashboard";
+import productSlice from "./dashboard/product";
 import rootSlice from "./rootSlice";
 import storage from "./storage";
 
 const rootReducer = combineReducers({ 
   account: authSlice,
+  product: productSlice,
   dashboard: dashboardSlice,
   root: rootSlice
 })

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { RootState } from "@/store"
 import { useDispatch, useSelector } from "react-redux"
-import { dashboardHandler } from "@/store/dashboard"
+import { dashboardHandler } from "@/store/dashboard/dashboard"
 import { Action } from "@/store/actions/dashboardStoreActions"
 import toast from "react-hot-toast"
 

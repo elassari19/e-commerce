@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { useCallback, useMemo, useState } from "react";
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
 import { useDispatch, useSelector } from "react-redux";
-import { dashboardHandler } from "@/store/dashboard";
+import { dashboardHandler } from "@/store/dashboard/dashboard";
 import { RootState } from "@/store";import { Action } from "@/store/actions/dashboardStoreActions";
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme

@@ -1,7 +1,7 @@
-import { Category, Product, Properties, ImageUrl } from "@prisma/client";
+import { Product, Properties, ImageUrl } from "@prisma/client";
 
 export type TImage = {
-  path: string
+  secure_url: string
   file: any
 }
 

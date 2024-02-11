@@ -1,14 +1,10 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from ".";
+import { RootState } from "..";
 
 export const initialState = {
   dashboardNav: false,
   categories: {
-    remove: [] as any[],
-    export: [] as any[]
-  },
-  products: {
     remove: [] as any[],
     export: [] as any[]
   },

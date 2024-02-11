@@ -5,7 +5,7 @@ export const productSchema = object().shape({
   description: string().required().min(20).max(200),
   images: array(),
   colors: array(),
-  category: string(),
+  categoryId: string(),
   price: string(),
 })
 

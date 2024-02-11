@@ -49,7 +49,7 @@ const page = async ({  }: Props) => {
               sheetTitle="Add Product"
               sheetDescription="Add your product and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Product</Button>}
-              sheetContent={<ProductForm categories={Categories} updateData={productsData[0]} />}
+              sheetContent={<ProductForm categories={Categories} />}
               className="w-full md:w-3/4"
             />
           </div>
