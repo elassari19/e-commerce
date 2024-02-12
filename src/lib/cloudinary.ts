@@ -36,7 +36,7 @@ export const uploader = (image: string, path: string) => new Promise((resolve, r
   })
 })
 
-export const uploadImages = async (images: any, path: string) => new Promise((resolve, reject) => {
+export const uploadImages = async (images: any[], path: string) => new Promise((resolve, reject) => {
   const upload = images.map((image: string) => uploader(image, path))
   Promise.all(upload)
     .then(val => resolve(val))

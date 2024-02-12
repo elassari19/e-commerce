@@ -8,41 +8,36 @@ import { TColorForm, TImage, TImageColors } from "@/types/products";
 interface ExtendsRequest extends Request, Pick<NextApiRequest, "query"> {
   response: any
   images: FileList | null | unknown
-  colors: TImageColors[]
+  colors: TImage[]
+  properties: TImageColors[]
 }
 
 export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const data = await req.json();
   const userId = await auth("id")
+  const categoryId = data.categoryId
+  delete data.categoryId
   data.slug = data.name.toLowerCase().replace(/\s/g, "-")
 
-  data.quantity = data.colors.reduce((acc: number, item: TColorForm) => Number(acc) + Number(item.quantity), 0).toString()
-  console.log("create.data", data)
-  
   try {
-    // awiat uploading images to cloudinary cloud
-    data.images = await uploadImages(data.images.map((fl: TImage) => fl.file), `products/${data.slug}`)
+    // awiat uploading root images to cloudinary cloud
+    data.images = await uploadImages(data.images, `products/${data.slug}`)
 
-    // @ts-ignore await uploading images based on colors to cloudinary cloud
-    const colors: TImageColors[] = await uploadImages(data.colors.map((fl: TImageColors) => fl.file), `products/${data.slug}/colors`)
+    // @ts-ignore await uploading product color images to cloudinary cloud
+    const images = data.properties.map((fl: TImageColors) => fl.file).filter((fl: TImageColors) => fl && fl)
+    req.colors = await uploadImages(images, `products/${data.slug}/colors`) as TImage[]
 
     // map images with colors
-    req.colors = data.colors.map((item: TImageColors, index: number) => {
-      return ({
-        quantity: item.quantity.toString(),
-        color: item.color,
-        secure_url: colors[index].secure_url,
-        public_id: colors[index].public_id
-      })
+    req.properties = data.properties.map((item: TImageColors, index: number) => {
+      delete item.file;
+      delete item.secure_url;
+      return item
     })
-
-    delete data.colors
   } catch (error) {
     return NextResponse.json({
       error
     }, { status: 400 })
   }
-  // console.log("create.data", data, req.colors)
 
   try {
     // create product
@@ -50,7 +45,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
       data: {
         ...data,
         User: { connect: { id: userId } },
-        Category: { connect: { id: data.categoryId } },
+        Category: { connect: { id: categoryId } },
         properties: {
           create: [ ...data.properties ],
         },
@@ -59,14 +54,15 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
         }
       }
     })
-    res.redirect(307, '/')
+    // res.redirect(307, '/')
     return NextResponse.json({
     response
   }, { status: 201 })
   } catch (error) {
+    console.log("error", error)
     return NextResponse.json({
       error
-    }, { status: 401 })
+    }, { status: 402 })
   }
 }
 

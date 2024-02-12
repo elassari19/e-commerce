@@ -1,6 +1,6 @@
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
 import { Plus, X } from "lucide-react"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
 import { Properties } from "@prisma/client"
 
 
@@ -11,7 +11,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const OptionsProperties = ({ properties, setProperties }: Props) => {
   return (
-    <>
+    <div className="col-span-full grid grid-cols-12">
     {
       properties.map((pro, index) => {
         return (
@@ -49,7 +49,9 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
             <div className="col-span-full md:col-span-2 px-4">
               <Button
                 variant="outline-destructive"
-                onClick={() => setProperties(properties.slice(0, -1))}
+                onClick={() => setProperties(
+                  properties.length > 1 ? properties.slice(0, -1) : [{ name: "", value: ""}]
+                )}
                 className="font-extrbold text-3xl h-10 rounded-full"
                 disabled={properties.length-1 != index}
               >
@@ -61,16 +63,16 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
         </div>
       )})
     }
-      <div className="col-span-full md:col-span-2 md:col-start-11 mt-2">
+      <div className="col-span-full md:col-span-3 md:col-start-10 mt-2">
         <Button
           variant="primary"
-          onClick={() => setProperties([...properties, {name: "", value: ""}])}
-          className="mt-4 md:mt-0"
+            onClick={() => setProperties([...properties, { name: "", value: "" }]) }
+          className="font-bold mt-4 md:mt-0"
         >
           <Plus size={18}/> Add Proporty
         </Button>
       </div>
-    </>
+    </div>
   )
 }
 
