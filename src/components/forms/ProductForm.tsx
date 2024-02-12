@@ -5,11 +5,8 @@ import { Form, Formik } from "formik"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { productSchema } from "../../schema/productSchema";
-import { Button } from "../ui/button";
 import FormikField from "../inputs/FormikField";
 import { useState } from "react";
-import Image from "next/image";
-import { X } from "lucide-react";
 import SelectInput from "../SelectInput";
 import { Category, ImageUrl, Properties } from "@prisma/client";
 import { uploadImagesHandler } from "../../helpers/methods/uploadImagesHandler";
@@ -25,6 +22,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const ProductForm = ({ className, categories, updateData }: Props) => {
+  const router = useRouter()
 
   const [img, setImages] = useState<any[]>(updateData?.images || [] )
   // color properties
@@ -50,7 +48,7 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
     // console.log("res", res)
     if(res.ok) {
       toast.success(`create ${values.name} product successeeded`)
-      // window.location.reload()
+      router.push("/dashboard/")
       return;
     }
     toast.error(`create ${values.name} product Faileded` )

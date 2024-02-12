@@ -42,6 +42,14 @@ const Signup = ({  }: Props) => {
       if(res.ok) {
         toast.success('Create account successeeded')
         router.push("/sign-in")
+        return;
+      }
+      if(res.status === 409) {
+        toast.error('Account alredy exists' );
+        return;
+      } else {
+        toast.error('Something wrong' );
+        return;
       }
       } catch (error) {
         console.log(error)
