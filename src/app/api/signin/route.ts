@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     if(!user?.email) return NextResponse.json({ status: 404, message: "Account not exists" })
 
     // encrypt password
-    const hashPassword = await compare(password, user.password);
+    const hashPassword = await compare(password, user.password!);
     if(!hashPassword) return NextResponse.json({ status: 401, message: "Email or Password not correct" })
 
   } catch (error: any) {
