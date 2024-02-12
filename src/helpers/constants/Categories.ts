@@ -18,5 +18,5 @@ export const userOptions = [
 export const catalog = [
   { href: "/dashboard/products", title: "Products", Icon: Minus },
   { href: "/dashboard/categories", title: "categories", Icon: Minus },
-  { href: "/dashboard/attributes", title: "Attributes", Icon: Minus }
+  // { href: "/dashboard/attributes", title: "Attributes", Icon: Minus }
 ]
