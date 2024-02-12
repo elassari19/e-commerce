@@ -16,7 +16,7 @@ const MenuLink = ({ className, href, Icon, title, isNav=true }: Props) => {
   return (
     <Link
       className={cn(`
-        p-2 cursor-pointer flex items-center gap-2
+        p-2 cursor-pointer flex items-center gap-2 hover:text-primary group
         ${pathname === href && "text-primary"}
         ${pathname === "/" && href === "/" && "text-primary"}
       `, className)}
@@ -26,7 +26,7 @@ const MenuLink = ({ className, href, Icon, title, isNav=true }: Props) => {
       {/* <motion.div animate={{ x: isNav ? 0 : -200 }} initial={{ x: -200 }} exit={{ x: 0 }}> */}
         <Typography
           className={`
-            text-secondary text-sm
+            text-secondary text-sm group-hover:text-primary
             ${pathname === href && "text-primary font-bold"}
             ${pathname === "/" && href === "/" && "text-primary font-bold"}
             ${!isNav && "hidden"}

@@ -17,7 +17,10 @@ const MenuList = ({ nav }: Props) => {
           <li key={idx}>
               <AccordionTree
               accordionTrigger={
-                <MenuLink Icon={Aperture} isNav={nav} title="Catalog" href="" className="py-5" />
+                <div className="w-full py-5 px-2 -z-0 group hover:text-primary flex gap-2 items-center">
+                  <Aperture size={25} />
+                  <span className="text-secondary text-sm group-hover:text-primary">Catalog</span>
+                </div>
               }
               accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} href={item.href} className="py-1" />))}
             />
