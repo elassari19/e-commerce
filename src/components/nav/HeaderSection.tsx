@@ -1,13 +1,11 @@
 "use client"
 
 import { Bell, MenuIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
 import Brand from "../atoms/Brand"
 import { RowStack } from "../layout"
 import ReduxToggleItem from "../reduxtHandler/ReduxToggleItem"
 import MotionSlide from "../framerMotion/MotionSlide"
 import UserAuth from "../auth/UserAuth"
-import { useSession } from "next-auth/react"
 import MenuList from "./MenuList"
 import DialogNav from "../DialogNav"
 import { motion } from "framer-motion"
@@ -15,9 +13,6 @@ import { motion } from "framer-motion"
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
 const HeaderSection = ({  }: Props) => {
-
-  const pathname = usePathname()
-  const { data } = useSession()
 
   return <motion.header layout className="bg-foreground p-4 border-b px-2 md:px-4 lg:px-12">
     <RowStack className="justify-between items-center gap-4 lg:gap-8">
@@ -50,7 +45,7 @@ const HeaderSection = ({  }: Props) => {
       </MotionSlide>
 
       {/* user avatar */}
-      <UserAuth pathname={pathname} session={data?.user?.email} />
+      <UserAuth />
     </RowStack>
   </motion.header>
 }

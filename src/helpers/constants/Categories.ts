@@ -1,4 +1,4 @@
-import { Aperture, Compass, LayoutDashboard, LogOut, Minus, Settings, Store, User, Users } from "lucide-react";
+import { Aperture, Bell, Compass, LayoutDashboard, List, Lock, LogOut, Minus, Settings, ShoppingBasket, Store, User, User2, Users } from "lucide-react";
 
 export const menuOptions = [
   { href: "/dashboard", title: "Dashboard", Icon: LayoutDashboard },
@@ -12,11 +12,18 @@ export const menuOptions = [
 
 export const userOptions = [
   { href: "/dashboard", title: "Dashboard", Icon: LayoutDashboard },
-  { href: "/edit-profile", title: "Edit Profile", Icon: Settings },
+  { href: "/my-orders", title: "My Orders", Icon: List },
+  { href: "/update-profile", title: "Update Profile", Icon: Settings },
+  { href: "/change-password", title: "Change Password", Icon: Lock },
 ]
 
 export const catalog = [
   { href: "/dashboard/products", title: "Products", Icon: Minus },
   { href: "/dashboard/categories", title: "categories", Icon: Minus },
   // { href: "/dashboard/attributes", title: "Attributes", Icon: Minus }
+]
+
+export const list = [
+  { href: "/notifications", title: "Notifications", Icon: Bell },
+  { href: "/basket", title: "basket", Icon: ShoppingBasket },
 ]

@@ -1,31 +1,34 @@
+'use client'
+
 import SignIn from "./SignIn"
 import DropdownMenu from "../DropdownMenu"
-import MotionSlide from "../framerMotion/MotionSlide"
 import { userOptions } from "@/helpers/constants/Categories"
 import Link from "next/link"
 import Typography from "../layout/typography"
 import SignOut from "./SignOut"
+import { usePathname } from "next/navigation"
+import { useSession } from "next-auth/react"
+import { User2 } from "lucide-react"
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  pathname: string
-  session: any
-}
+interface Props extends React.HTMLAttributes<HTMLDivElement> {}
 
-const UserAuth = ({ pathname, session }: Props) => {
+const UserAuth = ({  }: Props) => {
+  const pathname = usePathname()
+  const session = useSession()
 
   return <>
     {
-      !session
+      !session.data
       ? (
         <SignIn />
       )
       : (
         <DropdownMenu
-          className="p-2 w-60 rounded-xl"
+          className="px-2 w-60 rounded-xl"
           menuTrigger={
-            <MotionSlide top="100">
-              <div className="h-8 w-8 bg-primary rounded-full" />
-            </MotionSlide>
+            <div className="font-bold flex items-center gap-2">
+              <User2 /> <span className="md:hidden">Profile</span>
+            </div>
           }
           menuContent={
             [
@@ -38,7 +41,7 @@ const UserAuth = ({ pathname, session }: Props) => {
                     ${pathname === "/" && href === "/" && "text-primary"}
                   `}
                 >
-                  <Icon size={25} />
+                  <Icon size={22} />
                   <Typography
                     className={`
                       text-secondary text-sm
@@ -48,7 +51,7 @@ const UserAuth = ({ pathname, session }: Props) => {
                   >{title}</Typography>
                 </Link>
               )),
-              <SignOut key={"h-8w-8bg-primaryrounded-full"} />
+              <SignOut key={"h-8 w-8 bg-primary rounded-full"} />
             ]
           }
         />

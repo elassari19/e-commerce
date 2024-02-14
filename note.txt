@@ -14,7 +14,37 @@
   2- open category update form when click on the row of table category
 
 # product (route api)
-  1- upload all images (contains color images) function
-  2- update route -> remove all product images then upload the new product images
+√ 1- upload all images (contains color images) function
 
-  here -> on testing update/create product from
+
+implement a loading screen first 
+suspens (loading)
+
+# store page
+√ ## top nav
+ √- logo
+ √- search input
+
+  ### (authorizy)
+  √- notifications
+  √- shopping cart
+    #### user interact dropdown
+    √- edit profile
+    √- order history
+    √- track the orders
+    √- sign out
+
+  ### (unauthorizy)
+  - basket
+  #### user interact dropdown
+    √- sign in
+    - sign up 
+
+ ## under top nav
+  - categories
+  - contact us
+  - about us
+  - privacy Policy
+  - terms & conditions
+
+ ## reder products (go to section -> Popular Products for Daily Shopping)
