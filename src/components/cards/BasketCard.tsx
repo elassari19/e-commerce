@@ -3,7 +3,7 @@
 import { Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
-import brand from '@/assets/images/brand.png'
+import brand from '@/public/brand.webp'
 import { Input } from '../ui/input'
 import { useDispatch } from 'react-redux'
 import { decrementQuantity } from '../../store/cartSlice'

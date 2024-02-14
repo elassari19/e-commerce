@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ToggleMenuNav from '../modals/ToggleMenuNav';
 import SearchProductsInput from '../inputs/SearchProductsInput';
 import Image from 'next/image';
-import brand from '@/assets/images/brand.png';
+import brand from '@/public/brand.webp';
 import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
