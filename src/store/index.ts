@@ -5,12 +5,14 @@ import dashboardSlice from "./dashboard/dashboard";
 import productSlice from "./dashboard/product";
 import rootSlice from "./rootSlice";
 import storage from "./storage";
+import cartSlice from "./cartSlice";
 
 const rootReducer = combineReducers({ 
   account: authSlice,
   product: productSlice,
   dashboard: dashboardSlice,
-  root: rootSlice
+  root: rootSlice,
+  cart: cartSlice,
 })
 
 const persistConfig = {
