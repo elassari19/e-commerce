@@ -15,7 +15,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const Dropdown = ({ className, menuTrigger, menuHeader, menuContent }: Props) => {
   return <DropdownMenu>
-  <DropdownMenuTrigger className='px-2 outline-none row-stack gap-1'>
+  <DropdownMenuTrigger className='outline-none row-stack gap-1'>
     {menuTrigger}
   </DropdownMenuTrigger>
   <DropdownMenuContent className={cn("mt-4", className)}>
