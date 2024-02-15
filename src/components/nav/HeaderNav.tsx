@@ -10,7 +10,7 @@ import Dropdown from '../DropdownMenu';
 import { Bell, ShoppingBasket, ShoppingCartIcon } from 'lucide-react';
 import DialogCart from '../modals/DialogCart';
 import BasketCard from '../cards/BasketCard';
-import { Badge } from '../ui/badge';
+import { CartBadge } from '../reduxtHandler/CartActions';
 
 const HeaderNav = async () => {
   const session = await getAuthSession()
@@ -31,7 +31,7 @@ const HeaderNav = async () => {
 
           <ul className='hidden md:flex gap-4'>
             <li className='text-white font-bold relative' title={"Notification"}>
-              <Badge variant="destructive" className='absolute -top-2 -right-2 p-1 h-4'>4</Badge>
+              <CartBadge type="notification"/>
               <Dropdown
                 menuTrigger={<Bell size={25} />}
                 menuContent={
@@ -53,7 +53,7 @@ const HeaderNav = async () => {
                 }
                 sheetTrigger={
                   <div className='flex gap-2 relative cursor-pointer'>
-                    <Badge variant="destructive" className='absolute -top-2 -right-2 p-1 h-4'>4</Badge>
+                    <CartBadge type="cart"/>
                     <ShoppingBasket size={25}/> <span className='md:hidden font-semibold'>Shopping Cart</span>
                   </div>
                 }
