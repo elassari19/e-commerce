@@ -10,6 +10,7 @@ import Dropdown from '../DropdownMenu';
 import { Bell, ShoppingBasket, ShoppingCartIcon } from 'lucide-react';
 import DialogCart from '../modals/DialogCart';
 import BasketCard from '../cards/BasketCard';
+import { Badge } from '../ui/badge';
 
 const HeaderNav = async () => {
   const session = await getAuthSession()
@@ -29,38 +30,42 @@ const HeaderNav = async () => {
           <ToggleMenuNav />
 
           <ul className='hidden md:flex gap-4'>
-            <li className='text-white font-bold' title={"Notification"}>
-                <Dropdown
-                  menuTrigger={<Bell size={25} />}
-                  menuContent={
-                    Array(4).fill("notification id").map((item, idx) => (
-                      <li key={idx} className='text-sm list-none' title="Notification">
-                        <Link href={`/notification/${item.id}`}>Notification</Link>
-                      </li>
-                    ))
-                  }
-                />
-              </li>
+            <li className='text-white font-bold relative' title={"Notification"}>
+              <Badge variant="destructive" className='absolute -top-2 -right-2 p-1 h-4'>4</Badge>
+              <Dropdown
+                menuTrigger={<Bell size={25} />}
+                menuContent={
+                  Array(4).fill("notification id").map((item, idx) => (
+                    <li key={idx} className='text-sm list-none' title="Notification">
+                      <Link href={`/notification/${item.id}`}>Notification</Link>
+                    </li>
+                  ))
+                }
+              />
+            </li>
               
-              <li>
-                <DialogCart
-                  sheetHeader={
-                    <div className='bg-primary text-white flex gap-4 p-6 py-8 font-semibold'>
-                      <ShoppingCartIcon size={24} /> <span>Shopping Cart</span>
-                    </div>
-                  }
-                  sheetTrigger={
-                    <div className='flex gap-2'>
-                      <ShoppingBasket size={25}/> <span className='md:hidden font-semibold'></span>
-                    </div>
-                  }
-                  sheetContent={<BasketCard />}
-                  className="w-full md:w-1/4"
-                  colors="secondary"
-                />
-              </li>
+            <li>
+              <DialogCart
+                sheetHeader={
+                  <div className='bg-primary text-white flex gap-4 p-6 py-8 font-semibold'>
+                    <ShoppingCartIcon size={24} /> <span>Shopping Cart</span>
+                  </div>
+                }
+                sheetTrigger={
+                  <div className='flex gap-2 relative cursor-pointer'>
+                    <Badge variant="destructive" className='absolute -top-2 -right-2 p-1 h-4'>4</Badge>
+                    <ShoppingBasket size={25}/> <span className='md:hidden font-semibold'>Shopping Cart</span>
+                  </div>
+                }
+                sheetContent={<BasketCard />}
+                className="w-full md:w-1/4"
+                colors="secondary"
+              />
+            </li>
 
-            {session?.user ? <UserAuth /> : null}
+            <li>
+              {session?.user ? <UserAuth /> : null}
+            </li>
           </ul>
         </nav>
       </MotionSlide>
