@@ -16,26 +16,23 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDialogElement> {
   dialogTitle?: React.ReactNode,
   dialogDescription?: React.ReactNode,
   dialogFooter?: React.ReactNode,
+  dialogContent?: React.ReactNode,
 }
 
-const DialogPopup = ({ children, dialogTrigger, dialogTitle, dialogDescription, dialogFooter, className }: Props) => {
+const DialogPopup = ({ dialogContent, dialogTrigger, dialogTitle, dialogDescription, dialogFooter, className }: Props) => {
   return (
     <Dialog>
-      <DialogTrigger className="block w-full">
-        {dialogTrigger}
-      </DialogTrigger>
-      <DialogContent className={cn("sm:max-w-[425px] md:max-w-[50%] lg:max-w-[40%] px-28", className)}>
+      <DialogTrigger>{dialogTrigger}</DialogTrigger>
+      <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>
             {dialogDescription}
           </DialogDescription>
+          {dialogContent}
         </DialogHeader>
-        {children}
-        <DialogFooter>
-          {dialogFooter}
-        </DialogFooter>
       </DialogContent>
+      <DialogFooter>{dialogFooter}</DialogFooter>
     </Dialog>
   )
 }

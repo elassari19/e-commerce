@@ -1,13 +1,12 @@
 "use client"
 
 import React, { useLayoutEffect } from 'react'
-import { ColStack, RowStack } from '../layout'
 import { Button } from '../ui/button'
 import { Formik, Form } from 'formik';
 import FormikField from '../inputs/FormikField'
 import { signinSchema, signinType } from '../../schema'
 import { signIn, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -16,11 +15,11 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 const Signin = ({  }: Props) => {
   const router = useRouter()
   const { data } = useSession()
+  const pathname = usePathname()
 
-  console.log("data", data)
   useLayoutEffect(() => {
     if(data?.user) {
-      return router.push("/")
+      return router.push(pathname)
     }
   }, [data])
 
@@ -59,7 +58,7 @@ const Signin = ({  }: Props) => {
           return (
             <Form className='col-span-12'>
               {/* form section */}
-              <ColStack className='gap-1'>
+              <div className='flex flex-col gap-1'>
 
                 <FormikField
                   name='email'
@@ -83,7 +82,7 @@ const Signin = ({  }: Props) => {
 
                 <hr className='flex-1 my-6'/>
 
-              </ColStack>
+              </div>
             </Form>
           )
         }

@@ -7,10 +7,13 @@ import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
 import Dropdown from '../DropdownMenu';
-import { Bell, ShoppingBasket, ShoppingCartIcon } from 'lucide-react';
+import { Bell, ShoppingBasket, ShoppingCartIcon, User2 } from 'lucide-react';
 import DialogCart from '../modals/DialogCart';
 import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
+import SignIn from '../auth/SignIn';
+import DialogPopup from '../DialogPopup';
+import Signin from '../forms/Signin';
 
 const HeaderNav = async () => {
   const session = await getAuthSession()
@@ -64,7 +67,14 @@ const HeaderNav = async () => {
             </li>
 
             <li>
-              {session?.user ? <UserAuth /> : null}
+              {session?.user ? <UserAuth /> : (
+                <DialogPopup
+                  dialogTrigger={<User2 size={25} />}
+                  dialogTitle="User Authentication"
+                  className='w-96 md:w-1/2 lg:w-1/3'
+                  dialogContent={<Signin />}
+                />
+              )}
             </li>
           </ul>
         </nav>
