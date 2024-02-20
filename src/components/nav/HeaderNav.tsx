@@ -2,7 +2,6 @@ import Link from 'next/link';
 import ToggleMenuNav from '../modals/ToggleMenuNav';
 import SearchProductsInput from '../inputs/SearchProductsInput';
 import Image from 'next/image';
-import brand from '../../../public/brand.webp';
 import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
@@ -11,9 +10,9 @@ import { Bell, ShoppingBasket, ShoppingCartIcon, User2 } from 'lucide-react';
 import DialogCart from '../modals/DialogCart';
 import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
-import SignIn from '../auth/SignIn';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
+import { brand } from '../../assets/brand';
 
 const HeaderNav = async () => {
   const session = await getAuthSession()

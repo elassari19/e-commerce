@@ -1,9 +1,9 @@
 import { Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
-import brand from '../../../public/brand.webp'
 import { Input } from '../ui/input'
 import CartActions, { CartInput } from '../reduxtHandler/CartActions'
+import { brand } from '../../assets/brand'
 
 interface Props {}
 

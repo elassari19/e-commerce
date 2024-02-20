@@ -58,7 +58,7 @@ export const CartBadge = ({ type }: { type: string }) => {
   // @ts-ignore
   if (store?.[type]?.items.length > 0)
   return (
-    <Badge variant="destructive" className='absolute -top-2 -right-2 p-1 h-4'>
+    <Badge variant="destructive" className='animate-bounce absolute -top-2 -right-2 p-1 h-4'>
       {/* @ts-ignore */}
       {store?.[type]?.items.length}
     </Badge>
