@@ -11,12 +11,31 @@ import { Bell, ShoppingBasket, ShoppingCartIcon, User2 } from 'lucide-react';
 import DialogCart from '../modals/DialogCart';
 import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
-import SignIn from '../auth/SignIn';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
+import { db } from '../../lib/db';
 
-const HeaderNav = async () => {
+interface Props {
+  searchParams: {
+    search?: string
+    q?: string
+  }
+}
+
+const HeaderNav = async ({ searchParams }: Props) => {
   const session = await getAuthSession()
+
+  const products = await db.product.findMany({
+    where: {
+      OR: [
+        { name: { contains: searchParams.q } },
+        { description: { contains: searchParams.q } }
+      ]
+    },
+    include: {
+      images: true
+    }
+  })
 
   return (
     <header className="relative mx-2 md:container md:mx-auto pt-4 pb-2">

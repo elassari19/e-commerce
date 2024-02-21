@@ -3,7 +3,6 @@ import MotionSlide from '../framerMotion/MotionSlide'
 import { ImageUrl, Product } from '@prisma/client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { db } from '../../lib/db'
 
 interface Props {
   products: Partial<Product & { images: ImageUrl[] }>[]
@@ -18,7 +17,7 @@ const SearchProductsNav = async ({ searchParams, products }: Props) => {
     <div className="shadow-2xl max-h-40 w-full py-4 overflow-auto">
       {
         products.length > 0 && searchParams?.q && searchParams?.q.length > 2 && (
-            <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             {
               products.map((product, idx) => (
                 <MotionSlide bottom={10} delay={.2*(idx+2)} key={product.id}>
@@ -37,7 +36,7 @@ const SearchProductsNav = async ({ searchParams, products }: Props) => {
                 </MotionSlide>
               ))
             }
-            </div>
+          </div>
             
         )
       }
