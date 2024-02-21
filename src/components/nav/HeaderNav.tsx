@@ -13,11 +13,29 @@ import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
+import { db } from '../../lib/db';
 
-interface Props {}
+interface Props {
+  searchParams: {
+    search?: string
+    q?: string
+  }
+}
 
-const HeaderNav = async ({ }: Props) => {
+const HeaderNav = async ({ searchParams }: Props) => {
   const session = await getAuthSession()
+
+  const products = await db.product.findMany({
+    where: {
+      OR: [
+        { name: { contains: searchParams.q } },
+        { description: { contains: searchParams.q } }
+      ]
+    },
+    include: {
+      images: true
+    }
+  })
 
   return (
     <header className="relative mx-2 md:container md:mx-auto pt-4 pb-2">
@@ -29,7 +47,7 @@ const HeaderNav = async ({ }: Props) => {
             </Link>
           </div>
 
-          <SearchProductsInput />
+          {/* <SearchProductsInput /> */}
 
           <ToggleMenuNav />
 
