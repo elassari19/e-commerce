@@ -1,9 +1,7 @@
-'use client'
 import React from 'react'
-import MotionSlide from '../framerMotion/MotionSlide'
 import { ImageUrl, Product } from '@prisma/client'
-import Link from 'next/link'
-import Image from 'next/image'
+// import Link from 'next/link'
+// import Image from 'next/image'
 
 interface Props {
   products: Partial<Product & { images: ImageUrl[] }>[]
@@ -16,7 +14,7 @@ const SearchProductsNav = async ({ searchParams, products }: Props) => {
 
   return (
     <div className="shadow-2xl max-h-40 w-full py-4 overflow-auto">
-      {
+      {/* {
         products.length > 0 && searchParams?.q && searchParams?.q.length > 2 && (
           <div className="flex flex-col gap-1">
             {
@@ -47,7 +45,8 @@ const SearchProductsNav = async ({ searchParams, products }: Props) => {
             <p className="text-center py-2">No Products Found</p>
           </div>
         )
-      }
+      } */}
+      search nav
     </div>
   )
 }

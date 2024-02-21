@@ -1,11 +1,10 @@
 "use client";
 
-import { Loader2, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
-import MotionSlide from "../framerMotion/MotionSlide";
-import React, { Suspense } from "react";
+import React from "react";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 

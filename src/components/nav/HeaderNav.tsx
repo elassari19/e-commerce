@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ToggleMenuNav from '../modals/ToggleMenuNav';
 import SearchProductsInput from '../inputs/SearchProductsInput';
 import Image from 'next/image';
-// import brand from '../../../public/brand.webp';
+import brand from '../../assets/images/brand.png';
 import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
@@ -13,7 +13,7 @@ import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
-import { db } from '../../lib/db';
+// import { db } from '../../lib/db';
 
 interface Props {
   searchParams: {
@@ -43,12 +43,11 @@ const HeaderNav = async ({ searchParams }: Props) => {
         <nav className="flex justify-between items-center gap-4 md:gap-24">
           <div>
             <Link href="/">
-              brand
-              {/* <Image src={brand} alt='app brand' width={100} height={50}  className='h-8 w-8' /> */}
+              <Image src={brand} alt='app brand' width={100} height={50}  className='h-8 w-8' />
             </Link>
           </div>
 
-          {/* <SearchProductsInput /> */}
+          <SearchProductsInput />
 
           <ToggleMenuNav />
 
