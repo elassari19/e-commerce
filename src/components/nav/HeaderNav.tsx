@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ToggleMenuNav from '../modals/ToggleMenuNav';
 import SearchProductsInput from '../inputs/SearchProductsInput';
 import Image from 'next/image';
-import brand from '../../../public/brand.webp';
+// import brand from '../../../public/brand.webp';
 import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
@@ -25,17 +25,17 @@ interface Props {
 const HeaderNav = async ({ searchParams }: Props) => {
   const session = await getAuthSession()
 
-  const products = await db.product.findMany({
-    where: {
-      OR: [
-        { name: { contains: searchParams.q } },
-        { description: { contains: searchParams.q } }
-      ]
-    },
-    include: {
-      images: true
-    }
-  })
+  // const products = await db.product.findMany({
+  //   where: {
+  //     OR: [
+  //       { name: { contains: searchParams.q } },
+  //       { description: { contains: searchParams.q } }
+  //     ]
+  //   },
+  //   include: {
+  //     images: true
+  //   }
+  // })
 
   return (
     <header className="relative mx-2 md:container md:mx-auto pt-4 pb-2">
@@ -43,7 +43,8 @@ const HeaderNav = async ({ searchParams }: Props) => {
         <nav className="flex justify-between items-center gap-4 md:gap-24">
           <div>
             <Link href="/">
-              <Image src={brand} alt='app brand' width={100} height={50}  className='h-8 w-8' />
+              brand
+              {/* <Image src={brand} alt='app brand' width={100} height={50}  className='h-8 w-8' /> */}
             </Link>
           </div>
 
