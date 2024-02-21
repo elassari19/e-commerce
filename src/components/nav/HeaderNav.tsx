@@ -14,14 +14,9 @@ import { CartBadge } from '../reduxtHandler/CartActions';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
 
-interface Props {
-  searchParams: {
-    search?: string
-    q?: string
-  }
-}
+interface Props {}
 
-const HeaderNav = async ({ searchParams }: Props) => {
+const HeaderNav = async ({ }: Props) => {
   const session = await getAuthSession()
 
   return (

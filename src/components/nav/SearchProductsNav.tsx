@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import MotionSlide from '../framerMotion/MotionSlide'
 import { ImageUrl, Product } from '@prisma/client'
