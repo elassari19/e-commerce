@@ -5,23 +5,20 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
 import MotionSlide from "../framerMotion/MotionSlide";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Search = ({ placeholder }: Props) => {
-  // get search params
+
   const searchParams = useSearchParams();
   const { replace } = useRouter();
-  // get current url pathname
   const pathname = usePathname();
 
-  // useDebouncedCallback using for delay
+  const [toggleSearch, setToggleSearch] = useState(false);
+
   const handleSearch = useDebouncedCallback((e: any) => {
-
-    // update search params immediately
     const params = new URLSearchParams(searchParams);
-
     params.set("page", '1');
 
     if (e.target.value) {
@@ -39,18 +36,24 @@ const Search = ({ placeholder }: Props) => {
         onChange={handleSearch}
         // value={searchParams.get("q") || ""}
         className="flex-1"
+        onFocus={(e) => setToggleSearch(true)}
+        onBlur={(e) => setToggleSearch(false)}
       />
       <button type="submit">
       <SearchIcon className="text-primary mx-2 cursor-pointer" />
       </button>
-      <MotionSlide bottom={10} className="absolute top-12 h-48 w-full overflow-auto shadow-md">
-        <Suspense fallback={<div className="">
-        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-        </div>}>
-          {/* <Loader2 className='mx-auto h-40 w-40 animate-spin text-primary' /> */}
-        </Suspense>
-        
-      </MotionSlide>
+      {
+        toggleSearch && (
+          <MotionSlide bottom={10} className="absolute top-12 h-48 w-full overflow-auto shadow-md">
+            <Suspense fallback={<div className="">
+            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+            </div>}>
+              {/* <Loader2 className='mx-auto h-40 w-40 animate-spin text-primary' /> */}
+            </Suspense>
+            
+          </MotionSlide>
+        )
+      }
     </div>
   );
 };
