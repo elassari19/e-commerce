@@ -14,15 +14,18 @@ export default async function Home({ searchParams }: Props) {
 
   const getSearchProducts = () => {
     return new Promise((resolve) =>
-      resolve(db.product.findMany({
-        where: {
-          OR: [
-            { name: { contains: searchParams?.q, mode: "insensitive" } },
-            { description: { contains: searchParams?.q, mode: "insensitive" } }
-          ]
-        },
-        include: { images: true }
-      })
+      resolve(
+        setTimeout(() => {
+          db.product.findMany({
+            where: {
+              OR: [
+                { name: { contains: searchParams?.q, mode: "insensitive" } },
+                { description: { contains: searchParams?.q, mode: "insensitive" } }
+              ]
+            },
+            include: { images: true }
+          })
+        } , 1000)
     ))
   }
   const products = await getSearchProducts() as Partial<Product& { images: ImageUrl[]}>[]
