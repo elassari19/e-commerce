@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: Props) {
       <div className="col-span-full bg-primary-foreground text-white">
         <HeaderNav>
           <SearchProductsNav
-            products={products}
+            products={products || []}
             searchQuery={searchParams?.q}
           />
         </HeaderNav>
