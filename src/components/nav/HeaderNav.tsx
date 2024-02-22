@@ -6,15 +6,13 @@ import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
 import Dropdown from '../DropdownMenu';
-import { Bell, Loader2Icon, ShoppingBasket, ShoppingCartIcon, User2 } from 'lucide-react';
+import { Bell, ShoppingBasket, ShoppingCartIcon, User2 } from 'lucide-react';
 import DialogCart from '../modals/DialogCart';
 import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
 import { brand } from '../../assets/brand';
-import { Suspense } from 'react';
-import SearchProductsNav from './SearchProductsNav';
 
 interface Props {
   children: React.ReactNode
@@ -34,15 +32,7 @@ const HeaderNav = async ({ children }: Props) => {
           </div>
 
           <SearchProductsInput>
-            <MotionSlide bottom={10} className="absolute top-12 max-h-48 w-full overflow-auto shadow-md">
-              <Suspense fallback={
-                <div className="h-48 flex justify-center items-center">
-                <Loader2Icon className='h-16 w-16 animate-spin text-primary' />
-                </div>
-              }>
-                {children}
-              </Suspense>
-            </MotionSlide>
+            {children}
           </SearchProductsInput>
 
           <ToggleMenuNav />

@@ -29,8 +29,8 @@ const SearchProductsNav = async ({ products, searchQuery }: Props) => {
                       />
                     </div>
                     <div>
-                      <h2>{product.name}</h2>
-                      <p>{product.description}</p>
+                      <h2 className='text-sm font-bold'>{product.name}</h2>
+                      <p className='text-xs text-black/60'>{product.description}</p>
                     </div>
                   </Link>
                 </MotionSlide>

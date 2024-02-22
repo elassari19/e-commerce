@@ -33,7 +33,7 @@ const Search = ({ placeholder, children }: Props) => {
   return (
     <div className="relative flex-1 flex justify-between items-center rounded-sm bg-white text-black">
       <Input
-        placeholder={placeholder}
+        placeholder={placeholder || "Search products"}
         onChange={handleSearch}
         // value={searchParams.get("q") || ""}
         className="flex-1"
@@ -44,7 +44,16 @@ const Search = ({ placeholder, children }: Props) => {
       <SearchIcon className="text-primary mx-2 cursor-pointer" />
       </button>
       {
-        toggleSearch && children
+        toggleSearch && <MotionSlide top={10} className="absolute top-12 w-full max-h-48 shadow-md">
+          <Suspense fallback={
+            <div className="h-48 flex justify-center items-center">
+              <Loader2 className='h-16 w-16 animate-spin text-primary' />
+            </div>
+          
+          }>
+            {children}
+          </Suspense>
+        </MotionSlide>
       }
     </div>
   );
