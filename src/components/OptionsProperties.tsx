@@ -11,7 +11,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const OptionsProperties = ({ properties, setProperties }: Props) => {
   return (
-    <>
+    <div className="grid grid-cols-12 col-span-full">
     {
       properties.map((pro, index) => {
         return (
@@ -19,7 +19,7 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
           key={properties+index.toString()}
           className="col-span-full grid md:grid-cols-12 items-start md:gap-4 my-1"
         >
-          <label className="col-span-full md:col-span-4 text-sm ml-4">property {index+1}</label>
+          <label className="col-span-full md:col-span-4 text-sm text-black ml-4">property {index+1}</label>
           <div className="col-span-full md:col-span-8 grid grid-cols-12 gap-4">
             <div className="col-span-full md:col-span-5">
               <Input
@@ -30,7 +30,7 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
                   )
                 }
                 value={pro.name || ""}
-                className="text-sm"
+                className="text-sm text-black"
               />
             </div>
             <div className="col-span-full md:col-span-5">
@@ -42,7 +42,7 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
                   )
                 }}
                 value={pro.value || ""}
-                className="text-sm"
+                className="text-sm text-black"
               />
             </div>
             {/* remove option button */}
@@ -61,7 +61,7 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
         </div>
       )})
     }
-      <div className="col-span-full md:col-span-2 md:col-start-11 mt-2">
+      <div className="col-span-full md:col-span-3 md:col-start-10 mt-2 mb-8">
         <Button
           variant="primary"
           onClick={() => setProperties([...properties, {name: "", value: ""}])}
@@ -70,7 +70,7 @@ const OptionsProperties = ({ properties, setProperties }: Props) => {
           <Plus size={18}/> Add Proporty
         </Button>
       </div>
-    </>
+    </div>
   )
 }
 
