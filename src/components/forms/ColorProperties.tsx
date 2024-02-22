@@ -41,7 +41,7 @@ const ColorProperties = ({ properties, setProperties }: Props) => {
                   )
                 }
                 value={pro.color||""}
-                className="text-sm"
+                className="text-sm text-black"
               />
             </div>
             {/* quantety */}
@@ -54,7 +54,7 @@ const ColorProperties = ({ properties, setProperties }: Props) => {
                   )
                 }}
                 value={pro.quantity||""}
-                className="text-sm"
+                className="text-sm text-black"
               />
             </div>
             {/* images */}
