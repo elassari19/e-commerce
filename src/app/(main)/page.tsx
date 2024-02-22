@@ -14,7 +14,7 @@ export default async function Home({ searchParams }: Props) {
   let products: Partial<Product& { images: ImageUrl[]}>[] = []
 
   try {
-    products = await db.product.findMany({
+    if(searchParams?.q && searchParams?.q?.length > 2) products = await db.product.findMany({
       where: {
         OR: [
           { name: { contains: searchParams?.q, mode: "insensitive" } },
