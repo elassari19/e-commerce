@@ -11,24 +11,22 @@ interface Props {
 }
 
 export default async function Home({ searchParams }: Props) {
-  let products: Partial<Product& { images: ImageUrl[]}>[] = []
 
-  try {
-    if(searchParams?.q && searchParams?.q?.length > 2) products = await db.product.findMany({
-      where: {
-        OR: [
-          { name: { contains: searchParams?.q, mode: "insensitive" } },
-          { description: { contains: searchParams?.q, mode: "insensitive" } }
-        ]
-      },
-      include: {
-        images: true
-      }
-    })
-  } catch (error) {
-    products = []
-    console.error('Error fetching products', error)
+  const getSearchProducts = () => {
+    return new Promise((resolve) =>
+      resolve(db.product.findMany({
+        where: {
+          OR: [
+            { name: { contains: searchParams?.q, mode: "insensitive" } },
+            { description: { contains: searchParams?.q, mode: "insensitive" } }
+          ]
+        },
+        include: { images: true }
+      })
+    ))
   }
+  const products = await getSearchProducts() as Partial<Product& { images: ImageUrl[]}>[]
+
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full bg-primary-foreground text-white">
