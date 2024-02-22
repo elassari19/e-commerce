@@ -10,7 +10,7 @@ import SearchProductsNav from "../nav/SearchProductsNav";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Search = ({ placeholder }: Props) => {
+const Search = ({ placeholder, children }: Props) => {
 
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -44,21 +44,7 @@ const Search = ({ placeholder }: Props) => {
       <SearchIcon className="text-primary mx-2 cursor-pointer" />
       </button>
       {
-        toggleSearch && (
-          <MotionSlide bottom={10} className="absolute top-12 max-h-48 w-full overflow-auto shadow-md">
-            <Suspense fallback={
-              <div className="h-48 flex justify-center items-center">
-              <Loader2 className='h-16 w-16 animate-spin' />
-              </div>
-            }>
-              <SearchProductsNav
-                searchQuery={searchParams.get("q") || ""}
-                products={[]}
-              />
-            </Suspense>
-            
-          </MotionSlide>
-        )
+        toggleSearch && children
       }
     </div>
   );
