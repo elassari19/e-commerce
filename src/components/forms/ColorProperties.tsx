@@ -41,7 +41,7 @@ const ColorProperties = ({ properties, setProperties }: Props) => {
                   )
                 }
                 value={pro.color||""}
-                className="text-sm"
+                className="text-sm text-black"
               />
             </div>
             {/* quantety */}
@@ -54,7 +54,7 @@ const ColorProperties = ({ properties, setProperties }: Props) => {
                   )
                 }}
                 value={pro.quantity||""}
-                className="text-sm"
+                className="text-sm text-black"
               />
             </div>
             {/* images */}
@@ -64,7 +64,7 @@ const ColorProperties = ({ properties, setProperties }: Props) => {
                 type="file"
                 onChange={async (e) => await uploadImagesHandler(e, setImages)}
                 // value={pro.image?.[0]?.color}
-                className="text-sm flex-1"
+                className="text-sm text-black flex-1"
               />
               
             </div>
@@ -88,9 +88,9 @@ const ColorProperties = ({ properties, setProperties }: Props) => {
         <Button
           variant="primary"
             onClick={() => setProperties([...properties, { color: "", quantity: "" }]) }
-          className="font-bold mt-4 md:mt-0"
+          className="mt-4 md:mt-0"
         >
-          <Plus size={18}/> Add Proporty
+          <Plus size={18}/> Add Color
         </Button>
       </div>
     </div>

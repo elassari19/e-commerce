@@ -21,7 +21,7 @@ interface Props {
 const SelectInput = ({ placeholder, data, onSelect, value }: Props) => {
   return (
     <Select onValueChange={onSelect} defaultValue={value}>
-      <SelectTrigger className={cn("w-full")}>
+      <SelectTrigger className={cn("w-full text-black")}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

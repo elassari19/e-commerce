@@ -10,7 +10,7 @@ import Image from "next/image"
 import { Input } from "../ui/input"
 
 const InputVariants = cva(
-  "flex border border-black-300 flex-row gap-4 items-center justify-center p-3 py-1 rounded-md text-md font-medium border outline-none",
+  "flex border border-black-300 flex-row gap-4 items-center justify-center p-3 py-1 rounded-md text-black text-md font-medium border outline-none",
   {
     variants: {
       variant: {
