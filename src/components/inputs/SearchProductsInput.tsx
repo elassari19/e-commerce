@@ -6,6 +6,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
 import MotionSlide from "../framerMotion/MotionSlide";
 import { Suspense, useState } from "react";
+import SearchProductsNav from "../nav/SearchProductsNav";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -44,11 +45,16 @@ const Search = ({ placeholder }: Props) => {
       </button>
       {
         toggleSearch && (
-          <MotionSlide bottom={10} className="absolute top-12 h-48 w-full overflow-auto shadow-md">
-            <Suspense fallback={<div className="">
-            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            </div>}>
-              {/* <Loader2 className='mx-auto h-40 w-40 animate-spin text-primary' /> */}
+          <MotionSlide bottom={10} className="absolute top-12 max-h-48 w-full overflow-auto shadow-md">
+            <Suspense fallback={
+              <div className="h-48 flex justify-center items-center">
+              <Loader2 className='h-16 w-16 animate-spin' />
+              </div>
+            }>
+              <SearchProductsNav
+                searchQuery={searchParams.get("q") || ""}
+                products={[]}
+              />
             </Suspense>
             
           </MotionSlide>
