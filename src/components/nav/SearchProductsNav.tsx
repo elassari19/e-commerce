@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import MotionSlide from '../framerMotion/MotionSlide'
 import { ImageUrl, Product } from '@prisma/client'
 import Link from 'next/link'
@@ -9,7 +9,7 @@ interface Props {
   searchQuery?: string
 }
 
-const SearchProductsNav = async ({ products, searchQuery }: Props) => {
+const SearchProductsNav = ({ products, searchQuery }: Props) => {
 
   return (
     <MotionSlide top={10} className="h-full w-full py-4 overflow-auto">

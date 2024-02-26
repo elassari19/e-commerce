@@ -15,10 +15,9 @@ import Signin from '../forms/Signin';
 import { brand } from '../../assets/brand';
 
 interface Props {
-  children: React.ReactNode
 }
 
-const HeaderNav = async ({ children }: Props) => {
+const HeaderNav = async ({  }: Props) => {
   const session = await getAuthSession()
 
   return (
@@ -31,9 +30,7 @@ const HeaderNav = async ({ children }: Props) => {
             </Link>
           </div>
 
-          <SearchProductsInput>
-            {children}
-          </SearchProductsInput>
+          <SearchProductsInput />
 
           <ToggleMenuNav />
 
