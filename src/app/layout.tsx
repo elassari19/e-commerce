@@ -1,5 +1,5 @@
 import '@/app/globals.css'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+// import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/components/Providers'
@@ -13,17 +13,16 @@ export const metadata: Metadata = {
 
 interface Props {
   children: React.ReactNode
-  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default function RootLayout({ children, searchParams }: Props) {
+export default function RootLayout({ children }: Props) {
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <Providers>
           {children}
-          <SpeedInsights />
+          {/* <SpeedInsights /> */}
         </Providers>
       </body>
     </html>

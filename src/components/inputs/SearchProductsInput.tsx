@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
 import MotionSlide from "../framerMotion/MotionSlide";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import SearchProductsNav from "../nav/SearchProductsNav";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -17,25 +17,31 @@ const Search = ({ placeholder, children }: Props) => {
   const pathname = usePathname();
 
   const [toggleSearch, setToggleSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = useDebouncedCallback((e: any) => {
+  const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", '1');
 
-    if (e.target.value) {
-      e.target.value.length > 2 && params.set("q", e.target.value);
+    if (value) {
+      value.length > 2 && params.set("q", value);
     } else {
       params.delete("q");
     }
     replace(`${pathname}?${params}`);
-  }, 1000);
+  }, 500);
+
+  useEffect(() => {
+    handleSearch(searchQuery);
+  }, [searchQuery])
+  
 
   return (
     <div className="relative flex-1 flex justify-between items-center rounded-sm bg-white text-black">
       <Input
         placeholder={placeholder || "Search products"}
-        onChange={handleSearch}
-        // value={searchParams.get("q") || ""}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        value={searchQuery}
         className="flex-1"
         onFocus={(e) => setToggleSearch(true)}
         onBlur={(e) => setToggleSearch(false)}
