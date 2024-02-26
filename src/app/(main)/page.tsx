@@ -10,22 +10,32 @@ interface Props {
   }
 }
 
+const getProducts = (search: string) => {
+  const products = db.product.findMany({
+    where: {
+      OR: [
+        { name: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } }
+      ]
+    },
+    include: {
+      images: true
+    }
+  })
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(products)
+    }, 500)
+  )
+}
+
 export default async function Home({ searchParams }: Props) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
   let products: Partial<Product& { images: ImageUrl[]}>[] = []
 
   try {
-    if(searchParams?.q && searchParams?.q?.length > 2) products = await db.product.findMany({
-      where: {
-        OR: [
-          { name: { contains: searchParams?.q, mode: "insensitive" } },
-          { description: { contains: searchParams?.q, mode: "insensitive" } }
-        ]
-      },
-      include: {
-        images: true
-      }
-    })
+    if(searchParams?.q && searchParams?.q?.length > 2) {
+      products = await getProducts(searchParams.q) as Partial<Product& { images: ImageUrl[]}>[]
+    }
   } catch (error) {
     products = []
     console.error('Error fetching products', error)
