@@ -1,7 +1,4 @@
 import HeaderNav from "@/components/nav/HeaderNav"
-import SearchProductsNav from "@/components/nav/SearchProductsNav"
-import { db } from "@/lib/db"
-import { ImageUrl, Product } from "@prisma/client"
 
 interface Props {
   searchParams: {
@@ -9,7 +6,6 @@ interface Props {
     q?: string
   }
 }
-
 
 export default async function Home({ searchParams }: Props) {
 
