@@ -23,13 +23,14 @@ const Search = ({ placeholder }: Props) => {
   const [products, setProducts] = useState([]);
 
   const handleSearch = useDebouncedCallback(async(value: string) => {
-    params.set("page", '1');
 
     if (value && value.length > 2) {
+      params.set("limit", '5');
       params.set("q", value);
       setProducts(await getProducts(value)as any); 
     } else {
       params.delete("q");
+      params.delete("limit");
     }
     replace(`${pathname}?${params}`);
   }, 500);

@@ -15,7 +15,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement>{
 
 const AllCategories = ({ Categories, className }: Props) => {
   const categoriesTree = createList(Categories)
-  console.log("categoriesTree", categoriesTree)
+
   return (
     <>
       <div className='hidden md:block'>
