@@ -15,7 +15,7 @@ const BasketCard = ({  }: Props) => {
         Array(4).fill({ img: brand, title: "test", subtitle: "sub test", price: 50, quantity: 1 })
           .map(({ img, title, subtitle, price, quantity }, idx) => (
             <div className='w-full flex gap-2 hover:bg-gray-100 p-4 text-sm' key={idx}>
-              <Image src={img} alt='app brand' width={100} height={50} className='h-8 w-8 mx-2 rounded-full' />
+              <Image src={img} loading="lazy" alt='app brand' width={100} height={50} className='h-8 w-8 mx-2 rounded-full' />
               <div className='w-full'>
                 <h5 className='font-bold'>{title}</h5>
                 <h6 className='font-simebold text-gray-400'>{subtitle}</h6>

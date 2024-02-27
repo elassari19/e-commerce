@@ -24,7 +24,7 @@ const SearchProductsNav = ({ products, searchQuery }: Props) => {
                     className="flex items-center gap-4 py-1 px-4 hover:bg-slate-100 cursor-pointer"
                   >
                     <div className="w-10 h-10 bg-gray-200 rounded-sm">
-                      <Image src={product.images![0].secure_url} priority alt={product.name || ""} width={40} height={40}
+                      <Image src={product.images![0].secure_url} loading="lazy" alt={product.name || ""} width={40} height={40}
                         className='rounded-md'
                       />
                     </div>
