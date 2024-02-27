@@ -2,7 +2,6 @@ import Link from 'next/link';
 import ToggleMenuNav from '../modals/ToggleMenuNav';
 import SearchProductsInput from '../inputs/SearchProductsInput';
 import Image from 'next/image';
-import UserAuth from '../auth/UserAuth';
 import MotionSlide from '../framerMotion/MotionSlide';
 import { getAuthSession } from '../../lib/getAuthSession';
 import Dropdown from '../DropdownMenu';
@@ -13,22 +12,30 @@ import { CartBadge } from '../reduxtHandler/CartActions';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
 import { brand } from '../../assets/brand';
+import { db } from '../../lib/db';
+import AllCategories from './AllCategories';
+import { list } from '../../helpers/constants/Categories';
+import UserAuth from '../auth/UserAuth';
 
 interface Props {
 }
 
 const HeaderNav = async ({  }: Props) => {
   const session = await getAuthSession()
+  const Categories = await db.category.findMany()
 
   return (
     <header className="relative mx-2 md:container md:mx-auto pt-4 pb-2">
       <MotionSlide top={10}>
         <nav className="flex justify-between items-center gap-4 md:gap-24">
-          <div>
+          <div className='hidden md:block cursor-pointer'>
             <Link href="/">
-              <Image src={brand} alt='app brand' width={100} height={50}  className='h-8 w-8' />
+              <Image src={brand} loading="lazy" alt='app brand' width={100} height={50}  className='h-8 w-8' />
             </Link>
           </div>
+
+          {/* categories */}
+          <AllCategories Categories={Categories} />
 
           <SearchProductsInput />
 
@@ -69,14 +76,34 @@ const HeaderNav = async ({  }: Props) => {
             </li>
 
             <li>
-              {session?.user ? <UserAuth /> : (
-                <DialogPopup
-                  dialogTrigger={<User2 size={25} />}
-                  dialogTitle="User Authentication"
-                  className='w-96 md:w-1/2 lg:w-1/3'
-                  dialogContent={<Signin />}
-                />
-              )}
+              <ul className=''>
+                {session?.user
+                  ? (
+                    <Dropdown
+                      menuTrigger={<User2 size={25} />}
+                      menuContent={[...list.map(({ href, Icon, title }, idx) => (
+                        <li key={idx} className='font-semibold group list-none'>
+                          <Link href={href} className='flex items-center gap-2 group-hover:text-primary'>
+                            <Icon size={25} /> <span>{title}</span>
+                          </Link>
+                        </li>
+                      )),
+                      <li className='font-semibold group list-none'>
+                        <UserAuth className='flex items-center gap-2 group-hover:text-primary' />
+                      </li>,
+                      ]}
+                      className='w-[14rem]'
+                    />
+                  )
+                  : (
+                  <DialogPopup
+                    dialogTrigger={<User2 size={25} />}
+                    dialogTitle="User Authentication"
+                    className='w-96 md:w-1/2 lg:w-1/3'
+                    dialogContent={<Signin />}
+                  />
+                )}
+              </ul>
             </li>
           </ul>
         </nav>
