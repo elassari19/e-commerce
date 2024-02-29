@@ -34,8 +34,6 @@ const AllCategories = ({ Categories, className }: Props) => {
                     <AccordionContent className='ml-16'>
                       {
                         cat.children?.map((item) => {
-                          // @ts-ignore
-                          console.log("item", item)
                           return (
                             <Link key={item.id} href={`/?category=${item.id}`} className='block my-1'>
                               {item.name}

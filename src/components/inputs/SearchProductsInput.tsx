@@ -54,7 +54,7 @@ const Search = ({ placeholder }: Props) => {
       </button>
       {
         toggleSearch && (
-          <MotionSlide top={10} className="absolute top-12 w-full max-h-48 shadow-md">
+          <MotionSlide top={10} className="absolute top-12 w-full max-h-56 overflow-y-auto shadow-md">
             <SearchProductsNav products={products} searchQuery={searchQuery} />
           </MotionSlide>
         )
