@@ -1,41 +1,50 @@
 "use client";
 
-import { Loader2, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
 import MotionSlide from "../framerMotion/MotionSlide";
-import { Suspense, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import SearchProductsNav from "../nav/SearchProductsNav";
+import { getProducts } from "../../helpers/actions/Products";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Search = ({ placeholder, children }: Props) => {
+const Search = ({ placeholder }: Props) => {
 
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
+  const params = new URLSearchParams(searchParams);
 
   const [toggleSearch, setToggleSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState([]);
 
-  const handleSearch = useDebouncedCallback((e: any) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", '1');
+  const handleSearch = useDebouncedCallback(async(value: string) => {
 
-    if (e.target.value) {
-      e.target.value.length > 2 && params.set("q", e.target.value);
+    if (value && value.length > 2) {
+      params.set("limit", '5');
+      params.set("q", value);
+      setProducts(await getProducts(value)as any); 
     } else {
       params.delete("q");
+      params.delete("limit");
     }
     replace(`${pathname}?${params}`);
-  }, 1000);
+  }, 500);
+
+  useEffect(() => {
+    handleSearch(searchQuery);
+  }, [searchQuery])  
 
   return (
     <div className="relative flex-1 flex justify-between items-center rounded-sm bg-white text-black">
       <Input
-        placeholder={placeholder}
-        onChange={handleSearch}
-        // value={searchParams.get("q") || ""}
+        placeholder={placeholder || "Search products"}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        value={searchQuery}
         className="flex-1"
         onFocus={(e) => setToggleSearch(true)}
         onBlur={(e) => setToggleSearch(false)}
@@ -44,7 +53,11 @@ const Search = ({ placeholder, children }: Props) => {
       <SearchIcon className="text-primary mx-2 cursor-pointer" />
       </button>
       {
-        toggleSearch && children
+        toggleSearch && (
+          <MotionSlide top={10} className="absolute top-12 w-full max-h-56 overflow-y-auto shadow-md">
+            <SearchProductsNav products={products} searchQuery={searchQuery} />
+          </MotionSlide>
+        )
       }
     </div>
   );

@@ -23,7 +23,7 @@ const Dropdown = ({ className, menuTrigger, menuHeader, menuContent }: Props) =>
     {
       menuContent.map((item, idx) => {
         return (
-          <DropdownMenuItem key={idx}>
+          <DropdownMenuItem key={idx} className="block">
             {item}
           </DropdownMenuItem>
         )

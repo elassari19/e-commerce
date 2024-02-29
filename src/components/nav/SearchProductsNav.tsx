@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import MotionSlide from '../framerMotion/MotionSlide'
 import { ImageUrl, Product } from '@prisma/client'
 import Link from 'next/link'
@@ -9,7 +9,7 @@ interface Props {
   searchQuery?: string
 }
 
-const SearchProductsNav = async ({ products, searchQuery }: Props) => {
+const SearchProductsNav = ({ products, searchQuery }: Props) => {
 
   return (
     <MotionSlide top={10} className="h-full w-full py-4 overflow-auto">
@@ -24,13 +24,13 @@ const SearchProductsNav = async ({ products, searchQuery }: Props) => {
                     className="flex items-center gap-4 py-1 px-4 hover:bg-slate-100 cursor-pointer"
                   >
                     <div className="w-10 h-10 bg-gray-200 rounded-sm">
-                      <Image src={product.images![0].secure_url} priority alt={product.name || ""} width={40} height={40}
+                      <Image src={product.images![0].secure_url} loading="lazy" alt={product.name || ""} width={40} height={40}
                         className='rounded-md'
                       />
                     </div>
                     <div>
-                      <h2>{product.name}</h2>
-                      <p>{product.description}</p>
+                      <h2 className='text-sm font-bold'>{product.name}</h2>
+                      <p className='text-xs text-black/60'>{product.description}</p>
                     </div>
                   </Link>
                 </MotionSlide>
