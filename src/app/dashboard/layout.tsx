@@ -1,4 +1,4 @@
-import { getAuthSession } from "../../../lib/getAuthSession"
+import { getAuthSession } from "../../lib/getAuthSession"
 import HeaderSection from "@/components/nav/HeaderSection"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
