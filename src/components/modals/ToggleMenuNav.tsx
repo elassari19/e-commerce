@@ -25,7 +25,7 @@ const ToggleMenuNav = () => {
               </Link>
             </li>
           )),
-          <li className='font-semibold group'>
+          <li key={"userauth"} className='font-semibold group'>
             <UserAuth />
           </li>,
         ]

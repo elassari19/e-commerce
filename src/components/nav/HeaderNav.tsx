@@ -88,7 +88,7 @@ const HeaderNav = async ({  }: Props) => {
                           </Link>
                         </li>
                       )),
-                      <li className='font-semibold group list-none'>
+                      <li key={"userauth"} className='font-semibold group list-none'>
                         <UserAuth className='flex items-center gap-2 group-hover:text-primary' />
                       </li>,
                       ]}
