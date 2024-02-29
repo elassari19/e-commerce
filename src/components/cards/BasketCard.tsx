@@ -1,43 +1,75 @@
+'use client'
+
 import { Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import { Input } from '../ui/input'
-import CartActions, { CartInput } from '../reduxtHandler/CartActions'
-import { brand } from '../../assets/brand'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/store'
+import { decrementQuantity, incrementQuantity, removeFromCart } from '@/store/cartSlice'
+import Link from 'next/link'
 
 interface Props {}
 
 const BasketCard = ({  }: Props) => {
+  const basket = useSelector((state: RootState) => state.cart.items)
+  const dispatch = useDispatch()
 
+  const total = basket.reduce((acc, item) => acc + (+item.price * item.qty), 0)
+  console.log('total', total)
   return (
-    <div className='text-black col-span-12'>
+    <div className='text-black col-span-12 flex flex-col h-[88vh]'>
       {
-        Array(4).fill({ img: brand, title: "test", subtitle: "sub test", price: 50, quantity: 1 })
-          .map(({ img, title, subtitle, price, quantity }, idx) => (
-            <div className='w-full flex gap-2 hover:bg-gray-100 p-4 text-sm' key={idx}>
-              <Image src={img} loading="lazy" alt='app brand' width={100} height={50} className='h-8 w-8 mx-2 rounded-full' />
-              <div className='w-full'>
-                <h5 className='font-bold'>{title}</h5>
-                <h6 className='font-simebold text-gray-400'>{subtitle}</h6>
-                <div className='flex justify-between items-center'>
-                  <h5 className='font-bold text-xl'>{price}</h5>
-                  <div className='flex gap-2 h-8'>
-                    <CartActions increment product={{ id: idx.toString() }}>
-                      <button className='bg-primary text-white px-2 rounded-sm h-full'>+</button>
-                    </CartActions>
-                    <CartInput product={{ id: idx.toString() }} />
-                    <CartActions decrement product={{ id: idx.toString() }}>
-                      <button className='bg-primary text-white px-2 rounded-sm h-full'>-</button>
-                    </CartActions>
+        basket.length > 0
+          ? (
+            <div className='h-full'>
+            {
+              basket
+                .map((product, idx) => (
+                  <div className='flex gap-2 hover:bg-gray-100 p-4 text-sm w-full' key={idx}>
+                    <Image src={product.images?.[0].secure_url} loading="lazy" priority={false} alt='product' width={100} height={50} className='h-8 w-8 mx-2 rounded-full' />
+                    <div className='w-[85%]'>
+                      <h5 className='font-bold'>{product.name}</h5>
+                      <h6 className='font-simebold text-gray-400 truncate'>{product.description}</h6>
+                      <div className='flex justify-between items-center'>
+                        <h5 className='font-bold text-xl'>{product.price}</h5>
+                        <div className='flex gap-2 h-8'>
+                          <div onClick={() => dispatch(incrementQuantity(product))}>
+                            <button className='bg-primary text-white px-2 rounded-sm h-full'>+</button>
+                          </div>
+                          <Input
+                            type='number' className=' px-2 rounded-sm w-12' value={product.qty}
+                            onChange={(e) => dispatch(incrementQuantity({ ...product, value: +e.target.value }))}
+                          />
+                          <div onClick={() => dispatch(decrementQuantity(product))}>
+                            <button className='bg-primary text-white px-2 rounded-sm h-full'>-</button>
+                          </div>
+                        </div>
+                        <div onClick={() => dispatch(removeFromCart(product))}>
+                          <Trash2 size={22} className='font-thin text-destructive cursor-pointer' />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <CartActions remove product={{ id: idx.toString() }}>
-                    <Trash2 size={22} className='font-thin text-destructive cursor-pointer' />
-                  </CartActions>
-                </div>
-              </div>
+              ))
+            }
             </div>
-        ))}
-      
+          )
+          : (
+            <div className='flex-1'>no product</div>
+          )
+      }
+      <Link
+        href='/checkout'
+        className='bg-primary p-4 rounded-full m-4 text-white text-sm font-bold flex justify-between items-center'
+      >
+        Process To Checkout
+        <span
+          className='bg-white text-primary font-bold text-sm rounded-3xl block p-1 px-2'
+        >
+          ${total}
+        </span>
+      </Link>
     </div>
   )
 }

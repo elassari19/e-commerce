@@ -70,7 +70,7 @@ const HeaderNav = async ({  }: Props) => {
                   </div>
                 }
                 sheetContent={<BasketCard />}
-                className="w-full md:w-1/4"
+                className="w-full h-full md:w-2/5 lg:w-2/6 xl:w-1/4"
                 colors="secondary"
               />
             </li>
