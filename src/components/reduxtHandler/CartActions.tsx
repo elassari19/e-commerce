@@ -2,11 +2,12 @@
 
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from '../../store/cartSlice'
+import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from '@/store/cartSlice'
 import { Product } from '@prisma/client'
 import { Input } from '../ui/input'
-import { RootState } from '../../store'
+import { RootState } from '@/store'
 import { Badge } from '../ui/badge'
+import { cn } from '@/lib/utils'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement>{
   increment?: boolean
@@ -16,21 +17,22 @@ interface Props extends React.HTMLAttributes<HTMLDivElement>{
   product: Partial<Product>
 }
 
-function CartActions({ increment, add, remove, product, children }: Props) {
+function CartActions({ increment, add, remove, product, children, className }: Props) {
 
   const dispatch = useDispatch()
 
-  const action = (id: number) => increment
-    ? incrementQuantity({ id})
+  const action = (_product: Partial<Product>) => increment
+    ? incrementQuantity({ id: _product.id})
     : add
-      ? addToCart({ id})
+      ? addToCart(_product)
       : remove
-        ? removeFromCart({ id})
-        : decrementQuantity({ id})
+        ? removeFromCart({ id: _product.id})
+        : decrementQuantity({ id: _product.id})
 
   return (
     <div
-      onClick={() => dispatch(action(+product.id!))}
+      onClick={() => dispatch(action(product))}
+      className={cn("", className)}
     >
       {children}
     </div>
@@ -39,15 +41,15 @@ function CartActions({ increment, add, remove, product, children }: Props) {
 
 export default CartActions
 
-export const CartInput = ({ product }: { product: Pick<Product, "id">}) => {
+export const CartInput = ({ id }: { id: string}) => {
 
   const dispatch = useDispatch()
   const carts = useSelector((state: RootState) => state.cart.items)
 
   return (
     <Input
-      type='number' className=' px-2 rounded-sm w-12' value={+carts[+product.id]?.quantity}
-      onChange={(e) => dispatch(incrementQuantity({ id: +product.id, value: +e.target.value }))}
+      type='number' className=' px-2 rounded-sm w-12' value={carts[+id]?.qty}
+      onChange={(e) => dispatch(incrementQuantity({ id: +id, value: +e.target.value }))}
     />
   )
 }
