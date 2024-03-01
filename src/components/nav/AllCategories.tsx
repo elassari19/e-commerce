@@ -21,8 +21,8 @@ const AllCategories = ({ Categories, className }: Props) => {
       <div className='hidden md:block'>
         <DropdownMenu>
           <DropdownMenuTrigger className={cn('outline-none ring-0', className)} >
-            <div className='flex gap-2'>
-              <MenuIcon size={25} /> <span className='hidden md:inline'>All Categories</span>
+            <div className='flex items-center gap-2 border rounded-full p-1 px-3 bg-primary-light text-primary-dark hover:bg-primary hover:text-white'>
+              <MenuIcon size={18} /> <span className='hidden md:inline'>All Categories</span>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className='p-4 flex flex-col gap-2 max-h-[50vh] overflow-y-auto w-80 right-0'>

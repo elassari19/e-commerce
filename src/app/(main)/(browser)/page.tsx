@@ -1,7 +1,8 @@
-import HeaderNav from "@/components/nav/HeaderNav"
-import { db } from "../../../lib/db"
+import { db } from "@/lib/db"
 import { Suspense } from "react"
 import ProductCard from "@/components/cards/ProductCard"
+import { brand } from "@/assets/brand"
+import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
 
 export const dynamic = "force-dynamic"
 
@@ -27,9 +28,13 @@ export default async function Home({ searchParams }: Props) {
           }
         >
           <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-center">
-            <h1 className="col-span-full font-bold text-xl">
-              Shop by categories
-            </h1>
+            <div className="col-span-full">
+              <h1 className="font-bold text-xl">
+                Shop by categories
+              </h1>
+
+              <CategoriesSwiper swipersItems={Array(15).fill(brand)} />
+            </div>
 
             <h2 className="col-span-full font-bold text-xl">
               Popular Products for Daily Shopping
