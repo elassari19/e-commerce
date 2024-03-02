@@ -20,6 +20,8 @@ export default async function Home({ searchParams }: Props) {
     }
   })
 
+  const categories = await db.category.findMany()
+
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
@@ -27,14 +29,15 @@ export default async function Home({ searchParams }: Props) {
             <div className="w-full h-full text-9xl text-black">loading ...</div>
           }
         >
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-center">
-            <div className="col-span-full">
-              <h1 className="font-bold text-xl">
-                Shop by categories
-              </h1>
+          {/* categories */}
+          <div className="col-span-full place-content-center">
+            <h1 className="font-bold text-xl">
+              Shop by categories
+            </h1>
 
-              <CategoriesSwiper swipersItems={Array(15).fill(brand)} />
-            </div>
+            <CategoriesSwiper categories={categories.filter((category) => category.parentId === "" )} />
+          </div>
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center">
 
             <h2 className="col-span-full font-bold text-xl">
               Popular Products for Daily Shopping
