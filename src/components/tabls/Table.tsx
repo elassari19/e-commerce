@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
 import { useDispatch, useSelector } from "react-redux";
 import { dashboardHandler } from "@/store/dashboard/dashboard";
@@ -20,16 +20,21 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const Table = ({ className, action, rowsData, colsDefs }: Props) => {
 
-  const [rowData, setRowData] = useState(rowsData);
+  const [rowData, setRowData] = useState<any[]>([]);
 
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState(colsDefs);
+
+  useEffect(() => {
+    setRowData(rowsData)
+  }, [rowsData])
+  
 
   const defaultColDef = useMemo(() => ({
     filter: true, // Enable filtering on all columns
     onSelectionChanged: true,
     width: 150,
-    editable: true,
+    // editable: true,
   }), [])
 
   // @ts-ignore select state based on state name ex: state.dashboard.catagories
@@ -46,39 +51,39 @@ const Table = ({ className, action, rowsData, colsDefs }: Props) => {
     return dispatch(dashboardHandler({ [action]: { ...dashboard, remove: product } }))
   }
 
-  const onCellValueChanged = useCallback(async (event: CellEditingStoppedEvent) => {
-    let updateData
-    let rowUpdated: boolean = true;
-    const newRowsData = rowData.map((row) =>{
-      if(row.id != event.data.id){
-        return row
-      } else {
-        updateData = {
-          id: event.data.id,
-          value: event.newValue,
-          name: [event.colDef.field]
-        }
-        rowUpdated = row[event.colDef.field as string] === event.newValue
-        // console.log(rowUpdated)
-        return { ...row, [event.colDef.field as string]: event.newValue }
-      }
-    })
-    // no change
-    if(rowUpdated === true) return;
+  // const onCellValueChanged = useCallback(async (event: CellEditingStoppedEvent) => {
+  //   let updateData
+  //   let rowUpdated: boolean = true;
+  //   const newRowsData = rowData.map((row) =>{
+  //     if(row.id != event.data.id){
+  //       return row
+  //     } else {
+  //       updateData = {
+  //         id: event.data.id,
+  //         value: event.newValue,
+  //         name: [event.colDef.field]
+  //       }
+  //       rowUpdated = row[event.colDef.field as string] === event.newValue
+  //       // console.log(rowUpdated)
+  //       return { ...row, [event.colDef.field as string]: event.newValue }
+  //     }
+  //   })
+  //   // no change
+  //   if(rowUpdated === true) return;
     
-    setRowData(newRowsData)
-
-    const res = await fetch(`/api/dashboard/${action}`, {
-      method: "PATCH",
-      body: JSON.stringify(updateData)
-    });
-    console.log(await res.json())
-    if(res.ok) {
-      toast.success(`Update ${action} ${event.colDef.field} Succeeded`)
-    } else {
-      toast.error(`Update ${action} Failed`)
-    }
-  }, []);
+  //   console.log("updateData", updateData)
+  //   setRowData(newRowsData)
+  //   const res = await fetch(`/api/dashboard/${action}`, {
+  //     method: "PATCH",
+  //     body: JSON.stringify(updateData)
+  //   });
+  //   console.log(await res.json())
+  //   if(res.ok) {
+  //     toast.success(`Update ${action} ${event.colDef.field} Succeeded`)
+  //   } else {
+  //     toast.error(`Update ${action} Failed`)
+  //   }
+  // }, []);
 
   return <div className={cn("ag-theme-quartz min-h-screen", className)} style={{ height: 100 }}>
     <AgGridReact
@@ -86,7 +91,7 @@ const Table = ({ className, action, rowsData, colsDefs }: Props) => {
       columnDefs={colDefs}
       readOnlyEdit={true}
       defaultColDef={defaultColDef}
-      onCellEditingStopped={onCellValueChanged}
+      // onCellEditingStopped={onCellValueChanged}
       onRowSelected={handleCheckRow}
       stopEditingWhenCellsLoseFocus
       rowSelection="multiple"

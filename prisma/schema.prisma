@@ -149,19 +149,22 @@ model ImageUrl {
   userId       String?     @db.ObjectId
   Properties   Properties? @relation(fields: [propertiesId], references: [id])
   propertiesId String?     @db.ObjectId
+  Category     Category?   @relation(fields: [categoryId], references: [id])
+  categoryId   String?     @db.ObjectId
 }
 
 model Category {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  slug        String    @unique
+  slug        String     @unique
   description String
   parentId    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   Product     Product[]
-  User        User?     @relation(fields: [userId], references: [id])
-  userId      String?   @db.ObjectId
+  images      ImageUrl[]
+  User        User?      @relation(fields: [userId], references: [id])
+  userId      String?    @db.ObjectId
 }
 
 // npx prisma generate

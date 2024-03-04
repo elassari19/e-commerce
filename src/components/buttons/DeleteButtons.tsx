@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { dashboardHandler } from "@/store/dashboard/dashboard"
 import { Action } from "@/store/actions/dashboardStoreActions"
 import toast from "react-hot-toast"
+import { deleteItems } from "../../helpers/actions/dashboardActions"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   action: Action
@@ -21,18 +22,15 @@ const DeleteButtons = ({ className, action }: Props) => {
 
   const handleDelete = useCallback(async () => {
     const deletData = await dashboard.remove.map((item: any) => item.id)
-    const res = await fetch(`/api/dashboard/${action}`, {
-      method: "DELETE",
-      body: JSON.stringify(deletData)
-    })
 
-    if(res.ok){
+    const res = await deleteItems(deletData, action)
+
+    if(res < 300){
       toast.success(`delete ${action} was Succeeded`)
       dispatch(dashboardHandler({
         [action]: { ...dashboard, remove: [] }
       }))
 
-      // window.location.reload()
     } else {
       toast.error(`delete ${action} was Failed`)
     }

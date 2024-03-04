@@ -13,7 +13,8 @@ interface Props {}
 const page = async ({  }: Props) => {
   const categories = await db.category.findMany({
     include: {
-      User: { select: { id: true, email: true } }
+      User: { select: { id: true, email: true } },
+      images: true
     }
   })
   // console.log("categories", categories)
