@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: Props) {
     <div className="grid grid-cols-12">
       <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
         <Suspense fallback={
-            <div className="w-full h-full justify-center items-center text-9xl">
+            <div className="w-[100vw] h-[80vh] justify-center items-center text-9xl">
               <Loader2 className="h-48 w-48 animate-spin ease-in-out text-primary font-extrabold" />
             </div>
           }
