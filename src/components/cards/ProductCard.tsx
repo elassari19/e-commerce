@@ -11,6 +11,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ProductCard = ({ className, product }: Props) => {
+
   return (
     <div className={cn("col-span-1 w-full h-full shadow-lg rounded-md group p-4 overflow-hidden", className)}>
         <div className='flex gap-2 bg-green-100 rounded-full w-fit px-2'>
@@ -20,7 +21,7 @@ const ProductCard = ({ className, product }: Props) => {
 
         <div className='flex justify-center'>
           <Image
-            src={product.images[0].secure_url} alt={product.name} width={150} height={150}
+            src={product.images[0]?.secure_url} alt={product.name} width={150} height={150}
             className='w-48 h-48 rounded-md hover:scale-110 transform transition-transform duration-300 ease-in-out'
           />
         </div>
