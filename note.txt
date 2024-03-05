@@ -9,16 +9,8 @@
 √ 2- create the update functionality
   3_ open product update form when click on the row of table product
 
-# category
-  1- make function helper toggle between category id to category name
-  2- open category update form when click on the row of table category
-
 # product (route api)
 √ 1- upload all images (contains color images) function
-
-
-implement a loading screen first 
-suspens (loading)
 
 # store page
 √ ## top nav
@@ -38,13 +30,25 @@ suspens (loading)
   - basket
   #### user interact dropdown
     √- sign in
-    - sign up 
+    √- sign up 
 
  ## under top nav
-  - categories
-  - contact us
-  - about us
-  - privacy Policy
-  - terms & conditions
+  √- categories
 
- ## reder products (go to section -> Popular Products for Daily Shopping)
+# main page (/)
+  ## swipe categories
+    √- implement swipe categories
+    - onClick on category navigate to (/c=categoryid)
+
+  ## popular products (see aliExpress example)
+    - onClick on product open modal
+    - onClick on basket icon add product to basketCart
+    - onClick on preview navigate to (/product?p=productid)
+
+# product page (/product?p=productid)
+  -
+
+# category/Product
+  √1- make function helper toggle between category id to category name
+  √2- open category update form when click on the row of table category
+  √3- add a button on table to delete item from table

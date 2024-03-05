@@ -57,8 +57,6 @@ export async function GET(req: Request) {
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
   delete data.images
-  console.log("==================================================================")
-  console.log("patch data", data)
 
   try {
     req.response = await db.category.update({
@@ -69,11 +67,9 @@ export async function PATCH(req: ExtendsRequest) {
         parentId: data.parentId,
       }
     })
-    console.log("req.response", req.response)
     return NextResponse.json({ categories: req.response }, { status: 202 })
 
   } catch (error) {
-    console.log("error", error)
     return NextResponse.json({ error }, { status: 400 })
   }
 }

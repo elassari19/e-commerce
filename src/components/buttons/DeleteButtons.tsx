@@ -17,31 +17,29 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const DeleteButtons = ({ className, action }: Props) => {
   // @ts-ignore
-  const dashboard = useSelector((state: RootState) => state.dashboard[action])
+  const deletData = useSelector((state: RootState) => state.dashboard[action])
   const dispatch = useDispatch()
 
   const handleDelete = useCallback(async () => {
-    const deletData = await dashboard.remove.map((item: any) => item.id)
-
     const res = await deleteItems(deletData, action)
 
     if(res < 300){
       toast.success(`delete ${action} was Succeeded`)
       dispatch(dashboardHandler({
-        [action]: { ...dashboard, remove: [] }
+        [action]: { ...deletData, remove: [] }
       }))
 
     } else {
       toast.error(`delete ${action} was Failed`)
     }
-  }, [dashboard])
+  }, [deletData])
 
   return (
     <div
       className={cn('col-span-12 md:col-span-3 md:col-start-6', className)}
     >
       <Button
-        variant="destructive" disabled={dashboard?.remove?.length <= 0}
+        variant="destructive" disabled={deletData?.remove?.length <= 0}
         onClick={handleDelete}
       >
         <Trash2 size={16} /> Delete
