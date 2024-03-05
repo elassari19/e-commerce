@@ -20,11 +20,11 @@ interface Props {
 
 const SelectInput = ({ placeholder, data, onSelect, value }: Props) => {
   return (
-    <Select onValueChange={onSelect} defaultValue={value}>
+    <Select onValueChange={onSelect} defaultValue={value} value={value}>
       <SelectTrigger className={cn("w-full text-black")}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="h-48 overflow-auto">
         <SelectGroup>
         {/* {render select options} */}
           {

@@ -1,25 +1,38 @@
 import { NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/getAuthSession";
+import { deleteImages, uploadImages } from "@/lib/cloudinary";
 
-interface ExtendsRequest extends Request {
+interface ExtendsRequest extends Request, NextRequest {
   response: any
 }
 
-export async function POST(req: Request, res: NextApiResponse) {
+export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const data = await req.json();
-  const userId = await auth("id")
+  const userId = data.userId
+  delete data.userId
+
+  data.slug = data.name.toLowerCase().replace(" ", "_").replace("&", "and")
+  console.log("data", data.parentId)
+
+  try {
+    // awiat uploading root images to cloudinary cloud
+    data.images = await uploadImages(data.images.map((img: any) => img.file), `categoy/${data.slug}`)
+  } catch (error) {
+    return NextResponse.json({
+      error
+    }, { status: 400 })
+  }
 
   const response = await db.category.create({
     data: {
       ...data,
-      slug: data?.name?.toLowerCase().replace(" ", "_").replace("&", "and"),
-      User: {
-        connect: { id: userId }
-      },
+      User: { connect: { id: userId } },
+      images: {
+        create: [ ...data.images ],
+      }
     }
-  })
+})
 
   return NextResponse.json({ category:  response }, { status: 201 })
 }
@@ -43,22 +56,39 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
-  console.log(data)
+  delete data.images
 
   try {
     req.response = await db.category.update({
       where: { id: data.id },
-      data: { [data.name]: data.value }
+      data: {
+        name: data.name,
+        description: data.description,
+        parentId: data.parentId,
+      }
     })
     return NextResponse.json({ categories: req.response }, { status: 202 })
 
   } catch (error) {
-    return NextResponse.json({ error })
+    return NextResponse.json({ error }, { status: 400 })
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: ExtendsRequest) {
   const data = await req.json();
+
+  const categories = await db.category.findMany({
+    where: { id: { in: data } },
+    include: { images: true }
+  })
+
+  try { // delete images from cloudinary
+    categories.map(async (category) => category.images && await deleteImages(category.images))
+    // const remove = await deleteImages(prod.images)
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 400 })
+  }
+
   const response = await db.category.deleteMany({ where: { id: { in: data } } })
 
   return NextResponse.json({ categories: response }, { status: 202 })

@@ -1,0 +1,20 @@
+
+.swiper {
+  @apply w-full md:w-[88%] mx-auto overflow-auto static
+}
+
+.swiper-button-next, .swiper-button-prev {
+  @apply text-black bg-white
+}
+
+.swiper-button-next::after, .swiper-button-prev::after {
+  @apply text-sm font-bold border rounded-full border-black/40 p-3 py-6 hidden md:block
+}
+
+.swiper-button-disabled {
+  @apply text-black border-black/60
+}
+
+.swiper-pagination-bullet {
+  @apply hidden
+}

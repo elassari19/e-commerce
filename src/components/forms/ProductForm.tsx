@@ -55,7 +55,7 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
   };
 
   const removeImageHandler = (item: any) => {
-    const remove = img.filter((pre: any) => pre.path != item.path && item)
+    const remove = img.filter((pre: any) => pre.secure_url != item.secure_url && item)
     setImages(remove)
   }
 
