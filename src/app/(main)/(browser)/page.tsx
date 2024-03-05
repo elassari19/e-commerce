@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import ProductCard from "@/components/cards/ProductCard"
 import { brand } from "@/assets/brand"
 import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
+import { Loader2 } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -26,7 +27,9 @@ export default async function Home({ searchParams }: Props) {
     <div className="grid grid-cols-12">
       <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
         <Suspense fallback={
-            <div className="w-full h-full text-9xl text-black">loading ...</div>
+            <div className="w-full h-full justify-center items-center text-9xl">
+              <Loader2 className="h-48 w-48 animate-spin ease-in-out text-primary font-extrabold" />
+            </div>
           }
         >
           {/* categories */}
