@@ -46,7 +46,7 @@ const page = async ({  }: Props) => {
               sheetDescription="Add your Category and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Category</Button>}
               sheetContent={
-                <CategoryForm categories={categories} updateData={updateData} createNewData={createNewData} />}
+                <CategoryForm categories={categories} createNewData={createNewData} />}
               className="w-full md:w-3/4"
             />
           </div>
@@ -55,7 +55,7 @@ const page = async ({  }: Props) => {
       </section>
 
       <section>
-        <CategoriesTable data={categories} />
+        <CategoriesTable data={categories} updateData={updateData} />
       </section>
     </main>
   )

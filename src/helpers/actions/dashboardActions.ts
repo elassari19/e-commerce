@@ -22,25 +22,15 @@ export const createNewData = async (data: categoriesType, action: string) => {
 
 export const updateData = async (data: categoriesType&{id: string}, action: string) => {
   const response = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {
-    method: "DELETE",
+    method: "PATCH",
     body: JSON.stringify(data)
   });
 
   revalidatePath(`/dashboard/${action}`, "page")
 
-  return response
+  return response.status
   }
 
-export const updateItems = async(deletData: any[], action: string) => {
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {
-    method: "patch",
-    body: JSON.stringify(deletData)
-  })
-
-  revalidatePath(`/dashboard/${action}`, "page")
-
-  return response.status
-}
 export const deleteItems = async(deletData: any[], action: string) => {
   const response = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {
     method: "DELETE",

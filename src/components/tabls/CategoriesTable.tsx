@@ -12,12 +12,14 @@ import { Button } from "../ui/button";
 import { DialogClose } from "../ui/dialog";
 import { deleteItems } from "@/helpers/actions/dashboardActions";
 import toast from "react-hot-toast";
+import { categoriesType } from "@/types/categories";
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   data: Category[]
+  updateData: (values: categoriesType&{id: string}, action: string) => Promise<any>
 }
 
-const CategoriesTable = ({ data }: Props) => {
+const CategoriesTable = ({ data, updateData }: Props) => {
 
   const [rowData, setRowData] = useState<Category[]>([]);
 
@@ -41,7 +43,7 @@ const CategoriesTable = ({ data }: Props) => {
           sheetTitle="Add Category"
           sheetDescription="Add your Category and necessary information from here"
           sheetTrigger={<Pen size={25} className="text-gray-500 ml-4 my-1 cursor-pointer" />}
-          sheetContent={<CategoryForm categories={data} updateCategory={p.data} />}
+          sheetContent={<CategoryForm categories={data} updateCategory={p.data} updateData={updateData} />}
           className="w-full md:w-3/4"
         />
       ),

@@ -18,8 +18,8 @@ import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdNa
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
   updateCategory?: Category&{ images: ImageUrl[] }
-  createNewData: (values: categoriesType, action: string) => Promise<any>
-  updateData: (values: categoriesType&{id: string}, action: string) => Promise<any>
+  createNewData?: (values: categoriesType, action: string) => Promise<any>
+  updateData?: (values: categoriesType&{id: string}, action: string) => Promise<any>
 }
 
 const CategoryForm = ({ className, categories, updateCategory, createNewData, updateData }: Props) => {
@@ -33,15 +33,15 @@ const CategoryForm = ({ className, categories, updateCategory, createNewData, up
 
     let res = null
     if(!updateCategory) {
-      res = await createNewData(values, "categories")
+      res = createNewData && await createNewData(values, "categories")
         console.log("res", res)
         if(res < 300) {
           toast.success(`create ${values.name} Category successeeded`)
           return;
         }
       } else {
-        res = await updateData({ id: updateCategory.id, ...values }, "categories")
-        console.log("res first", res)
+        res = updateData && await updateData({ id: updateCategory.id, ...values }, "categories")
+        console.log("res", res)
         if(res < 300) {
           toast.success(`Update ${values.name} Category successeeded`)
           return;
