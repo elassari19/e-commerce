@@ -5,6 +5,7 @@ import { Download, Plus, Trash2, Upload } from "lucide-react"
 import OrdersTable from "@/components/tabls/OrdersTable"
 import fakeData from "@/helpers/constants/fakeData.json"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
+import { deleteImages } from "@/lib/cloudinary"
 
 interface Props {}
 
@@ -25,7 +26,7 @@ const page = ({  }: Props) => {
           </div>
         </div>
         <div className="md:col-span-6 grid grid-cols-12 col-span-12 gap-1">
-          <DeleteButtons action="attributes" />
+          <DeleteButtons action="attributes" deleteItems={deleteImages} />
           <div className="col-span-12 md:col-span-4 lg:col-span-4">
             <Button variant="primary"><Plus size={16} /> Add Product</Button>
           </div>

@@ -13,15 +13,16 @@ import SelectInput from "../SelectInput";
 import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { useState } from "react";
 import CardImage from "../cards/CardImage";
-import { createNewData, updateData } from "@/helpers/actions/dashboardActions";
 import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
   updateCategory?: Category&{ images: ImageUrl[] }
+  createNewData: (values: categoriesType, action: string) => Promise<any>
+  updateData: (values: categoriesType&{id: string}, action: string) => Promise<any>
 }
 
-const CategoryForm = ({ className, categories, updateCategory }: Props) => {
+const CategoryForm = ({ className, categories, updateCategory, createNewData, updateData }: Props) => {
 
   const [img, setImages] = useState<ImageUrl[]>(updateCategory?.images || [])
 
@@ -31,18 +32,18 @@ const CategoryForm = ({ className, categories, updateCategory }: Props) => {
     // console.log("values", values)
 
     let res = null
-    if(updateCategory) {
-      res = await updateData({ id: updateCategory.id, ...values }, "categories")
-        console.log("res first", res)
-        if(res < 300) {
-          toast.success(`Update ${values.name} Category successeeded`)
-          return;
-        }
-      } else {
+    if(!updateCategory) {
       res = await createNewData(values, "categories")
         console.log("res", res)
         if(res < 300) {
           toast.success(`create ${values.name} Category successeeded`)
+          return;
+        }
+      } else {
+        res = await updateData({ id: updateCategory.id, ...values }, "categories")
+        console.log("res first", res)
+        if(res < 300) {
+          toast.success(`Update ${values.name} Category successeeded`)
           return;
         }
       }
