@@ -14,17 +14,16 @@ import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { useState } from "react";
 import CardImage from "../cards/CardImage";
 import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
+import { createNewData, updateData } from "../../helpers/actions/dashboardActions";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
-  updateCategory?: Category&{ images: ImageUrl[] }
-  createNewData?: (values: categoriesType, action: string) => Promise<any>
-  updateData?: (values: categoriesType&{id: string}, action: string) => Promise<any>
+  formUpdateData?: Category&{ images: ImageUrl[] }
 }
 
-const CategoryForm = ({ className, categories, updateCategory, createNewData, updateData }: Props) => {
+const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
 
-  const [img, setImages] = useState<ImageUrl[]>(updateCategory?.images || [])
+  const [img, setImages] = useState<ImageUrl[]>(formUpdateData?.images || [])
 
   const onSubmit = async (values: categoriesType) => {
     values.parentId = toggleSlugToId(categories, values.parentId!)
@@ -32,14 +31,14 @@ const CategoryForm = ({ className, categories, updateCategory, createNewData, up
     // console.log("values", values)
 
     let res = null
-    if(!updateCategory) {
-      res = createNewData && await createNewData(values, "categories")
+    if(!formUpdateData) {
+      res = await createNewData(values, "categories")
         if(res < 300) {
           toast.success(`create ${values.name} Category successeeded`)
           return;
         }
       } else {
-        res = updateData && await updateData({ id: updateCategory.id, ...values }, "categories")
+        res = await updateData({ id: formUpdateData.id, ...values }, "categories")
         if(res < 300) {
           toast.success(`Update ${values.name} Category successeeded`)
           return;
@@ -53,9 +52,9 @@ const CategoryForm = ({ className, categories, updateCategory, createNewData, up
     setImages(remove)
   }
   const initialValues = {
-    name: updateCategory?.name || "",
-    description: updateCategory?.description || "",
-    parentId: updateCategory ? toggleIdToSlug(categories, updateCategory.parentId) : "",
+    name: formUpdateData?.name || "",
+    description: formUpdateData?.description || "",
+    parentId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.parentId) : "",
     images: img,
   }
 
@@ -133,7 +132,7 @@ const CategoryForm = ({ className, categories, updateCategory, createNewData, up
                 className="h-14"
                 disabled={!formik.isValid && formik.isSubmitting}
                 isLoading={formik.isSubmitting}
-              >{updateCategory ? "Update" : "Add"} Product</Button>
+              >{formUpdateData ? "Update" : "Add"} Product</Button>
             </div>
             <div className="col-span-12 md:col-span-6">
               <SheetPrimitive.Close className="w-full">

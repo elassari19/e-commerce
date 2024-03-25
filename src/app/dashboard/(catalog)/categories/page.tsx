@@ -1,13 +1,13 @@
 import Typography from "@/components/layout/typography"
 import { Button } from "@/components/ui/button"
 import MainCard from "@/components/cards/MainCard"
-import { Download, Plus, Trash2, Upload } from "lucide-react"
+import { Download, Plus, Upload } from "lucide-react"
 import CategoriesTable from "@/components/tabls/CategoriesTable"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
 import DialogForm from "@/components/modals/DialogForm"
 import CategoryForm from "@/components/forms/CategoryForm"
 import { db } from "@/lib/db"
-import { createNewData, deleteItems, updateData } from "@/helpers/actions/dashboardActions"
+import { deleteItems } from "@/helpers/actions/dashboardActions"
 
 interface Props {}
 
@@ -46,7 +46,7 @@ const page = async ({  }: Props) => {
               sheetDescription="Add your Category and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Category</Button>}
               sheetContent={
-                <CategoryForm categories={categories} createNewData={createNewData} />}
+                <CategoryForm categories={categories} />}
               className="w-full md:w-3/4"
             />
           </div>
@@ -55,7 +55,7 @@ const page = async ({  }: Props) => {
       </section>
 
       <section>
-        <CategoriesTable data={categories} updateData={updateData} />
+        <CategoriesTable data={categories} />
       </section>
     </main>
   )

@@ -14,7 +14,6 @@ interface Props {
 }
 
 const deleteAction = async (data: any, action: string) => {
-  console.log("delete", data, action)
   const res = await deleteItems([data.id], action)
   console.log(res)
     if(res < 400) {
@@ -25,7 +24,7 @@ const deleteAction = async (data: any, action: string) => {
 }
 
 const DeleteButton = ({ p, route }: Props) => {
-  console.log("action", route)
+
   return (
     <DialogPopup
       dialogTrigger={<Trash2 size={25} className="text-destructive ml-4 my-1" />}
