@@ -15,20 +15,22 @@ import ColorProperties from "./ColorProperties";
 import { IProductData } from "../../types/products";
 import FormActions from "./FormActions";
 import OptionsProperties from "../OptionsProperties";
+import { createNewData, updateData } from "../../helpers/actions/dashboardActions";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
-  updateData?: IProductData
+  updateData?: (values: IProductData&{id: string}, action: string) => Promise<any>
+  updateProduct: IProductData
 }
 
-const ProductForm = ({ className, categories, updateData }: Props) => {
+const ProductForm = ({ className, categories, updateProduct }: Props) => {
   const router = useRouter()
 
-  const [img, setImages] = useState<any[]>(updateData?.images || [] )
+  const [img, setImages] = useState<any[]>(updateProduct?.images || [] )
   // color properties
-  const [properties, setProperties] = useState<Partial<Properties>[]>(updateData?.properties || [{ color: "", quantity: "" } ])
+  const [properties, setProperties] = useState<Partial<Properties>[]>(updateProduct?.properties || [{ color: "", quantity: "" } ])
   // other properties
-  const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(updateData?.properties || [{ name: "", value: "" } ])
+  const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(updateProduct?.properties || [{ name: "", value: "" } ])
 
   const onSubmit = async (values: any) => {
     const fls = img.map(fl => fl.file)
@@ -37,20 +39,34 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
     delete values.category
     delete values.img
 
-    const res = await fetch("/api/dashboard/products", {
-      method: "POST",
-      body: JSON.stringify({
+    if(!updateProduct) {
+      const res = await createNewData({
         ...values,
         properties: [...properties, ...optionsproperties],
         images: fls
-      })
-    });
-    // console.log("res", res)
-    if(res.ok) {
-      toast.success(`create ${values.name} product successeeded`)
-      router.push("/dashboard/")
-      return;
-    }
+      }, "products")
+      // const res = await fetch("/api/dashboard/products", {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     ...values,
+      //     properties: [...properties, ...optionsproperties],
+      //     images: fls
+      //   })
+      // });
+      // console.log("res", res)
+      console.log("res", res)
+      if(res < 300) {
+        toast.success(`create ${values.name} product successeeded`)
+        return;
+      }
+    } else {
+      const res = updateProduct && await updateData({ id: updateProduct.id, ...values }, "products")
+      if(res < 300) {
+        toast.success(`Update ${values.name} Product successeeded`)
+        return;
+      }
+  }
+
     toast.error(`create ${values.name} product Faileded` )
   };
 
@@ -64,13 +80,13 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
       onSubmit={onSubmit}
       validationSchema={productSchema}
       initialValues={{
-        name: updateData?.name || "",
-        description: updateData?.description || "",
+        name: updateProduct?.name || "",
+        description: updateProduct?.description || "",
         img,
-        categoryId: updateData?.categoryId || "",
-        quantity: updateData?.quantity || "",
-        price: updateData?.price || "",
-        properties: updateData?.properties || [{name: "", value: ""}],
+        categoryId: updateProduct?.categoryId || "",
+        quantity: updateProduct?.quantity || "",
+        price: updateProduct?.price || "",
+        properties: updateProduct?.properties || [{name: "", value: ""}],
       }}
       className={cn('', className)}
     >

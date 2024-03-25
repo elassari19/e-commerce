@@ -34,14 +34,12 @@ const CategoryForm = ({ className, categories, updateCategory, createNewData, up
     let res = null
     if(!updateCategory) {
       res = createNewData && await createNewData(values, "categories")
-        console.log("res", res)
         if(res < 300) {
           toast.success(`create ${values.name} Category successeeded`)
           return;
         }
       } else {
         res = updateData && await updateData({ id: updateCategory.id, ...values }, "categories")
-        console.log("res", res)
         if(res < 300) {
           toast.success(`Update ${values.name} Category successeeded`)
           return;

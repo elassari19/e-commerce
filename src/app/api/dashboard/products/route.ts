@@ -14,7 +14,8 @@ interface ExtendsRequest extends Request, Pick<NextApiRequest, "query"> {
 
 export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const data = await req.json();
-  const userId = await auth("id")
+  const userId = data.userId
+  delete data.userId
   const categoryId = data.categoryId
   delete data.categoryId
   data.slug = data.name.toLowerCase().replace(/\s/g, "-")

@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { categoriesType } from "@/types/categories";
 import { auth } from "@/lib/getAuthSession";
+import { IProductData } from "@/types/products";
 
-export const createNewData = async (data: categoriesType, action: string) => {
+export const createNewData = async (data: categoriesType | IProductData, action: string) => {
   const userId = await auth("id")
 
   const response = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {

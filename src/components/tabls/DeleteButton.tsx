@@ -1,0 +1,55 @@
+import React from 'react'
+import DialogPopup from '../DialogPopup'
+import { Trash2 } from 'lucide-react'
+import { Button } from '../ui/button'
+import { DialogClose } from "../ui/dialog";
+import { ICellRendererParams } from 'ag-grid-community';
+import { deleteItems } from '../../helpers/actions/dashboardActions';
+import toast from 'react-hot-toast';
+
+interface Props {
+  children?: React.ReactNode
+  p: ICellRendererParams
+  route: string
+}
+
+const deleteAction = async (data: any, action: string) => {
+  console.log("delete", data, action)
+  const res = await deleteItems([data.id], action)
+  console.log(res)
+    if(res < 400) {
+      toast.success(`${data.name} ${action} deleted successfully`)
+      return
+    }
+    toast.error(`${data.name} ${action} deleted failed`)
+}
+
+const DeleteButton = ({ p, route }: Props) => {
+  console.log("action", route)
+  return (
+    <DialogPopup
+      dialogTrigger={<Trash2 size={25} className="text-destructive ml-4 my-1" />}
+      dialogTitle={<p className="text-destructive">Confirm Delete {route} Warning</p>}
+      className='w-96 md:w-1/2 lg:w-1/3'
+      dialogContent={<div className="flex flex-col gap-2">
+        <p className="text-sm font-bold">
+          Confirm deleting the (<strong className="text-primary-dark">{p.data.name}</strong>
+          ) {route === 'categories' ? 'all relay categories and products will be deleting too' : 'product'}
+        </p>
+        <div className="flex gap-8 items-center mt-8">
+          <form
+            action={() => deleteAction(p.data, route)}
+            className='w-full'
+          >
+            <Button variant="destructive" type='submit'>Delete</Button>
+          </form>
+          <Button variant="outline">
+            <DialogClose>Cancel</DialogClose>
+          </Button>
+        </div>
+      </div>}
+    />
+  )
+}
+
+export default DeleteButton
