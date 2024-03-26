@@ -19,6 +19,7 @@ interface Props {
 }
 
 const SelectInput = ({ placeholder, data, onSelect, value }: Props) => {
+
   return (
     <Select onValueChange={onSelect} defaultValue={value} value={value}>
       <SelectTrigger className={cn("w-full text-black")}>
@@ -30,7 +31,7 @@ const SelectInput = ({ placeholder, data, onSelect, value }: Props) => {
           {
             data.map((item, idx) => (
               <SelectItem key={idx} value={item.slug}>
-                {item.slug}
+                {item.name}
               </SelectItem>
             ))
           }

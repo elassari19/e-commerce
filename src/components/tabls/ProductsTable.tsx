@@ -1,6 +1,6 @@
 "use client"
 
-import { Product } from "@prisma/client";
+import { Category, Product } from "@prisma/client";
 import Table from "./Table";
 import View from "./View"
 import { ICellRendererParams } from "ag-grid-community";
@@ -8,13 +8,13 @@ import Image from "next/image";
 import EditButtons from "./EditButtons";
 import ProductForm from "../forms/ProductForm";
 import DeleteButton from "./DeleteButton";
-import { updateData } from "@/helpers/actions/dashboardActions";
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   data: Product[]
+  categories: Category[]
 }
 
-const ProductsTable = ({ data }: Props) => {
+const ProductsTable = ({ data, categories }: Props) => {
 
   // structure head table
   const colDefs = [
@@ -40,7 +40,7 @@ const ProductsTable = ({ data }: Props) => {
     { 
       field: "Edit",
       cellRenderer: (p: ICellRendererParams) => (
-        <EditButtons Form={ProductForm} data={data} p={p} updateData={updateData} />
+        <EditButtons Form={ProductForm} data={categories} p={p} />
       ),
       width: 100
     },

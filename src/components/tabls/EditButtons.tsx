@@ -11,7 +11,7 @@ interface Props {
 }
 
 const EditButtons = ({ Form, data, p }: Props) => {
-  console.log("data", data)
+
   return (
     <DialogForm
       sheetTitle="Add Category"

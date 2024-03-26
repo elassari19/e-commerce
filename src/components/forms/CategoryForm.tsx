@@ -15,6 +15,7 @@ import { useState } from "react";
 import CardImage from "../cards/CardImage";
 import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
 import { createNewData, updateData } from "../../helpers/actions/dashboardActions";
+import FormActions from "./FormActions";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
@@ -122,29 +123,8 @@ const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
         }
 
         {/* form action */}
-        <div className="bg-white p-4 fixed bottom-0 right-0 left-0 shadow-2xl shadow-primary-dark">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 md:col-span-6">
-              <Button
-                type="submit"
-                variant="primary"
-                size="sm"
-                className="h-14"
-                disabled={!formik.isValid && formik.isSubmitting}
-                isLoading={formik.isSubmitting}
-              >{formUpdateData ? "Update" : "Add"} Product</Button>
-            </div>
-            <div className="col-span-12 md:col-span-6">
-              <SheetPrimitive.Close className="w-full">
-                <Button
-                  variant="outline-destructive"
-                  size="sm"
-                  className="h-14"
-                  disabled={!formik.isValid && formik.isSubmitting}
-                >Cancel</Button>
-              </SheetPrimitive.Close>
-            </div>
-          </div>
+        <div className="py-8 p-8 fixed bottom-0 right-0 left-0 bg-foreground shadow-md shadow-primary">
+          <FormActions isSubmitting={formik.isSubmitting} update={formUpdateData?true:false} />
         </div>
       </Form>)
       }

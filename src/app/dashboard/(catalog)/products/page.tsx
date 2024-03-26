@@ -15,12 +15,17 @@ const page = async ({  }: Props) => {
   const productsData = await db.product.findMany({
     include: {
       images: true,
-      Category: { select: { id: true, name: true } },
+      Category: { select: { id: true, name: true, slug: true } },
       properties: true,
       User: { select: { id: true, email: true } }
     }
   })
-  const Categories = await db.category.findMany()
+  const Categories = await db.category.findMany({
+    include: {
+      User: { select: { id: true, email: true } },
+      images: true
+    }
+  })
   // console.log("products", productsData)
 
   return (
@@ -59,7 +64,7 @@ const page = async ({  }: Props) => {
       </section>
 
       <section>
-        <ProductsTable data={productsData} />
+        <ProductsTable data={productsData} categories={Categories} />
       </section>
     </main>
   )

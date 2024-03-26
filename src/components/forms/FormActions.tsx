@@ -4,9 +4,10 @@ import { Button } from '../ui/button'
 
 interface Props {
   isSubmitting: boolean
+  update: boolean
 }
 
-const FormActions = ({ isSubmitting }: Props) => {
+const FormActions = ({ isSubmitting, update }: Props) => {
   return (
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-12 md:col-span-6">
@@ -17,7 +18,7 @@ const FormActions = ({ isSubmitting }: Props) => {
           className="h-14"
           disabled={isSubmitting}
           isLoading={isSubmitting}
-        >Add Product</Button>
+        >{update?'Update Product':'Add Product'}</Button>
       </div>
       <div className="col-span-12 md:col-span-6">
         <SheetPrimitive.Close className="w-full">

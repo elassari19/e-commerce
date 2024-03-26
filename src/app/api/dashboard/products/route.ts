@@ -84,12 +84,26 @@ export async function PATCH(req: ExtendsRequest) {
   try {
     req.response = await db.product.update({
       where: { id: data.id },
-      data: { [data.name]: data.value }
+      data: {
+        name: data.name,
+        description: data.description,
+        slug: data.name.toLowerCase().replace(/\s/g, "-"),
+        price: data.price,
+        quantity: data.quantity,
+        Category: { connect: { id: data.categoryId }},
+        // images: {
+        //   create: data.images
+        // },
+        // properties: {
+        //   create: data.properties
+        // },
+      }
     })
     return NextResponse.json({ product: req.response }, { status: 202 })
 
   } catch (error) {
-    return NextResponse.json({ error })
+    console.log("error", error)
+    return NextResponse.json({ error }, { status: 400 })
   }
 }
 
