@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import { uploadImages, deleteImages } from "@/lib/cloudinary";
+import { uploadImages, deleteImages, deleteFolder } from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/getAuthSession";
 import { TImage, TImageColors } from "@/types/products";
@@ -123,8 +123,10 @@ export async function DELETE(req: Request) {
   })
 
   try { // delete images from cloudinary
-    products.map(async (prod) => prod.images && await deleteImages(prod.images))
-    // const remove = await deleteImages(prod.images)
+    products.map(async (prod) => {
+      prod.images && await deleteImages(prod.images)
+      await deleteFolder(`${prod.slug}`)
+    })
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 })
   }
