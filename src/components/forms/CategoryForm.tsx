@@ -14,7 +14,7 @@ import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { useState } from "react";
 import CardImage from "../cards/CardImage";
 import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
-import { createNewData, updateData } from "../../helpers/actions/dashboardActions";
+import { createNewData, revalidatePathByAction, updateData } from "../../helpers/actions/dashboardActions";
 import FormActions from "./FormActions";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -31,16 +31,23 @@ const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
     values.images = img
     // console.log("values", values)
 
-    let res = null
     if(!formUpdateData) {
-      res = await createNewData(values, "categories")
-        if(res < 300) {
+      const res = await fetch('/api/dashboard/categories', {
+        method: 'POST',
+        body: JSON.stringify(values)
+      })
+        if(res.ok) {
+          revalidatePathByAction("categories")
           toast.success(`create ${values.name} Category successeeded`)
           return;
         }
       } else {
-        res = await updateData({ id: formUpdateData.id, ...values }, "categories")
-        if(res < 300) {
+        const res = await fetch('/api/dashboard/categories', {
+          method: 'PATCH',
+          body: JSON.stringify({id: formUpdateData.id, ...values})
+        })
+        if(res.ok) {
+          revalidatePathByAction("categories")
           toast.success(`Update ${values.name} Category successeeded`)
           return;
         }

@@ -1,7 +1,6 @@
 import { db } from "@/lib/db"
 import { Suspense } from "react"
 import ProductCard from "@/components/cards/ProductCard"
-import { brand } from "@/assets/brand"
 import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
 import { Loader2 } from "lucide-react"
 
