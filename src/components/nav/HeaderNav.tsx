@@ -30,7 +30,7 @@ const HeaderNav = async ({  }: Props) => {
         <nav className="flex justify-between items-center gap-4 md:gap-24">
           <div className='hidden md:block cursor-pointer'>
             <Link href="/">
-              <Image src={logo} loading="lazy" alt='app brand' width={100} height={50}  className='h-8 w-8' />
+              <Image src={logo} loading="lazy" alt='app brand' width={100} height={50}  className='h-10 w-10' />
             </Link>
           </div>
 

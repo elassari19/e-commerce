@@ -1,6 +1,6 @@
 
 .swiper {
-  @apply w-full md:w-[88%] mx-auto overflow-auto static
+  @apply w-[84%] md:w-[88%] mx-auto overflow-auto static
 }
 
 .swiper-button-next, .swiper-button-prev {
@@ -8,11 +8,14 @@
 }
 
 .swiper-button-next::after, .swiper-button-prev::after {
-  @apply text-sm font-bold border rounded-full border-black/40 p-3 py-6 hidden md:block
+  @apply text-lg text-primary
+}
+.swiper-button-next, .swiper-button-prev {
+  @apply bg-primary/20 text-sm font-bold border rounded-full border-primary p-3 py-6 md:py-8 md:px-4 md:block
 }
 
 .swiper-button-disabled {
-  @apply text-black border-black/60
+  @apply text-black border-black/60 bg-gray-400 z-10
 }
 
 .swiper-pagination-bullet {

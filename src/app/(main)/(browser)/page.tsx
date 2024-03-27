@@ -20,20 +20,24 @@ export default async function Home({ searchParams }: Props) {
     }
   })
 
-  const categories = await db.category.findMany()
+  const categories = await db.category.findMany({
+    include: {
+      images: true
+    }
+  })
 
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
         <Suspense fallback={
-            <div className="w-[100vw] h-[80vh] justify-center items-center text-9xl">
+            <div className="w-full h-full flex justify-center items-center text-9xl">
               <Loader2 className="h-48 w-48 animate-spin ease-in-out text-primary font-extrabold" />
             </div>
           }
         >
           {/* categories */}
           <div className="col-span-full place-content-center">
-            <h1 className="font-bold text-xl">
+            <h1 className="font-bold text-lg">
               Shop by categories
             </h1>
 
