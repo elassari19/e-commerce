@@ -22,7 +22,11 @@ const MenuList = ({ nav }: Props) => {
                   <span className="text-secondary text-sm group-hover:text-primary">Catalog</span>
                 </div>
               }
-              accordionContent={catalog.map((item, idx) => (<MenuLink key={idx} {...item} href={item.href} className="py-1" />))}
+              accordionContent={
+                catalog.map((item, idx) => (
+                  <MenuLink key={idx} {...item} href={item.href} className="py-1" />
+                ))
+              }
             />
           </li>
         )

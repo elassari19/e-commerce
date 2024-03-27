@@ -1,4 +1,4 @@
-import { Aperture, Bell, Compass, LayoutDashboard, List, Lock, LogOut, Minus, Settings, ShoppingBasket, Store, User, User2, Users } from "lucide-react";
+import { Aperture, Bell, Compass, LayoutDashboard, List, Minus, Settings, ShoppingBasket, Store, User, User2, Users } from "lucide-react";
 
 export const menuOptions = [
   { href: "/dashboard", title: "Dashboard", Icon: LayoutDashboard },

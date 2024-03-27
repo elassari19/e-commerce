@@ -19,7 +19,7 @@ const DeleteButton = ({ p, route }: Props) => {
 
   const deleteAction = async (data: any, action: string) => {
     startTransition(async() => {
-      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {
+      const res = await fetch(`/api/dashboard/${action}`, {
         method: "DELETE",
         body: JSON.stringify([data.id])
       })
