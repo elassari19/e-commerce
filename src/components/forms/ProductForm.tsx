@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { productSchema } from "../../schema/productSchema";
 import FormikField from "../inputs/FormikField";
@@ -12,10 +11,9 @@ import { Category, ImageUrl, Product, Properties } from "@prisma/client";
 import { uploadImagesHandler } from "../../helpers/methods/uploadImagesHandler";
 import CardImage from "../cards/CardImage";
 import ColorProperties from "./ColorProperties";
-import { IProductData } from "../../types/products";
 import FormActions from "./FormActions";
 import OptionsProperties from "../OptionsProperties";
-import { createNewData, updateData } from "../../helpers/actions/dashboardActions";
+import { revalidatePathByAction } from "../../helpers/actions/dashboardActions";
 import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -24,7 +22,6 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const ProductForm = ({ className, categories, formUpdateData }: Props) => {
-  console.log("formUpdateData", formUpdateData, "categories", categories)
 
   const [img, setImages] = useState<any[]>(formUpdateData?.images || [] )
   // color properties
@@ -33,32 +30,41 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
   const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ name: "", value: "" } ])
 
   const onSubmit = async (values: any) => {
-    const fls = img.map(fl => fl.file)
     values.categoryId = toggleSlugToId(categories, values.categoryId)
     values.images = img
     delete values.category
     delete values.img
 
     if(!formUpdateData) {
-      const res = await createNewData({
-        ...values,
-        properties: [...properties, ...optionsproperties],
-        images: fls
-      }, "products")
-      console.log("res", res)
-      if(res < 300) {
+      const res = await fetch('/api/dashboard/products',{
+        method: "POST",
+        body: JSON.stringify({
+          ...values,
+          properties: [...properties, ...optionsproperties],
+        })
+      })
+      // console.log("res", res)
+      if(res.ok) {
+        revalidatePathByAction("products")
         toast.success(`create ${values.name} product successeeded`)
         return;
       }
     } else {
-      const res = await updateData({ id: formUpdateData.id, ...values }, "products")
-      if(res < 300) {
+      const res = await fetch('/api/dashboard/products',{
+        method: "PATCH",
+        body: JSON.stringify({
+          id: formUpdateData.id,
+          ...values
+        })
+      })
+      if(res.ok) {
+        revalidatePathByAction("products")
         toast.success(`Update ${values.name} Product successeeded`)
         return;
       }
   }
-
-    toast.error(`create ${values.name} product Faileded` )
+  // the operation failed
+  toast.error(`create ${values.name} product Faileded` )
   };
 
   const removeImageHandler = (item: any) => {

@@ -5,6 +5,10 @@ import { categoriesType } from "@/types/categories";
 import { auth } from "@/lib/getAuthSession";
 import { IProductData } from "@/types/products";
 
+export const revalidatePathByAction = (action: string) => {
+  revalidatePath(`/dashboard/${action}`, "page")
+}
+
 export const createNewData = async (data: categoriesType | IProductData, action: string) => {
   const userId = await auth("id")
 
