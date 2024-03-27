@@ -6,7 +6,6 @@ import SideNavBar from "@/components/nav/SideNavBar"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store"
 import MotionSlide from "@/components/framerMotion/MotionSlide"
-import { motion } from "framer-motion"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 

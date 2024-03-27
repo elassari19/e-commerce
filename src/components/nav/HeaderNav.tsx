@@ -11,7 +11,6 @@ import BasketCard from '../cards/BasketCard';
 import { CartBadge } from '../reduxtHandler/CartActions';
 import DialogPopup from '../DialogPopup';
 import Signin from '../forms/Signin';
-import { brand } from '../../assets/brand';
 import { db } from '../../lib/db';
 import AllCategories from './AllCategories';
 import { list } from '../../helpers/constants/Categories';
@@ -19,6 +18,7 @@ import UserAuth from '../auth/UserAuth';
 
 interface Props {
 }
+const logo = "https://res.cloudinary.com/elassari/image/upload/v1711499475/my-ecom-app/assets/vcwujmu0yvc9k4bc1adw.png"
 
 const HeaderNav = async ({  }: Props) => {
   const session = await getAuthSession()
@@ -30,7 +30,7 @@ const HeaderNav = async ({  }: Props) => {
         <nav className="flex justify-between items-center gap-4 md:gap-24">
           <div className='hidden md:block cursor-pointer'>
             <Link href="/">
-              <Image src={brand} loading="lazy" alt='app brand' width={100} height={50}  className='h-8 w-8' />
+              <Image src={logo} loading="lazy" alt='app brand' width={100} height={50}  className='h-8 w-8' />
             </Link>
           </div>
 
