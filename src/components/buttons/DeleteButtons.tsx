@@ -9,21 +9,25 @@ import { useDispatch, useSelector } from "react-redux"
 import { dashboardHandler } from "@/store/dashboard/dashboard"
 import { Action } from "@/store/actions/dashboardStoreActions"
 import toast from "react-hot-toast"
+import { revalidatePathByAction } from "@/helpers/actions/revalidate"
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   action: Action
-  deleteItems: (deletData: any[], action: string) => Promise<any>
 }
 
-const DeleteButtons = ({ className, action, deleteItems }: Props) => {
+const DeleteButtons = ({ className, action }: Props) => {
   // @ts-ignore
   const deletData = useSelector((state: RootState) => state.dashboard[action])
   const dispatch = useDispatch()
 
   const handleDelete = useCallback(async () => {
-    const res = await deleteItems(deletData.remove, action)
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {
+      method: "DELETE",
+      body: JSON.stringify(deletData.remove)
+    })
 
-    if(res < 300){
+    if(res.ok){
+      revalidatePathByAction(action)
       toast.success(`delete ${action} was Succeeded`)
       dispatch(dashboardHandler({
         [action]: { ...deletData, remove: [] }

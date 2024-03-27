@@ -4,10 +4,6 @@ import { Category } from "@prisma/client";
 import Table from "./Table";
 import { ICellRendererParams } from "ag-grid-community";
 import CategoryForm from "../forms/CategoryForm";
-import { Button } from "../ui/button";
-import { deleteItems } from "@/helpers/actions/dashboardActions";
-import toast from "react-hot-toast";
-import { categoriesType } from "@/types/categories";
 import EditButtons from "./EditButtons";
 import DeleteButton from "./DeleteButton";
 

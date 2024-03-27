@@ -4,17 +4,15 @@ import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
 import toast from "react-hot-toast";
 import { categorySchema } from "@/schema/productSchema";
-import { Button } from "../ui/button";
 import FormikField from "../inputs/FormikField";
-import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { categoriesType } from "@/types/categories";
 import { Category, ImageUrl } from "@prisma/client";
 import SelectInput from "../SelectInput";
 import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { useState } from "react";
 import CardImage from "../cards/CardImage";
-import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
-import { createNewData, revalidatePathByAction, updateData } from "../../helpers/actions/dashboardActions";
+import { toggleIdToSlug, toggleSlugToId } from "@/helpers/methods/toggleIdName";
+import { revalidatePathByAction } from "@/helpers/actions/revalidate";
 import FormActions from "./FormActions";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {

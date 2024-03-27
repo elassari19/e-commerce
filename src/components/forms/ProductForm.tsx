@@ -3,18 +3,18 @@
 import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
 import toast from "react-hot-toast";
-import { productSchema } from "../../schema/productSchema";
+import { productSchema } from "@/schema/productSchema";
 import FormikField from "../inputs/FormikField";
 import { useState } from "react";
 import SelectInput from "../SelectInput";
 import { Category, ImageUrl, Product, Properties } from "@prisma/client";
-import { uploadImagesHandler } from "../../helpers/methods/uploadImagesHandler";
 import CardImage from "../cards/CardImage";
 import ColorProperties from "./ColorProperties";
 import FormActions from "./FormActions";
 import OptionsProperties from "../OptionsProperties";
-import { revalidatePathByAction } from "../../helpers/actions/dashboardActions";
-import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
+import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
+import { revalidatePathByAction } from "@/helpers/actions/revalidate";
+import { toggleIdToSlug, toggleSlugToId } from "@/helpers/methods/toggleIdName";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]

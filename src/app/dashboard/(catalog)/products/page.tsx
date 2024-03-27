@@ -7,7 +7,6 @@ import DeleteButtons from "@/components/buttons/DeleteButtons"
 import DialogForm from "@/components/modals/DialogForm"
 import ProductForm from "@/components/forms/ProductForm"
 import { db } from "@/lib/db"
-import { deleteItems } from "../../../../helpers/actions/dashboardActions"
 
 interface Props {}
 
@@ -48,7 +47,7 @@ const page = async ({  }: Props) => {
 
         <div className="md:col-span-6 grid grid-cols-12 col-span-12 gap-1">
           {/* delete selected products */}
-          <DeleteButtons action="products" deleteItems={deleteItems} />
+          <DeleteButtons action="products" />
           {/* add product button & opem dialog (modal/sheet) when click */}
           <div className="col-span-12 md:col-span-4 lg:col-span-4">
             <DialogForm

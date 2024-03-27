@@ -4,7 +4,7 @@ import { Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { DialogClose } from "../ui/dialog";
 import { ICellRendererParams } from 'ag-grid-community';
-import { deleteItems } from '@/helpers/actions/dashboardActions';
+import { revalidatePathByAction } from '@/helpers/actions/revalidate';
 import toast from 'react-hot-toast';
 import useLoading from '@/hooks/useLoading';
 
@@ -19,9 +19,13 @@ const DeleteButton = ({ p, route }: Props) => {
 
   const deleteAction = async (data: any, action: string) => {
     startTransition(async() => {
-      const res = await deleteItems([data.id], action)
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/dashboard/${action}`, {
+        method: "DELETE",
+        body: JSON.stringify([data.id])
+      })
       console.log("delete item -> res", res)
-      if(res < 400) {
+      if(res.ok) {
+        revalidatePathByAction(action)
         toast.success(`${data.name} ${action} deleted successfully`)
         return
       }
