@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { uploadImages, deleteImages } from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/getAuthSession";
-import { TColorForm, TImage, TImageColors } from "@/types/products";
+import { TImage, TImageColors } from "@/types/products";
 
 interface ExtendsRequest extends Request, Pick<NextApiRequest, "query"> {
   response: any
@@ -14,16 +14,21 @@ interface ExtendsRequest extends Request, Pick<NextApiRequest, "query"> {
 
 export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const data = await req.json();
-  const userId = data.userId
-  delete data.userId
+  const userId = await auth("id")
+  // console.log("userId", userId)
+
   const categoryId = data.categoryId
   delete data.categoryId
   data.slug = data.name.toLowerCase().replace(/\s/g, "-")
 
   try {
     // awiat uploading root images to cloudinary cloud
-    data.images = await uploadImages(data.images, `products/${data.slug}`)
-
+    data.images = await uploadImages(data.images.map((img: any) => img.file), `products/${data.slug}`)
+    console.log("upload images done")
+  } catch (error) {
+    console.log("images error", error)
+  }
+  try {
     // @ts-ignore await uploading product color images to cloudinary cloud
     const images = data.properties.map((fl: TImageColors) => fl.file).filter((fl: TImageColors) => fl && fl)
     req.colors = await uploadImages(images, `products/${data.slug}/colors`) as TImage[]
@@ -35,6 +40,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
       return item
     })
   } catch (error) {
+    console.log("color images error", error)
     return NextResponse.json({
       error
     }, { status: 400 })
@@ -60,7 +66,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
     response
   }, { status: 201 })
   } catch (error) {
-    console.log("error", error)
+    console.log("post error", error)
     return NextResponse.json({
       error
     }, { status: 402 })
