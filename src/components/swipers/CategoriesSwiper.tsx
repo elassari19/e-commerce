@@ -38,7 +38,7 @@ const CategoriesSwiper = ({ categories }: Props) => {
               key={idx}
               className='w-full h-full p-2'
             >
-              <Link href={`/?c=${category.id}`} className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center items-center'>
+              <Link href={`/category/${category.id}`} className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center items-center'>
                 <Image src={category?.images?.[0]?.secure_url} loading="lazy" priority={false}
                   width={50} height={50} alt={`item image ${idx}`}
                   className={`w-20 h-20 rounded-full`}

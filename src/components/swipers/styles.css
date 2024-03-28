@@ -11,7 +11,7 @@
   @apply text-lg text-primary
 }
 .swiper-button-next, .swiper-button-prev {
-  @apply bg-primary/20 text-sm font-bold border rounded-full border-primary p-3 py-6 md:py-8 md:px-4 md:block
+  @apply bg-primary/20 text-sm font-bold border rounded-full border-primary p-2 md:p-4 py-6 md:py-8
 }
 
 .swiper-button-disabled {

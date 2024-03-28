@@ -37,15 +37,15 @@ export default async function Home({ searchParams }: Props) {
         >
           {/* categories */}
           <div className="col-span-full place-content-center">
-            <h1 className="font-bold text-lg">
+            <h1 className="font-bold text-lg pl-2">
               Shop by categories
             </h1>
 
             <CategoriesSwiper categories={categories.filter((category) => category.parentId === "" )} />
           </div>
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
 
-            <h2 className="col-span-full font-bold text-xl">
+            <h2 className="col-span-full font-bold text-lg">
               Popular Products for Daily Shopping
             </h2>
           {
