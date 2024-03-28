@@ -37,7 +37,7 @@ export default async function Home({ searchParams }: Props) {
         >
           {/* categories */}
           <div className="col-span-full place-content-center">
-            <h1 className="font-bold text-lg pl-2">
+            <h1 className="font-bold text-lg pl-2 bg-foreground">
               Shop by categories
             </h1>
 

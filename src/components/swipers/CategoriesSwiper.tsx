@@ -12,36 +12,42 @@ import { Navigation, Pagination } from 'swiper/modules';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Category, ImageUrl } from '@prisma/client';
+import { cn } from '@/lib/utils';
 
 interface Props extends SwiperProps {
   categories: (Category&{images: ImageUrl[]})[],
 }
 
-const CategoriesSwiper = ({ categories }: Props) => {
-  const perView = window.innerWidth > 1024 ? 6 : window.innerWidth > 768 ? 4 : 3;
+const CategoriesSwiper = ({ categories, className }: Props) => {
+  const perView = window.innerWidth > 1024 ? 5 : window.innerWidth > 768 ? 4 : 2.3;
+  const space = window.innerWidth > 768 ? 20 : 10;
 
   return (
-    <div className='relative p-0 md:p-4 md:mx-8 mb-4'>
+    <div className={cn('relative p-0 md:mx-8 mb-4', className)}>
       <Swiper
         slidesPerView={perView}
-        spaceBetween={30}
+        spaceBetween={space}
         navigation={true} 
         pagination={{
           clickable: true,
         }}
         modules={[Navigation, Pagination]}
-        className="mySwiper h-36"
+        className="mySwiper h-44 md:h-56"
       >
         {
           categories.map((category, idx) => (
             <SwiperSlide
               key={idx}
-              className='w-full h-full p-2'
+              className='w-full h-full py-2 px-1'
             >
-              <Link href={`/category/${category.id}`} className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center items-center'>
+              <Link
+                href={`/category/${category.id}`} 
+                className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center
+                items-center shadow p-2 hover:shadow-primary/60'
+              >
                 <Image src={category?.images?.[0]?.secure_url} loading="lazy" priority={false}
                   width={50} height={50} alt={`item image ${idx}`}
-                  className={`w-20 h-20 rounded-full`}
+                  className={`w-36 h-36 rounded-full`}
                 />
                 <h4 className='font-bold text-sm text-center'>{category.name}</h4>
               </Link>
