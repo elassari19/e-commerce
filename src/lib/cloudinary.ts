@@ -47,8 +47,18 @@ export const uploadImages = async (images: any[], path: string) => new Promise((
 export const deleteImages = async (images: any[]) => {
   const resources = images.map((img) => img.public_id)
   try {
-    const rem = await cloudinary.api.delete_resources(resources)
+    await cloudinary.api.delete_resources(resources)
     return 200
+  } catch (error) {
+    return 400
+  }
+}
+
+// delete folder assets from cloudinary cloud
+export const deleteFolder = async (fileName: string) => {
+  try {
+    const res = await cloudinary.api.delete_folder(fileName).then(resp => resp.folders)
+    return res
   } catch (error) {
     return 400
   }

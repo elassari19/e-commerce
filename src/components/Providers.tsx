@@ -15,7 +15,7 @@ type Props = {
 const index = ({ children }: Props) => {
   return (
     <ReduxProvider store={store}>
-      <SessionProvider>
+      <SessionProvider basePath='/api/auth'>
         <PersistGate loading={null} persistor={persistor}>
           {/* <SessionProvider> */}
             {children}

@@ -7,8 +7,8 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   sheetTrigger: React.ReactNode
   sheetContent: React.ReactNode
   sheetFooter?: React.ReactNode
-  sheetTitle: string
-  sheetDescription: string
+  sheetTitle: React.ReactNode
+  sheetDescription: React.ReactNode
 }
 
 const DialogForm = ({ className, sheetTitle, sheetTrigger, sheetDescription, sheetContent, sheetFooter }: Props) => {

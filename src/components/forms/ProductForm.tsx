@@ -2,56 +2,69 @@
 
 import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { productSchema } from "../../schema/productSchema";
+import { productSchema } from "@/schema/productSchema";
 import FormikField from "../inputs/FormikField";
 import { useState } from "react";
 import SelectInput from "../SelectInput";
-import { Category, ImageUrl, Properties } from "@prisma/client";
-import { uploadImagesHandler } from "../../helpers/methods/uploadImagesHandler";
+import { Category, ImageUrl, Product, Properties } from "@prisma/client";
 import CardImage from "../cards/CardImage";
 import ColorProperties from "./ColorProperties";
-import { IProductData } from "../../types/products";
 import FormActions from "./FormActions";
 import OptionsProperties from "../OptionsProperties";
+import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
+import { revalidatePathByAction } from "@/helpers/actions/revalidate";
+import { toggleIdToSlug, toggleSlugToId } from "@/helpers/methods/toggleIdName";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
-  updateData?: IProductData
+  formUpdateData?: Product&{ images: ImageUrl[], properties: Properties[], quantity: number, price: number }
 }
 
-const ProductForm = ({ className, categories, updateData }: Props) => {
-  const router = useRouter()
+const ProductForm = ({ className, categories, formUpdateData }: Props) => {
 
-  const [img, setImages] = useState<any[]>(updateData?.images || [] )
+  const [img, setImages] = useState<any[]>(formUpdateData?.images || [] )
   // color properties
-  const [properties, setProperties] = useState<Partial<Properties>[]>(updateData?.properties || [{ color: "", quantity: "" } ])
+  const [properties, setProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ color: "", quantity: "" } ])
   // other properties
-  const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(updateData?.properties || [{ name: "", value: "" } ])
+  const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ name: "", value: "" } ])
 
   const onSubmit = async (values: any) => {
-    const fls = img.map(fl => fl.file)
-    values.categoryId = categories.filter((item) => item.slug === values.category)[0]?.id || ""
+    values.categoryId = toggleSlugToId(categories, values.categoryId)
     values.images = img
     delete values.category
     delete values.img
 
-    const res = await fetch("/api/dashboard/products", {
-      method: "POST",
-      body: JSON.stringify({
-        ...values,
-        properties: [...properties, ...optionsproperties],
-        images: fls
+    if(!formUpdateData) {
+      const res = await fetch('/api/dashboard/products',{
+        method: "POST",
+        body: JSON.stringify({
+          ...values,
+          properties: [...properties, ...optionsproperties],
+        })
       })
-    });
-    // console.log("res", res)
-    if(res.ok) {
-      toast.success(`create ${values.name} product successeeded`)
-      router.push("/dashboard/")
-      return;
-    }
-    toast.error(`create ${values.name} product Faileded` )
+      // console.log("res", res)
+      if(res.ok) {
+        revalidatePathByAction("products")
+        toast.success(`create ${values.name} product successeeded`)
+        return;
+      }
+    } else {
+      const res = await fetch('/api/dashboard/products',{
+        method: "PATCH",
+        body: JSON.stringify({
+          id: formUpdateData.id,
+          ...values
+        })
+      })
+      if(res.ok) {
+        revalidatePathByAction("products")
+        toast.success(`Update ${values.name} Product successeeded`)
+        return;
+      }
+  }
+  // the operation failed
+  toast.error(`create ${values.name} product Faileded` )
   };
 
   const removeImageHandler = (item: any) => {
@@ -59,19 +72,21 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
     setImages(remove)
   }
 
+  const initialValues = {
+    name: formUpdateData?.name || "",
+    description: formUpdateData?.description || "",
+    img,
+    categoryId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.categoryId) : "",
+    quantity: formUpdateData?.quantity || "",
+    price: formUpdateData?.price || "",
+    properties: formUpdateData?.properties || [{name: "", value: ""}],
+  }
+
     return (
     <Formik
       onSubmit={onSubmit}
       validationSchema={productSchema}
-      initialValues={{
-        name: updateData?.name || "",
-        description: updateData?.description || "",
-        img,
-        categoryId: updateData?.categoryId || "",
-        quantity: updateData?.quantity || "",
-        price: updateData?.price || "",
-        properties: updateData?.properties || [{name: "", value: ""}],
-      }}
+      initialValues={initialValues}
       className={cn('', className)}
     >
       {
@@ -107,8 +122,9 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
                       ? (
                         <SelectInput
                           placeholder="Select Category"
-                          data={categories}
-                          onSelect={(e) => formik.setFieldValue("category", e)}
+                          data={categories.filter(item => item.parentId !== "")}
+                          onSelect={(e) => formik.setFieldValue("categoryId", e)}
+                          value={formik.values.categoryId}
                         />)
                       : (<>
                           <FormikField
@@ -141,8 +157,8 @@ const ProductForm = ({ className, categories, updateData }: Props) => {
         }
 
         {/* form action */}
-        <div className="py-8 p-8 fixed bottom-0 right-0 left-72 bg-foreground shadow-md shadow-primary">
-          <FormActions isSubmitting={formik.isSubmitting} />
+        <div className="py-8 p-8 fixed bottom-0 right-0 left-0 bg-foreground shadow-md shadow-primary">
+          <FormActions isSubmitting={formik.isSubmitting} update={formUpdateData?true:false} />
         </div>
       </Form>)
       }

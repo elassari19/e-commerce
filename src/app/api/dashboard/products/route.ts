@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import { uploadImages, deleteImages } from "@/lib/cloudinary";
+import { uploadImages, deleteImages, deleteFolder } from "@/lib/cloudinary";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/getAuthSession";
-import { TColorForm, TImage, TImageColors } from "@/types/products";
+import { TImage, TImageColors } from "@/types/products";
 
 interface ExtendsRequest extends Request, Pick<NextApiRequest, "query"> {
   response: any
@@ -15,14 +15,20 @@ interface ExtendsRequest extends Request, Pick<NextApiRequest, "query"> {
 export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const data = await req.json();
   const userId = await auth("id")
+  // console.log("userId", userId)
+
   const categoryId = data.categoryId
   delete data.categoryId
   data.slug = data.name.toLowerCase().replace(/\s/g, "-")
 
   try {
     // awiat uploading root images to cloudinary cloud
-    data.images = await uploadImages(data.images, `products/${data.slug}`)
-
+    data.images = await uploadImages(data.images.map((img: any) => img.file), `products/${data.slug}`)
+    console.log("upload images done")
+  } catch (error) {
+    console.log("images error", error)
+  }
+  try {
     // @ts-ignore await uploading product color images to cloudinary cloud
     const images = data.properties.map((fl: TImageColors) => fl.file).filter((fl: TImageColors) => fl && fl)
     req.colors = await uploadImages(images, `products/${data.slug}/colors`) as TImage[]
@@ -34,6 +40,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
       return item
     })
   } catch (error) {
+    console.log("color images error", error)
     return NextResponse.json({
       error
     }, { status: 400 })
@@ -59,7 +66,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
     response
   }, { status: 201 })
   } catch (error) {
-    console.log("error", error)
+    console.log("post error", error)
     return NextResponse.json({
       error
     }, { status: 402 })
@@ -83,12 +90,26 @@ export async function PATCH(req: ExtendsRequest) {
   try {
     req.response = await db.product.update({
       where: { id: data.id },
-      data: { [data.name]: data.value }
+      data: {
+        name: data.name,
+        description: data.description,
+        slug: data.name.toLowerCase().replace(/\s/g, "-"),
+        price: data.price,
+        quantity: data.quantity,
+        Category: { connect: { id: data.categoryId }},
+        // images: {
+        //   create: data.images
+        // },
+        // properties: {
+        //   create: data.properties
+        // },
+      }
     })
     return NextResponse.json({ product: req.response }, { status: 202 })
 
   } catch (error) {
-    return NextResponse.json({ error })
+    console.log("error", error)
+    return NextResponse.json({ error }, { status: 400 })
   }
 }
 
@@ -102,8 +123,10 @@ export async function DELETE(req: Request) {
   })
 
   try { // delete images from cloudinary
-    products.map(async (prod) => prod.images && await deleteImages(prod.images))
-    // const remove = await deleteImages(prod.images)
+    products.map(async (prod) => {
+      prod.images && await deleteImages(prod.images)
+      await deleteFolder(`${prod.slug}`)
+    })
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 })
   }

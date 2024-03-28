@@ -4,45 +4,49 @@ import { cn } from "@/lib/utils"
 import { Form, Formik } from "formik"
 import toast from "react-hot-toast";
 import { categorySchema } from "@/schema/productSchema";
-import { Button } from "../ui/button";
 import FormikField from "../inputs/FormikField";
-import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { categoriesType } from "@/types/categories";
 import { Category, ImageUrl } from "@prisma/client";
 import SelectInput from "../SelectInput";
 import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { useState } from "react";
 import CardImage from "../cards/CardImage";
-import { createNewData, updateData } from "@/helpers/actions/dashboardActions";
-import { toggleIdToSlug, toggleSlugToId } from "../../helpers/methods/toggleIdName";
+import { toggleIdToSlug, toggleSlugToId } from "@/helpers/methods/toggleIdName";
+import { revalidatePathByAction } from "@/helpers/actions/revalidate";
+import FormActions from "./FormActions";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
-  updateCategory?: Category&{ images: ImageUrl[] }
+  formUpdateData?: Category&{ images: ImageUrl[] }
 }
 
-const CategoryForm = ({ className, categories, updateCategory }: Props) => {
+const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
 
-  const [img, setImages] = useState<ImageUrl[]>(updateCategory?.images || [])
+  const [img, setImages] = useState<ImageUrl[]>(formUpdateData?.images || [])
 
   const onSubmit = async (values: categoriesType) => {
     values.parentId = toggleSlugToId(categories, values.parentId!)
     values.images = img
     // console.log("values", values)
 
-    let res = null
-    if(updateCategory) {
-      res = await updateData({ id: updateCategory.id, ...values }, "categories")
-        console.log("res first", res)
-        if(res < 300) {
-          toast.success(`Update ${values.name} Category successeeded`)
+    if(!formUpdateData) {
+      const res = await fetch('/api/dashboard/categories', {
+        method: 'POST',
+        body: JSON.stringify(values)
+      })
+        if(res.ok) {
+          revalidatePathByAction("categories")
+          toast.success(`create ${values.name} Category successeeded`)
           return;
         }
       } else {
-      res = await createNewData(values, "categories")
-        console.log("res", res)
-        if(res < 300) {
-          toast.success(`create ${values.name} Category successeeded`)
+        const res = await fetch('/api/dashboard/categories', {
+          method: 'PATCH',
+          body: JSON.stringify({id: formUpdateData.id, ...values})
+        })
+        if(res.ok) {
+          revalidatePathByAction("categories")
+          toast.success(`Update ${values.name} Category successeeded`)
           return;
         }
       }
@@ -54,9 +58,9 @@ const CategoryForm = ({ className, categories, updateCategory }: Props) => {
     setImages(remove)
   }
   const initialValues = {
-    name: updateCategory?.name || "",
-    description: updateCategory?.description || "",
-    parentId: updateCategory ? toggleIdToSlug(categories, updateCategory.parentId) : "",
+    name: formUpdateData?.name || "",
+    description: formUpdateData?.description || "",
+    parentId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.parentId) : "",
     images: img,
   }
 
@@ -124,29 +128,8 @@ const CategoryForm = ({ className, categories, updateCategory }: Props) => {
         }
 
         {/* form action */}
-        <div className="bg-white p-4 fixed bottom-0 right-0 left-0 shadow-2xl shadow-primary-dark">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 md:col-span-6">
-              <Button
-                type="submit"
-                variant="primary"
-                size="sm"
-                className="h-14"
-                disabled={!formik.isValid && formik.isSubmitting}
-                isLoading={formik.isSubmitting}
-              >{updateCategory ? "Update" : "Add"} Product</Button>
-            </div>
-            <div className="col-span-12 md:col-span-6">
-              <SheetPrimitive.Close className="w-full">
-                <Button
-                  variant="outline-destructive"
-                  size="sm"
-                  className="h-14"
-                  disabled={!formik.isValid && formik.isSubmitting}
-                >Cancel</Button>
-              </SheetPrimitive.Close>
-            </div>
-          </div>
+        <div className="py-8 p-8 fixed bottom-0 right-0 left-0 bg-foreground shadow-md shadow-primary">
+          <FormActions isSubmitting={formik.isSubmitting} update={formUpdateData?true:false} />
         </div>
       </Form>)
       }

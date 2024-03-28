@@ -1,7 +1,7 @@
 import Typography from "@/components/layout/typography"
 import { Button } from "@/components/ui/button"
 import MainCard from "@/components/cards/MainCard"
-import { Download, Plus, Trash2, Upload } from "lucide-react"
+import { Download, Plus, Upload } from "lucide-react"
 import CategoriesTable from "@/components/tabls/CategoriesTable"
 import DeleteButtons from "@/components/buttons/DeleteButtons"
 import DialogForm from "@/components/modals/DialogForm"
@@ -27,8 +27,8 @@ const page = async ({  }: Props) => {
         <MainCard className="grid grid-cols-12 gap-4 justify-between">
         <div className="md:col-span-6 grid grid-cols-12 col-span-12 md:grid-cols-10 gap-1">
           <div className="col-span-6 md:col-span-2">
-             {/* export products to file (excel) */}
-             <Button variant="outline"><Upload size={16} /> Export</Button>
+            {/* export products to file (excel) */}
+            <Button variant="outline"><Upload size={16} /> Export</Button>
           </div>
           <div className="col-span-6 md:col-span-2">
             {/* upload products based on sheet (excel) */}
@@ -44,7 +44,8 @@ const page = async ({  }: Props) => {
               sheetTitle="Add Category"
               sheetDescription="Add your Category and necessary information from here"
               sheetTrigger={<Button variant="primary"><Plus size={16} /> Add Category</Button>}
-              sheetContent={<CategoryForm categories={categories} />}
+              sheetContent={
+                <CategoryForm categories={categories} />}
               className="w-full md:w-3/4"
             />
           </div>
