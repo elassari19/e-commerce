@@ -16,9 +16,10 @@ import { cn } from '@/lib/utils';
 
 interface Props extends SwiperProps {
   categories: (Category&{images: ImageUrl[]})[],
+  path: string
 }
 
-const CategoriesSwiper = ({ categories, className }: Props) => {
+const CategoriesSwiper = ({ categories, path, className }: Props) => {
   const perView = window.innerWidth > 1024 ? 5 : window.innerWidth > 768 ? 4 : 2.3;
   const space = window.innerWidth > 768 ? 20 : 10;
 
@@ -41,7 +42,7 @@ const CategoriesSwiper = ({ categories, className }: Props) => {
               className='w-full h-full py-2 px-1'
             >
               <Link
-                href={`/category/${category.id}`} 
+                href={`/${path}/${category.id}`} 
                 className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center
                 items-center shadow p-2 hover:shadow-primary/60'
               >

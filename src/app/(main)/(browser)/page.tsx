@@ -41,7 +41,10 @@ export default async function Home({ searchParams }: Props) {
               Shop by categories
             </h1>
 
-            <CategoriesSwiper categories={categories.filter((category) => category.parentId === "" )} />
+            <CategoriesSwiper
+              categories={categories.filter((category) => category.parentId === "" )}
+              path="category"
+            />
           </div>
           <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
 
