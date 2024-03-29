@@ -43,12 +43,12 @@ const Category = async({ params }: Props) => {
           <CustomTabs
             tabList={["Top Seller", "Latest Product"]}
             tabContent={[
-              <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
+              <div key={"is-first"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
                 {
                   products.map((product) => (<ProductCard key={product.id} product={product} />))
                 }
               </div>,
-              <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
+              <div key={"is-second"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
               {
                 products.map((product) => (<ProductCard key={product.id} product={product} />))
               }
