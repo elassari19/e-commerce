@@ -5,6 +5,8 @@ import { Plus, ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import { CustomTabs, PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { db } from '../../lib/db'
+import { Button } from '../ui/button'
+import CartActions, { CartInput } from '../reduxtHandler/CartActions'
 
 interface Props {
   productId: string
@@ -82,7 +84,7 @@ const ProductPreview = async ({ productId }: Props) => {
 
             <p className='font-bold px-2'>{product.description}</p>
 
-            <hr className='border border-primary/70' />
+            <hr className='border border-primary/70 my-2' />
 
             {/* product colors and size */}
             <div className='flex flex-col gap-2'>
@@ -121,13 +123,38 @@ const ProductPreview = async ({ productId }: Props) => {
               />
             </div>
 
-            <hr className='border border-primary/70' />
+            <hr className='border border-primary/70 my-2' />
 
           </div>
 
 
-          {/* product order */}
-          <div className='col-span-3'></div>
+          {/* product status */}
+          <div className='col-span-3 border flex flex-col gap-2 p-4 font-bold rounded-lg'>
+            <h2>Delivery</h2>
+            <h3>Free shipping </h3>
+            <p><span className='text-primary'>8-day delivery</span> by Apr 12</p>
+            <hr className='border border-primary/70 my-2' />
+            <h2>Service</h2>
+            <p className='text-primary'>Free returns · Delivery Guarantee</p>
+            <hr className='border border-primary/70 my-2' />
+            <h2>Quantity</h2>
+            <div className='flex gap-4 p-2 h-12'>
+              {/* merge redux action with server component */}
+              <CartActions decrement product={product}>
+                <Button size="sm" variant="destructive" className='rounded-full'>-</Button>
+              </CartActions>
+              <CartInput id={product.id} />
+              <CartActions increment product={product}>
+                <Button size="sm" variant="primary" className='rounded-full'>+</Button>
+              </CartActions>
+            </div>
+            {/* implement checkout button
+              if login go to checkout page
+              else popup login modal */}
+            
+            {/* implement view details -> got product page */}
+            {/* implement add to favorite list */}
+          </div>
         </div>
       }
     />

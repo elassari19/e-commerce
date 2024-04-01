@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, decrementQuantity, incrementQuantity, removeFromCart } from '@/store/cartSlice'
 import { Product } from '@prisma/client'
@@ -48,7 +48,7 @@ export const CartInput = ({ id }: { id: string}) => {
 
   return (
     <Input
-      type='number' className=' px-2 rounded-sm w-12' value={carts[+id]?.qty}
+      type='number' className=' px-2 rounded-sm w-12' value={carts.filter((c) => c.id === id)[0]?.qty}
       onChange={(e) => dispatch(incrementQuantity({ id: +id, value: +e.target.value }))}
     />
   )

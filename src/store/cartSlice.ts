@@ -12,7 +12,13 @@ export const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, { payload }) => {
+      const index = state.items.findIndex((item) => item.id === payload.id);
+      if (index !== -1) {
+        state.items[index].qty++;
+        return;
+      }
       state.items.push({ ...payload, qty: 1 });
+      return;
     },
     removeFromCart: (state, { payload }) => {
       state.items = state.items.filter((item) => item.id !== payload.id);

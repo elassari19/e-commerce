@@ -34,27 +34,35 @@ const Category = async({ params }: Props) => {
 
         <CategoriesSwiper
           categories={categories.filter((category) => category.parentId )}
-          path='product'
+          path='products'
         />
       </div>
 
       <section className='m-2 md:m-4 lg:m-8 my-4'>
         <div>
-          <CustomTabs
-            tabList={["Top Seller", "Latest Product"]}
-            tabContent={[
-              <div key={"is-first"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
-                {
-                  products.map((product) => (<ProductCard key={product.id} product={product} />))
-                }
-              </div>,
-              <div key={"is-second"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
-              {
-                products.map((product) => (<ProductCard key={product.id} product={product} />))
-              }
-            </div>
-          ]}
-          />
+          {
+            products.length > 0 ? (
+              <CustomTabs
+                tabList={["Top Seller", "Latest Product"]}
+                tabContent={[
+                  <div key={"is-first"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
+                    {
+                      products.map((product) => (<ProductCard key={product.id} product={product} />))
+                    }
+                  </div>,
+                  <div key={"is-second"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
+                  {
+                    products.map((product) => (<ProductCard key={product.id} product={product} />))
+                  }
+                  </div>
+                ]}
+              />  
+            ) : (
+              <div className="flex justify-center items-center h-64">
+                <h1 className="text-2xl">No Product Found</h1>
+              </div>
+            )
+          }
         </div>
       </section>
 

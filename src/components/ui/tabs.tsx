@@ -87,7 +87,6 @@ interface PrewiewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 export const PreviewTabs = ({ tabList, tabContent, className}: PrewiewProps) => {
-  console.log("tabList", tabList, "tabContent", tabContent)
 
   return (
     <Tabs defaultValue={"value0"} className={cn("w-full", className)}>
