@@ -4,6 +4,7 @@ import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 const Tabs = TabsPrimitive.Root
 
@@ -57,6 +58,7 @@ export { Tabs, TabsList, TabsTrigger, TabsContent }
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   tabList: string[],
   tabContent: React.ReactNode[],
+  reverse?: boolean
 }
 
 export const CustomTabs = ({ tabList, tabContent, className}: Props) => {
@@ -74,6 +76,42 @@ export const CustomTabs = ({ tabList, tabContent, className}: Props) => {
           <TabsContent key={idx} value={tabList[idx]}>{content}</TabsContent>
         ))
       }
+    </Tabs>
+  )
+}
+
+
+interface PrewiewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  tabList: any[],
+  tabContent: any[],
+}
+
+export const PreviewTabs = ({ tabList, tabContent, className}: PrewiewProps) => {
+  console.log("tabList", tabList, "tabContent", tabContent)
+
+  return (
+    <Tabs defaultValue={"value0"} className={cn("w-full", className)}>
+      <div>
+      {
+        tabContent.map((content, idx) => (
+          <TabsContent key={idx} value={"value"+idx.toString()} className="mb-4" >
+            {content}
+          </TabsContent>
+        ))
+      }
+      </div>
+      <TabsList className="w-full overflow-auto justify-start p-0 h-16">
+      {
+        tabList.map((tab, idx) => (
+          <TabsTrigger
+            key={idx} value={"value"+idx.toString()}
+            className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"
+          >
+            {tab}
+          </TabsTrigger>
+        ))
+      }
+      </TabsList>
     </Tabs>
   )
 }
