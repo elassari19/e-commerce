@@ -1,18 +1,24 @@
 import React from 'react'
 import DialogPopup from '../DialogPopup'
 import { ImageUrl, Product, Properties } from '@prisma/client'
-import { Plus, ShoppingCart } from 'lucide-react'
+import { Heart, Plus, ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import { CustomTabs, PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { db } from '../../lib/db'
 import { Button } from '../ui/button'
 import CartActions, { CartInput } from '../reduxtHandler/CartActions'
+import { auth } from '../../lib/getAuthSession'
+import Link from 'next/link'
+import Signin from '../forms/Signin'
+import FavoriteAction from '../reduxtHandler/FavoriteAction'
 
 interface Props {
   productId: string
 }
 
 const ProductPreview = async ({ productId }: Props) => {
+  const user = await auth("email")
+  console.log("user", user)
   const product = await db.product.findUnique({
     where: { id: productId },
     include: {
@@ -83,7 +89,6 @@ const ProductPreview = async ({ productId }: Props) => {
             </div>
 
             <p className='font-bold px-2'>{product.description}</p>
-
             <hr className='border border-primary/70 my-2' />
 
             {/* product colors and size */}
@@ -92,16 +97,24 @@ const ProductPreview = async ({ productId }: Props) => {
                 tabList={
                   product.properties.filter((property) => property.color?.length! > 0 && property)
                   .map((property) => (
-                    <Image
-                      src={property.secure_url!} alt="product" loading="lazy"
-                      width={40} height={40}
-                      className="w-16 h-full bg-white"
-                    />
+                    <CartActions
+                      key={property.color}
+                      product={product}
+                      productOptions={{ color:property.color! }}
+                    >
+                      <Image
+                        src={property.secure_url!} alt="product" loading="lazy"
+                        width={40} height={40}
+                        className="w-16 h-full bg-white"
+                      />
+                    </CartActions>
                   ))
                 }
                 tabContent={
                   product.properties.filter((property) => property.color?.length! > 0 && property)
-                  .map((property) => <p className="text-bold"><strong>Color</strong>: {property.color}</p>)
+                  .map((property) => (
+                      <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
+                  ))
                 }
               />
 
@@ -110,7 +123,13 @@ const ProductPreview = async ({ productId }: Props) => {
                   product.properties.filter((property) => property.name == "size" && property)
                   .map((property) => property.value!)[0]?.split(",")
                   .map((size) => (
-                    <p className="text-bold"><strong>{size}</strong></p>
+                    <CartActions
+                      key={size} className='w-full h-full py-4'
+                      product={product}
+                      productOptions={{ size }}
+                    >
+                      <p className="text-bold"><strong>{size}</strong></p>
+                    </CartActions>
                   ))
                 }
                 tabContent={
@@ -124,11 +143,10 @@ const ProductPreview = async ({ productId }: Props) => {
             </div>
 
             <hr className='border border-primary/70 my-2' />
-
           </div>
 
 
-          {/* product status */}
+          {/* product order */}
           <div className='col-span-3 border flex flex-col gap-2 p-4 font-bold rounded-lg'>
             <h2>Delivery</h2>
             <h3>Free shipping </h3>
@@ -137,6 +155,7 @@ const ProductPreview = async ({ productId }: Props) => {
             <h2>Service</h2>
             <p className='text-primary'>Free returns · Delivery Guarantee</p>
             <hr className='border border-primary/70 my-2' />
+            {/* select quantity */}
             <h2>Quantity</h2>
             <div className='flex gap-4 p-2 h-12'>
               {/* merge redux action with server component */}
@@ -148,12 +167,32 @@ const ProductPreview = async ({ productId }: Props) => {
                 <Button size="sm" variant="primary" className='rounded-full'>+</Button>
               </CartActions>
             </div>
-            {/* implement checkout button
-              if login go to checkout page
-              else popup login modal */}
+
+            {/* checkout action */}
+            <div className='my-2'>
+              {user ? (
+                <Button size="sm" variant="primary" className='rounded-full py-7 text-lg'>
+                  <Link href={"/checkout"}>Checkout now</Link>
+                </Button>
+              ):(
+                <DialogPopup
+                  dialogTrigger={<Button size="sm" variant="primary" className='rounded-full py-7 text-lg'>
+                    Checkout now
+                  </Button>}
+                  dialogContent={<Signin />}
+                  className='w-96 md:w-1/2 lg:w-1/3'
+                />
+              )}
+            </div>
             
             {/* implement view details -> got product page */}
             {/* implement add to favorite list */}
+            <div className='flex justify-between items-center gap-4'>
+              <Button size="sm" variant="primary-outline" className='rounded-full py-5'>
+                <Link href={`${product.categoryId}/${product.id}`}>View Details</Link>
+              </Button>
+              <FavoriteAction productId={product.id} />
+            </div>
           </div>
         </div>
       }

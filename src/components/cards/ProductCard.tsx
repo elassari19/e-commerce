@@ -33,7 +33,7 @@ const ProductCard = ({ className, product }: Props) => {
         <div className='flex flex-col gap-1 py-2'>
           <span className='text-xs font-bold whitespace-nowrap text-ellipsis'>{product.name}</span>
           <div className='relative flex justify-between items-center'>
-            <span className='font-bold text-xl flex-1'>$ {product.price}</span>
+            <span className='font-bold text-xl flex-1'>$ {+product.price/100}</span>
             <ProductPreview productId={product.id} />
           </div>
         </div>

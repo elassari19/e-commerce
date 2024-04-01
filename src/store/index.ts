@@ -6,6 +6,7 @@ import productSlice from "./dashboard/product";
 import rootSlice from "./rootSlice";
 import storage from "./storage";
 import cartSlice from "./cartSlice";
+import favoriteSlice from "./favoriteSlice";
 
 const rootReducer = combineReducers({ 
   account: authSlice,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   dashboard: dashboardSlice,
   root: rootSlice,
   cart: cartSlice,
+  favorite: favoriteSlice
 })
 
 const persistConfig = {

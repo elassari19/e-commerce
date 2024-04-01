@@ -1,6 +1,6 @@
 'use client'
 
-import { Trash2 } from 'lucide-react'
+import { LucideShoppingBasket, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import { Input } from '../ui/input'
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { decrementQuantity, incrementQuantity, removeFromCart } from '@/store/cartSlice'
 import Link from 'next/link'
+import { Button } from '../ui/button'
 
 interface Props {}
 
@@ -32,7 +33,7 @@ const BasketCard = ({  }: Props) => {
                       <h5 className='font-bold'>{product.name}</h5>
                       <h6 className='font-simebold text-gray-400 truncate'>{product.description}</h6>
                       <div className='flex justify-between items-center'>
-                        <h5 className='font-bold text-xl'>{product.price}</h5>
+                        <h5 className='font-bold text-xl'>{+product.price/100}</h5>
                         <div className='flex gap-2 h-8'>
                           <div onClick={() => dispatch(incrementQuantity(product))}>
                             <button className='bg-primary text-white px-2 rounded-sm h-full'>+</button>
@@ -56,7 +57,13 @@ const BasketCard = ({  }: Props) => {
             </div>
           )
           : (
-            <div className='flex-1'>no product</div>
+            <div className='h-[100vh] w-full flex flex-col justify-center items-center gap-4 p-8'>
+              <LucideShoppingBasket size={100} className='text-primary' />
+              <p className='text-sm font-bold text-center'>No items yet? Continue shopping to explore more.</p>
+              <Button variant="primary" className='rounded-full'>
+                <Link href="/">Explore items</Link>
+              </Button>
+            </div>
           )
       }
       <Link
@@ -67,7 +74,7 @@ const BasketCard = ({  }: Props) => {
         <span
           className='bg-white text-primary font-bold text-sm rounded-3xl block p-1 px-2'
         >
-          ${total}
+          ${total/100}
         </span>
       </Link>
     </div>
