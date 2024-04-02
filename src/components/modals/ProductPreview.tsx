@@ -1,9 +1,9 @@
 import React from 'react'
 import DialogPopup from '../DialogPopup'
-import { ImageUrl, Product, Properties } from '@prisma/client'
-import { Heart, Plus, ShoppingCart } from 'lucide-react'
+import { ImageUrl, Product, Properties, Reviews } from '@prisma/client'
+import { Plus, ShoppingCart, Star, StarIcon } from 'lucide-react'
 import Image from 'next/image'
-import { CustomTabs, PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { db } from '../../lib/db'
 import { Button } from '../ui/button'
 import CartActions, { CartInput } from '../reduxtHandler/CartActions'
@@ -11,6 +11,7 @@ import { auth } from '../../lib/getAuthSession'
 import Link from 'next/link'
 import Signin from '../forms/Signin'
 import FavoriteAction from '../reduxtHandler/FavoriteAction'
+import ImageMagnify from '../cards/ImageMagnify'
 
 interface Props {
   productId: string
@@ -18,14 +19,17 @@ interface Props {
 
 const ProductPreview = async ({ productId }: Props) => {
   const user = await auth("email")
-  console.log("user", user)
+
   const product = await db.product.findUnique({
     where: { id: productId },
     include: {
       images: true,
       properties: true,
+      reviews: true,
     }
-  }) as Product & { properties: (Properties&{images: ImageUrl[]})[], images: ImageUrl[] }
+  }) as Product & { properties: (Properties&{images: ImageUrl[]})[], images: ImageUrl[], reviews: Reviews[] }
+
+  const ratings = (product.reviews.reduce((acc, review) => acc + review.rating,0) / product.reviews.length) +1
 
   return (
     <DialogPopup
@@ -40,19 +44,14 @@ const ProductPreview = async ({ productId }: Props) => {
       }
       dialogContent={
         <div className='grid grid-cols-12 gap-4 h-[30rem]'>
-          {/* product image */}
+          {/* product overview images */}
           <div className='col-span-4'>
             <Tabs defaultValue={"pro2"} className="w-full h-full">
               <div>
               {
                 [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
                   <TabsContent key={idx} value={pro+idx.toString()} className="mb-4 w-full h-full" >
-                    <Image
-                      src={pro.secure_url!} alt="product"
-                      width={40} height={40}
-                      className='w-full h-[20rem] rounded-lg transform transition-transform duration-300 ease-in-out'
-                      loading="lazy"
-                    />
+                    <ImageMagnify src={pro.secure_url!} />
                   </TabsContent>
                 ))
               }
@@ -79,8 +78,8 @@ const ProductPreview = async ({ productId }: Props) => {
 
           {/* product details */}
           <div className='col-span-5 flex flex-col gap-4 h-full overflow-auto p-2'>
-            <div className='w-full bg-primary px-4 rounded-lg'>
-              <h2 className='text-xl font-bold text-white'>{product.name}</h2>
+            <div className='w-full bg-primary px-4 py-2 rounded-lg'>
+              <h2 className='text-xl font-bold text-white'>{product.name.toUpperCase()}</h2>
             </div>
 
             <div className='flex flex-col gap-2'>
@@ -89,6 +88,16 @@ const ProductPreview = async ({ productId }: Props) => {
             </div>
 
             <p className='font-bold px-2'>{product.description}</p>
+
+            {/* reviews */}
+            <div className='flex items-center gap-4 text-sm font-bold'>
+              <div className='flex gap-1'>{Array(5).fill("").map((_, idx)=>(
+                <StarIcon key={idx} size={20} fill={idx<2?'black':'white'} className={"font-thin"} />
+              ))}</div>
+              <span> {ratings || 0} Rating</span>
+              <span>{product.reviews.length} Reviews</span>
+              <span>{product.sold || 0} Sold</span>
+            </div>
             <hr className='border border-primary/70 my-2' />
 
             {/* product colors and size */}
@@ -145,7 +154,6 @@ const ProductPreview = async ({ productId }: Props) => {
             <hr className='border border-primary/70 my-2' />
           </div>
 
-
           {/* product order */}
           <div className='col-span-3 border flex flex-col gap-2 p-4 font-bold rounded-lg'>
             <h2>Delivery</h2>
@@ -171,12 +179,12 @@ const ProductPreview = async ({ productId }: Props) => {
             {/* checkout action */}
             <div className='my-2'>
               {user ? (
-                <Button size="sm" variant="primary" className='rounded-full py-7 text-lg'>
+                <Button variant="primary" className='rounded-full'>
                   <Link href={"/checkout"}>Checkout now</Link>
                 </Button>
               ):(
                 <DialogPopup
-                  dialogTrigger={<Button size="sm" variant="primary" className='rounded-full py-7 text-lg'>
+                  dialogTrigger={<Button variant="primary" className='rounded-full'>
                     Checkout now
                   </Button>}
                   dialogContent={<Signin />}
@@ -185,8 +193,7 @@ const ProductPreview = async ({ productId }: Props) => {
               )}
             </div>
             
-            {/* implement view details -> got product page */}
-            {/* implement add to favorite list */}
+            {/* implement details  add to favorite */}
             <div className='flex justify-between items-center gap-4'>
               <Button size="sm" variant="primary-outline" className='rounded-full py-5'>
                 <Link href={`${product.categoryId}/${product.id}`}>View Details</Link>
