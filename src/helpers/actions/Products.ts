@@ -29,7 +29,7 @@ export async function getProductsByCategory(categoryIds: string[]) {
       take: 2,
       skip: afterCursor ? 1 : 0, // Skip existing results
     });
-    products.push(res[0]); // Assuming data is an array
+    products.push(...res); // Assuming data is an array
   }
 
   return products;

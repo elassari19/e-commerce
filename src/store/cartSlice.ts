@@ -3,7 +3,7 @@
 import { ImageUrl, Product } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 
-type cartType = Product & { images: ImageUrl[], qty: number};
+type cartType = Product & { images: ImageUrl[], qty: number, color: string, size: string};
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -12,7 +12,13 @@ export const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, { payload }) => {
+      const index = state.items.findIndex((item) => item.id === payload.id);
+      if (index !== -1) {
+        state.items[index].qty++;
+        return;
+      }
       state.items.push({ ...payload, qty: 1 });
+      return;
     },
     removeFromCart: (state, { payload }) => {
       state.items = state.items.filter((item) => item.id !== payload.id);
@@ -43,11 +49,23 @@ export const cartSlice = createSlice({
       state.items[index].qty--;
       if (state.items[index].qty === 0) {
         // in case the qty is 0, we remove the item from the cart
-        cartSlice.caseReducers.removeFromCart(state, cartSlice.actions.removeFromCart({ id: payload.id, price: payload.price, qty: 1 }));
+        cartSlice.caseReducers.removeFromCart(state, cartSlice.actions.removeFromCart({
+          id: payload.id, price: payload.price, qty: 0
+        }));
       }
     },
+    selectProductOptions: (state, { payload }) => {
+      const index = state.items.findIndex((item) => item.id === payload.id);
+      if (index === -1) {
+        cartSlice.caseReducers.addToCart(state, cartSlice.actions.addToCart({ ...payload, qty: 1 }));
+        state.items.sort((a, b) => a.id > b.id ? 1 : -1);
+        return;
+      }
+      state.items[index].color = payload.color;
+      state.items[index].size = payload.size;
+    }
   },
 });
 
-export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity } = cartSlice.actions;
+export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, selectProductOptions } = cartSlice.actions;
 export default cartSlice.reducer;

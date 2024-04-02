@@ -29,18 +29,23 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
     console.log("images error", error)
   }
   try {
-    // @ts-ignore await uploading product color images to cloudinary cloud
-    const images = data.properties.map((fl: TImageColors) => fl.file).filter((fl: TImageColors) => fl && fl)
-    req.colors = await uploadImages(images, `products/${data.slug}/colors`) as TImage[]
+    const properties: any = []
+    let result: Pick<TImageColors, "public_id"|"secure_url">[]
+    for(let i=0; i < data.properties.length; i++) {
+      if(data.properties[i].color !== undefined) {
+        result = await uploadImages([data.properties[i].file], `products/${data.slug}/colors`)
 
-    // map images with colors
-    req.properties = data.properties.map((item: TImageColors, index: number) => {
-      delete item.file;
-      delete item.secure_url;
-      return item
-    })
+        delete data.properties[i].file
+        data.properties[i].public_id = result[0].public_id
+        data.properties[i].secure_url = result[0].secure_url
+        properties.push(data.properties[i])
+      } else {
+        properties.push(data.properties[i])
+      }
+    }
+    data.properties = properties
   } catch (error) {
-    console.log("color images error", error)
+    console.log("color images error")
     return NextResponse.json({
       error
     }, { status: 400 })
@@ -54,16 +59,15 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
         User: { connect: { id: userId } },
         Category: { connect: { id: categoryId } },
         properties: {
-          create: [ ...data.properties ],
+          create: [ ...data.properties ],  
         },
         images: {
-          create: [ ...data.images, ...req.colors ],
+          create: [ ...data.images ],
         }
       }
     })
-    // res.redirect(307, '/')
     return NextResponse.json({
-    response
+      response
   }, { status: 201 })
   } catch (error) {
     console.log("post error", error)
