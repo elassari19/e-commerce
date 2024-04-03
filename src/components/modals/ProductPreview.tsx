@@ -4,7 +4,7 @@ import { ImageUrl, Product, Properties, Reviews } from '@prisma/client'
 import { Plus, ShoppingCart, Star, StarIcon } from 'lucide-react'
 import Image from 'next/image'
 import { PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import { db } from '../../lib/db'
+import { db } from '@/lib/db'
 import { Button } from '../ui/button'
 import CartActions, { CartInput } from '../reduxtHandler/CartActions'
 import { auth } from '../../lib/getAuthSession'
@@ -12,12 +12,15 @@ import Link from 'next/link'
 import Signin from '../forms/Signin'
 import FavoriteAction from '../reduxtHandler/FavoriteAction'
 import ImageMagnify from '../cards/ImageMagnify'
+import Ratings from '../atoms/Ratings'
+import { cn } from '@/lib/utils'
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement>{
   productId: string
+  dialogTrigger?: React.ReactNode
 }
 
-const ProductPreview = async ({ productId }: Props) => {
+const ProductPreview = async ({ productId, dialogTrigger, className }: Props) => {
   const user = await auth("email")
 
   const product = await db.product.findUnique({
@@ -33,9 +36,9 @@ const ProductPreview = async ({ productId }: Props) => {
 
   return (
     <DialogPopup
-      className='w-[96%]'
+      className={cn('w-[96%]')}
       dialogTrigger={
-        <div className='cursor-pointer relative'>
+        dialogTrigger||<div className={cn('cursor-pointer relative', className)}>
           <ShoppingCart size={40} className='w-11 h-11 text-primary rounded-full p-1 bg-primary/10' />
           <span className='absolute right-1 top-2 w-6 pl-1 bg-[#e6f0e4]'>
             <Plus size={14} strokeWidth={4} className='text-primary' />
@@ -91,10 +94,11 @@ const ProductPreview = async ({ productId }: Props) => {
 
             {/* reviews */}
             <div className='flex items-center gap-4 text-sm font-bold'>
-              <div className='flex gap-1'>{Array(5).fill("").map((_, idx)=>(
+              <Ratings ratings={ratings} />
+              {/* <div className='flex gap-1'>{Array(5).fill("").map((_, idx)=>(
                 <StarIcon key={idx} size={20} fill={idx<2?'black':'white'} className={"font-thin"} />
               ))}</div>
-              <span> {ratings || 0} Rating</span>
+              <span> {ratings || 0} Rating</span> */}
               <span>{product.reviews.length} Reviews</span>
               <span>{product.sold || 0} Sold</span>
             </div>
