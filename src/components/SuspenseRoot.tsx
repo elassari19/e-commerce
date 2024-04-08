@@ -10,7 +10,7 @@ const SuspenseRoot = ({ children, loader, className }: Props) => {
     <Suspense
       fallback={
         <div className='w-full h-[50rem] flex justify-center items-center'>
-          {loader ??  <Loader2 className='mr-2 h-20 w-20 animate-spin text-primary' />}
+          {loader ??  <Loader2 className='mr-2 h-[20%] w-[20%] animate-spin text-primary' />}
         </div>
       }
     >
