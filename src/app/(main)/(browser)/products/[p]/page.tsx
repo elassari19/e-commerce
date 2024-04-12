@@ -213,8 +213,9 @@ const page = async ({ params, searchParams }: Props) => {
             )}
           >
             {
-              products.map((product) => (
+              products.map((product, index) => (
                 <ProductCard
+                  index={index}
                   key={product.id}
                   product={product}
                   list={searchParams.view === "list"}

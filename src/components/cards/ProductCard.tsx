@@ -10,10 +10,11 @@ import Ratings from '../atoms/Ratings'
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   product: Product & { images: ImageUrl[] },
   list?: boolean
+  index?: number
 }
 
-const ProductCard = ({ className, product, list }: Props) => {
-
+const ProductCard = ({ className, product, list, index }: Props) => {
+console.log("index",index)
   return (
     <div
       className={cn(
@@ -29,7 +30,7 @@ const ProductCard = ({ className, product, list }: Props) => {
         <Link href={`/products/${product.categoryId}/${product.id}`}
           className={cn('flex justify-center', list&&"w-1/4")}>
           <Image
-            src={product.images[0]?.secure_url} alt={product.name} width={150} height={150}
+            src={product.images[0]?.secure_url} priority={index==0} alt={product.name} width={150} height={150}
             className='w-48 h-48 m4 rounded-full hover:scale-110 transform transition-transform duration-300 ease-in-out'
           />
         </Link>

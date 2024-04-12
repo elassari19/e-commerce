@@ -47,12 +47,16 @@ const Category = async({ params }: Props) => {
                 tabContent={[
                   <div key={"is-first"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
                     {
-                      products.map((product) => (<ProductCard key={product.id} product={product} />))
+                      products.map((product, index) => (
+                        <ProductCard key={product.id} product={product} index={index} />
+                      ))
                     }
                   </div>,
                   <div key={"is-second"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
                   {
-                    products.map((product) => (<ProductCard key={product.id} product={product} />))
+                    products.map((product, index) => (
+                      <ProductCard key={product.id} product={product} index={index} />
+                    ))
                   }
                   </div>
                 ]}

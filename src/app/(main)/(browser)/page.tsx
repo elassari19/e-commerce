@@ -48,7 +48,13 @@ export default async function Home({ searchParams }: Props) {
               Popular Products for Daily Shopping
             </h2>
           {
-            products.map((product) => (<ProductCard key={product.id} product={product} />))
+            products.map((product, index) => (
+              <ProductCard
+                key={product.id}
+                index={index}
+                product={product}
+              />
+            ))
           }
           </div>
         </Suspense>
