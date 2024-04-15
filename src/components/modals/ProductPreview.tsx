@@ -74,9 +74,8 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
                 ))
               }
             </TabsList>
-            </Tabs>
-
-          </div>
+          </Tabs>
+        </div>
 
           {/* product details */}
           <div className='col-span-5 flex flex-col gap-4 h-full overflow-auto p-2'>

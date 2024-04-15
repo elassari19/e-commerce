@@ -38,32 +38,32 @@ const page = async ({ params }: Props) => {
     <div className='grid grid-cols-12 gap-4 m-8 mb-24'>
       {/* product overview images */}
       <div className='col-span-12 md:col-span-4'>
-        <Tabs defaultValue={"value0"} className="w-full h-full">
+        <Tabs defaultValue={"0"} className="w-full h-full">
           <div>
           {
             [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
-              <TabsContent key={idx} value={pro+idx.toString()} className="mb-4 w-full h-full" >
+              <TabsContent key={idx} tabIndex={idx} value={idx.toString()} className="mb-4 w-full h-full" >
                 <ImageMagnify src={pro.secure_url!} />
               </TabsContent>
             ))
           }
           </div>
           <TabsList className="w-full overflow-auto justify-start p-0 h-16">
-          {
-            [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
-              <TabsTrigger key={idx} value={pro+idx.toString()}
-                className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"
-              >
-                <Image
-                  src={pro.secure_url!} alt="product"
-                  width={40} height={40}
-                  className='w-full h-full rounded-lg transform transition-transform duration-300 ease-in-out'
-                  loading="lazy"
-                />
-              </TabsTrigger>
-            ))
-          }
-        </TabsList>
+            {
+              [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
+                <TabsTrigger key={idx} value={idx.toString()}
+                  className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"
+                >
+                  <Image
+                    src={pro.secure_url!} alt="product"
+                    width={40} height={40}
+                    className='w-full h-full rounded-lg transform transition-transform duration-300 ease-in-out'
+                    loading="lazy"
+                  />
+                </TabsTrigger>
+              ))
+            }
+          </TabsList>
         </Tabs>
       </div>
 
@@ -265,7 +265,7 @@ const page = async ({ params }: Props) => {
               <div className='flex gap-1'>
                 {Array(5).fill("").map((_, index) => <StarIcon size={20} fill='black' key={index} />)}
               </div>
-              <p className='text-black/60'>Color:Black Shoe Size:46</p>
+              <p className='text-black/60'>Color&#58; Black&#44; Shoe Size&#58;46</p>
               <p>I received the reference during. I did not expect that, these shoes will be so good. They're just fabulous. Very comfortable and lightweight. They can be worn every day and the legs will rest without stress. And surprisingly low price for such a good shoe. And just great customer service. Thank you for such fabulously comfortable shoes!!!</p>
             </div>
           ))
