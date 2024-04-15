@@ -266,7 +266,7 @@ const page = async ({ params }: Props) => {
                 {Array(5).fill("").map((_, index) => <StarIcon size={20} fill='black' key={index} />)}
               </div>
               <p className='text-black/60'>Color&#58; Black&#44; Shoe Size&#58;46</p>
-              <p>I received the reference during. I did not expect that, these shoes will be so good. They're just fabulous. Very comfortable and lightweight. They can be worn every day and the legs will rest without stress. And surprisingly low price for such a good shoe. And just great customer service. Thank you for such fabulously comfortable shoes!!!</p>
+              <p>I received the reference during. I did not expect that, these shoes will be so good. They&apos;re just fabulous. Very comfortable and lightweight. They can be worn every day and the legs will rest without stress. And surprisingly low price for such a good shoe. And just great customer service. Thank you for such fabulously comfortable shoes!!!</p>
             </div>
           ))
         }
