@@ -14,7 +14,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ProductCard = ({ className, product, list, index }: Props) => {
-console.log("index",index)
+
   return (
     <div
       className={cn(
