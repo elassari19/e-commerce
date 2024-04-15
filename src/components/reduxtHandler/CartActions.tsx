@@ -55,14 +55,14 @@ function CartActions({ increment, add, remove, favorite, product, productOptions
 
 export default CartActions
 
-export const CartInput = ({ id }: { id: string}) => {
+export const CartInput = ({ id, className }: { id: string, className?: string}) => {
 
   const dispatch = useDispatch()
   const carts = useSelector((state: RootState) => state.cart.items)
 
   return (
     <Input
-      type='number' className=' px-2 rounded-sm w-12' value={carts.filter((c) => c.id === id)[0]?.qty || 0}
+      type='number' className={cn(' px-2 rounded-sm w-12', className)} value={carts.filter((c) => c.id === id)[0]?.qty || 0}
       onChange={(e) => dispatch(incrementQuantity({ id: +id, value: +e.target.value }))}
     />
   )

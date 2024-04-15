@@ -7,13 +7,14 @@ import { PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tab
 import { db } from '@/lib/db'
 import { Button } from '../ui/button'
 import CartActions, { CartInput } from '../reduxtHandler/CartActions'
-import { auth } from '../../lib/getAuthSession'
+import { auth } from '@/lib/getAuthSession'
 import Link from 'next/link'
 import Signin from '../forms/Signin'
 import FavoriteAction from '../reduxtHandler/FavoriteAction'
 import ImageMagnify from '../cards/ImageMagnify'
 import Ratings from '../atoms/Ratings'
 import { cn } from '@/lib/utils'
+import { ratings } from '@/helpers/methods/functions'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement>{
   productId: string
@@ -31,8 +32,6 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
       reviews: true,
     }
   }) as Product & { properties: (Properties&{images: ImageUrl[]})[], images: ImageUrl[], reviews: Reviews[] }
-
-  const ratings = (product.reviews.reduce((acc, review) => acc + review.rating,0) / product.reviews.length) +1
 
   return (
     <DialogPopup
@@ -94,7 +93,7 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
 
             {/* reviews */}
             <div className='flex items-center gap-4 text-sm font-bold'>
-              <Ratings ratings={ratings} />
+              <Ratings ratings={ratings(product.reviews)} />
               {/* <div className='flex gap-1'>{Array(5).fill("").map((_, idx)=>(
                 <StarIcon key={idx} size={20} fill={idx<2?'black':'white'} className={"font-thin"} />
               ))}</div>
@@ -172,11 +171,11 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
             <div className='flex gap-4 p-2 h-12'>
               {/* merge redux action with server component */}
               <CartActions decrement product={product}>
-                <Button size="sm" variant="destructive" className='rounded-full'>-</Button>
+                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
               </CartActions>
               <CartInput id={product.id} />
               <CartActions increment product={product}>
-                <Button size="sm" variant="primary" className='rounded-full'>+</Button>
+                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
               </CartActions>
             </div>
 
