@@ -179,14 +179,14 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
             </div>
 
             {/* checkout action */}
-            <div className='my-2'>
+            <div className='my-2 w-full'>
               {user ? (
                 <Button variant="primary" className='rounded-full'>
                   <Link href={"/checkout"}>Checkout now</Link>
                 </Button>
               ):(
                 <DialogPopup
-                  dialogTrigger={<Button variant="primary" className='rounded-full'>
+                  dialogTrigger={<Button variant="primary" className='rounded-full w-72'>
                     Checkout now
                   </Button>}
                   dialogContent={<Signin />}

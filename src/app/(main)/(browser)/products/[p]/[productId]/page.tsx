@@ -9,11 +9,11 @@ import { ratings } from '@/helpers/methods/functions'
 import CartActions, { CartInput } from '@/components/reduxtHandler/CartActions'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import SignIn from '@/components/auth/SignIn'
 import DialogPopup from '@/components/DialogPopup'
 import FavoriteAction from '@/components/reduxtHandler/FavoriteAction'
 import { auth } from '@/lib/getAuthSession'
 import { StarIcon } from 'lucide-react'
+import Signin from '@/components/forms/Signin'
 
 interface Props {
   params: {
@@ -210,17 +210,17 @@ const page = async ({ params }: Props) => {
           </div>
 
           {/* checkout action */}
-          <div className='my-2'>
+          <div className='my-2 w-full'>
             {user ? (
               <Button variant="primary" className='rounded-full'>
                 <Link href={"/checkout"}>Checkout now</Link>
               </Button>
             ):(
               <DialogPopup
-                dialogTrigger={<Button variant="primary" className='rounded-full'>
+                dialogTrigger={<Button variant="primary" className='rounded-full w-72'>
                   Checkout now
                 </Button>}
-                dialogContent={<SignIn />}
+                dialogContent={<Signin />}
                 className='w-96 md:w-1/2 lg:w-1/3'
               />
             )}
