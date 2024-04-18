@@ -21,6 +21,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
+  console.log("formUpdateData", formUpdateData)
 
   const [img, setImages] = useState<ImageUrl[]>(formUpdateData?.images || [])
 
@@ -60,6 +61,7 @@ const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
   const initialValues = {
     name: formUpdateData?.name || "",
     description: formUpdateData?.description || "",
+    tags: formUpdateData?.tags || "",
     parentId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.parentId) : "",
     images: img,
   }
@@ -78,9 +80,10 @@ const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
             { lable: "Category Title/Name", name: "name", value: formik.values.name },
             { lable: "Category Description", name: "description", component:"textarea", rows: 5, value: formik.values.description },
             { lable: "Product Images", name: "images", type: "file", multiple: true, accept: "image/*",
-              onChange: (e: any) => {uploadImagesHandler(e, setImages), formik.setFieldValue("images", img)}
-            },
-            { lable: "Category", name: "parentId" },
+            onChange: (e: any) => {uploadImagesHandler(e, setImages), formik.setFieldValue("images", img)}
+          },
+          { lable: "Category", name: "parentId" },
+          { lable: "Category Tags", name: "tags", component:"textarea", rows: 3, value: formik.values.tags },
           ].map(({ lable, name, ...rest }, idx) => {
             if(name === "parentId") {
               return (

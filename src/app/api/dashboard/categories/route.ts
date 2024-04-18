@@ -11,10 +11,11 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const data = await req.json();
   const userId = data.userId
   delete data.userId
+  data.tags = data.tags.split(",")
 
   data.slug = data.name.toLowerCase().replace(" ", "_").replace("&", "and")
   console.log("data", data.parentId)
-
+  data.tags = data.tags.split(",")
   try {
     // awiat uploading root images to cloudinary cloud
     data.images = await uploadImages(data.images.map((img: any) => img.file), `categoy/${data.slug}`)
@@ -57,6 +58,7 @@ export async function GET(req: Request) {
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
   delete data.images
+  data.tags = data.tags.split(",")
 
   try {
     req.response = await db.category.update({
@@ -65,6 +67,7 @@ export async function PATCH(req: ExtendsRequest) {
         name: data.name,
         description: data.description,
         parentId: data.parentId,
+        tags: data.tags
       }
     })
     return NextResponse.json({ categories: req.response }, { status: 202 })

@@ -6,15 +6,16 @@ import Image from 'next/image'
 import ProductPreview from '../modals/ProductPreview'
 import { Button } from '../ui/button'
 import Ratings from '../atoms/Ratings'
+import { IProductData } from '../../types/products'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  product: Product & { images: ImageUrl[] },
+  product: IProductData,
   list?: boolean
   index?: number
 }
 
 const ProductCard = ({ className, product, list, index }: Props) => {
-
+// console.log("product", product)
   return (
     <div
       className={cn(
@@ -47,13 +48,13 @@ const ProductCard = ({ className, product, list, index }: Props) => {
           <Ratings ratings={4} />
           <div className={cn('relative flex justify-between items-center')}>
             <span className='font-bold text-xl flex-1'>$ {+product.price/100}</span>
-            <ProductPreview productId={product.id} className={cn('',list&&"hidden")} />
+            <ProductPreview product={product} className={cn('',list&&"hidden")} />
           </div>
         </div>
 
         <div className={cn("w-1/4 flex flex-col gap-2",!list&&"hidden")}>
           <ProductPreview
-            productId={product.id}
+            product={product}
             dialogTrigger={<Button variant="primary" className='rounded-full'>Add to cart</Button>}
           />
           <Button href={`${product.categoryId}/${product.id}`} variant="primary-outline" className='rounded-full'>

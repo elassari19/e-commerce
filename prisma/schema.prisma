@@ -105,11 +105,12 @@ model Product {
   name        String
   slug        String       @unique
   description String
+  tags        String[]
   images      ImageUrl[]
-  price       String
+  price       Float
   sold        String?      @default("0")
   reviews     Reviews[]
-  quantity    String
+  quantity    Int
   properties  Properties[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -162,6 +163,7 @@ model Category {
   name        String
   slug        String     @unique
   description String
+  tags        String[]
   parentId    String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

@@ -3,7 +3,8 @@ import { db } from '@/lib/db'
 import CategoriesSwiper from '@/components/swipers/CategoriesSwiper'
 import ProductCard from '@/components/cards/ProductCard'
 import { CustomTabs } from '@/components/ui/tabs'
-import { getProductsByCategory } from '../../../../../helpers/actions/Products'
+import LoadMore from '@/components/atoms/LoadMore'
+import { IProductData } from '@/types/products'
 
 interface Props {
   params: {
@@ -21,9 +22,17 @@ const Category = async({ params }: Props) => {
       images: true,
     }
   })
-  const ids = categories.filter((category) => category.parentId == params.c && category.id).map((category) => category.id)
 
-  const products = await getProductsByCategory(ids)
+  const productsCategory = await db.product.findMany({
+    where: { categoryId: params.c },
+    include: {
+      images: true,
+      Category: true,
+      properties: true,
+      reviews: true
+    },
+    take: 10
+  }) as IProductData[]
 
   return (
     <div>
@@ -41,20 +50,14 @@ const Category = async({ params }: Props) => {
       <section className='m-2 md:m-4 lg:m-8 my-4'>
         <div>
           {
-            products.length > 0 ? (
+            productsCategory.length > 0 ? (
               <CustomTabs
                 tabList={["Top Seller", "Latest Product"]}
                 tabContent={[
-                  <div key={"is-first"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
-                    {
-                      products.map((product, index) => (
-                        <ProductCard key={product.id} product={product} index={index} />
-                      ))
-                    }
-                  </div>,
+                  <LoadMore categoryId={params.c!} productsList={productsCategory} />,
                   <div key={"is-second"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
                   {
-                    products.map((product, index) => (
+                    productsCategory.map((product, index) => (
                       <ProductCard key={product.id} product={product} index={index} />
                     ))
                   }
@@ -68,6 +71,7 @@ const Category = async({ params }: Props) => {
             )
           }
         </div>
+        {/* <LoadMore categories={ids} /> */}
       </section>
 
     </div>

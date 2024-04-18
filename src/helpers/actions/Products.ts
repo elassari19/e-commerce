@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 
-export const getProducts = async (searchQuery: string) => {
+export const getSearchProducts = async (searchQuery: string) => {
   const products = await db.product.findMany({
     where: {
       name: {
@@ -17,20 +17,37 @@ export const getProducts = async (searchQuery: string) => {
   return products;
 }
 
-export async function getProductsByCategory(categoryIds: string[]) {
-  let afterCursor = null;
-  const products = [];
+export async function getProductsByCategory(categoryId: string, skip: number = 0) {
+  const res = await db.product.findMany({
+    where: { categoryId },
+    include: {
+      images: true,
+      properties: true,
+      reviews: true,
+      Category: true,
+    },
+    orderBy: { id: "asc" },
+    take: 10,
+    skip: skip * 10,
+  });
 
-  for (const categoryId of categoryIds) {
-    const res = await db.product.findMany({
-      where: { categoryId },
-      include: { images: true },
-      orderBy: { id: "asc" },
-      take: 2,
-      skip: afterCursor ? 1 : 0, // Skip existing results
-    });
-    products.push(...res); // Assuming data is an array
-  }
+  return res ?? [];
+}
 
-  return products;
+export async function getProductById(productId: string) {
+  const product = await db.product.findUnique({
+    where: { id: productId },
+    include: {
+      images: true,
+      reviews: true,
+      properties: true,
+    },
+  });
+  return product;
+}
+
+export async function getCategories() {
+  const categories = await db.category.findMany({
+  });
+  return categories;
 }
