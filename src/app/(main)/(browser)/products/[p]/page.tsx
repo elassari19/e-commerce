@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup } from '@/components/ui/radio-group'
 import Ratings from '@/components/atoms/Ratings'
 import { redirect } from 'next/navigation'
+import { IProductData } from '@/types/products'
+import LoadMore from '../../../../../components/atoms/LoadMore'
 
 interface Props {
   params: {
@@ -33,18 +35,24 @@ const page = async ({ params, searchParams }: Props) => {
   const products = await db.product.findMany({
     where: {
       categoryId: params.p,
+      price: {
+        gte: gteMin,
+      },
     },
     include: {
       images: true,
       reviews: true,
+      properties: true,
+      Category: true,
     },
     orderBy: {
       sold: searchParams.sort === "order" ? "asc" : undefined,
       name: searchParams.sort === "match" ? "asc" : undefined,
       price: searchParams.sort === "price" ? "asc" : undefined,
-    }
-  }).then((res) => res.filter((product) => +product.price >= gteMin && +product.price <= lteMax))
-
+    },
+    take: 10
+  }) as IProductData[]
+  
   const handleForm = async(formData: FormData) => {
     'use server'
     const min = formData.get('min')
@@ -212,7 +220,8 @@ const page = async ({ params, searchParams }: Props) => {
               searchParams.view === "list" && "grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
             )}
           >
-            {
+            <LoadMore categoryId={params.p!} productsList={products} />
+            {/* {
               products.map((product, index) => (
                 <ProductCard
                   index={index}
@@ -221,7 +230,7 @@ const page = async ({ params, searchParams }: Props) => {
                   list={searchParams.view === "list"}
                 />
               ))
-            }
+            } */}
           </div>
         </SuspenseRoot>
       </section>

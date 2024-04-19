@@ -145,6 +145,7 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
                                       ind !== -1 && formik.setFieldValue("tags", formik.values.tags?.filter((item: string) => item !== tag))
                                     }
                                   }}
+                                  checked={formik.values.tags.indexOf(tag) !== -1}
                                   className="p-1 bg-primary-foreground text-white rounded-lg w-4 h-4 border-primary"
                                 />
                                 <label htmlFor={tag} className="ml-1">{tag}</label>

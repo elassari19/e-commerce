@@ -20,6 +20,12 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
   const categoryId = data.categoryId
   delete data.categoryId
   data.slug = data.name.toLowerCase().replace(/\s/g, "-")
+  const isSlugExist = await db.product.findFirst({ where: { slug: data.slug } })
+  if(isSlugExist) {
+    return NextResponse.json({
+      error: "Slug already exist"
+    }, { status: 400 })
+  }
 
   try {
     // awiat uploading root images to cloudinary cloud
@@ -56,7 +62,9 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
     const response = await db.product.create({
       data: {
         ...data,
-        User: { connect: { id: userId } },
+        price: parseFloat(data.price),
+        quantity: parseInt(data.quantity),
+        User: { connect: { id: "65a84b613bfb23665c6e3df1" } },
         Category: { connect: { id: categoryId } },
         properties: {
           create: [ ...data.properties ],  
@@ -98,9 +106,10 @@ export async function PATCH(req: ExtendsRequest) {
         name: data.name,
         description: data.description,
         slug: data.name.toLowerCase().replace(/\s/g, "-"),
-        price: data.price,
-        quantity: data.quantity,
+        price: parseFloat(data.price),
+        quantity: parseInt(data.quantity),
         Category: { connect: { id: data.categoryId }},
+        tags: data.tags
         // images: {
         //   create: data.images
         // },
