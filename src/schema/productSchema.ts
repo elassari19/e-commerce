@@ -13,4 +13,5 @@ export const categorySchema = object().shape({
   name: string().required().min(3),
   slug: string(),
   description: string(),
+  parentId: string(),
 })

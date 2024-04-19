@@ -15,6 +15,7 @@ import OptionsProperties from "../OptionsProperties";
 import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { revalidatePathByAction } from "@/helpers/actions/revalidate";
 import { toggleIdToSlug, toggleSlugToId } from "@/helpers/methods/toggleIdName";
+import ProductTags from "../ProductTags";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
@@ -77,6 +78,7 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
     description: formUpdateData?.description || "",
     img,
     categoryId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.categoryId) : "",
+    tags: formUpdateData?.tags || [],
     quantity: formUpdateData?.quantity || "",
     price: formUpdateData?.price || "",
     properties: formUpdateData?.properties || [{name: "", value: ""}],
@@ -100,11 +102,10 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
               onChange: (e: any) => {uploadImagesHandler(e, setImages), formik.setFieldValue("images", img)}
             },
             { lable: "Category", name: "category", value: formik.values?.categoryId},
+            { lable: "Product Tags", name: "tags", component: "textarea", rows: 3 , value: formik.values?.tags},
             { lable: "Product Price", name: "price", value: formik.values?.price },
             { lable: "Product Quantity", name: "quantity", value: formik.values?.quantity },
-            {
-              lable: "Product Properties", name: "properties"
-            },
+            { lable: "Product Properties", name: "properties" },
           ].map(({ lable, name, ...rest }, idx) => {
               return (
                 <div className="grid grid-cols-1 md:grid-cols-12" key={idx}>
@@ -122,10 +123,36 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
                       ? (
                         <SelectInput
                           placeholder="Select Category"
-                          data={categories.filter(item => item.parentId !== "")}
+                          data={categories.filter(item => item.parentId == "")}
                           onSelect={(e) => formik.setFieldValue("categoryId", e)}
                           value={formik.values.categoryId}
                         />)
+                      : name === "tags"
+                      ? (
+                        <>
+                          <ProductTags>
+                            {tags => tags.map((tag) =>(
+                              <div className="bg-primary/80 rounded-md p-2 flex items-center">
+                                <input
+                                  key={tag} type="checkbox"
+                                  name={tag} value={tag}
+                                  onChange={(e) => {
+                                    e.target.value
+                                    if(e.target.checked) {
+                                      formik.values.tags.indexOf(tag) === -1 && formik.setFieldValue("tags", [...formik.values.tags, tag])
+                                    } else {
+                                      const ind = formik.values.tags.indexOf(tag)
+                                      ind !== -1 && formik.setFieldValue("tags", formik.values.tags?.filter((item: string) => item !== tag))
+                                    }
+                                  }}
+                                  className="p-1 bg-primary-foreground text-white rounded-lg w-4 h-4 border-primary"
+                                />
+                                <label htmlFor={tag} className="ml-1">{tag}</label>
+                              </div>
+                            ))}
+                          </ProductTags>
+                        </>
+                      )
                       : (<>
                           <FormikField
                             name={name}
