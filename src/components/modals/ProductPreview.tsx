@@ -1,7 +1,8 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import DialogPopup from '../DialogPopup'
-import { ImageUrl, Product, Properties, Reviews } from '@prisma/client'
-import { Plus, ShoppingCart, Star, StarIcon } from 'lucide-react'
+import { Plus, ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import { PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { db } from '@/lib/db'
@@ -15,23 +16,19 @@ import ImageMagnify from '../cards/ImageMagnify'
 import Ratings from '../atoms/Ratings'
 import { cn } from '@/lib/utils'
 import { ratings } from '@/helpers/methods/functions'
+import { useSession } from 'next-auth/react'
+import { IProductData } from '../../types/products'
+import { getProductById } from '../../helpers/actions/Products'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement>{
-  productId: string
+  product: IProductData
   dialogTrigger?: React.ReactNode
 }
 
-const ProductPreview = async ({ productId, dialogTrigger, className }: Props) => {
-  const user = await auth("email")
+const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
+  const { data } = useSession()
 
-  const product = await db.product.findUnique({
-    where: { id: productId },
-    include: {
-      images: true,
-      properties: true,
-      reviews: true,
-    }
-  }) as Product & { properties: (Properties&{images: ImageUrl[]})[], images: ImageUrl[], reviews: Reviews[] }
+  if (!product) return <div>d</div>
 
   return (
     <DialogPopup
@@ -51,7 +48,7 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
             <Tabs defaultValue={"pro2"} className="w-full h-full">
               <div>
               {
-                [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
+                [...product?.images, ...product?.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
                   <TabsContent key={idx} value={pro+idx.toString()} className="mb-4 w-full h-full" >
                     <ImageMagnify src={pro.secure_url!} />
                   </TabsContent>
@@ -74,8 +71,8 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
                 ))
               }
             </TabsList>
-          </Tabs>
-        </div>
+            </Tabs>
+          </div>
 
           {/* product details */}
           <div className='col-span-5 flex flex-col gap-4 h-full overflow-auto p-2'>
@@ -104,6 +101,7 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
 
             {/* product colors and size */}
             <div className='flex flex-col gap-2'>
+              {/* images tags */}
               <PreviewTabs
                 tabList={
                   product.properties.filter((property) => property.color?.length! > 0 && property)
@@ -129,6 +127,7 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
                 }
               />
 
+              {/* size tags */}
               <PreviewTabs
                 tabList={
                   product.properties.filter((property) => property.name == "size" && property)
@@ -180,7 +179,7 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
 
             {/* checkout action */}
             <div className='my-2 w-full'>
-              {user ? (
+              {data?.user ? (
                 <Button variant="primary" className='rounded-full'>
                   <Link href={"/checkout"}>Checkout now</Link>
                 </Button>
@@ -198,7 +197,7 @@ const ProductPreview = async ({ productId, dialogTrigger, className }: Props) =>
             {/* implement details  add to favorite */}
             <div className='flex justify-between items-center gap-4'>
               <Button size="sm" variant="primary-outline" className='rounded-full py-5'>
-                <Link href={`${product.categoryId}/${product.id}`}>View Details</Link>
+                <Link href={`/products/${product.categoryId}/${product.id}`}>View Details</Link>
               </Button>
               <FavoriteAction productId={product.id} />
             </div>

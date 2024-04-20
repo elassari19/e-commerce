@@ -54,14 +54,8 @@ const Category = async({ params }: Props) => {
               <CustomTabs
                 tabList={["Top Seller", "Latest Product"]}
                 tabContent={[
-                  <LoadMore categoryId={params.c!} productsList={productsCategory} />,
-                  <div key={"is-second"} className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
-                  {
-                    productsCategory.map((product, index) => (
-                      <ProductCard key={product.id} product={product} index={index} />
-                    ))
-                  }
-                  </div>
+                  <LoadMore key="top sellere" categoryId={params.c!} productsList={productsCategory} />,
+                  <LoadMore key="lates produ" categoryId={params.c!} productsList={productsCategory} />
                 ]}
               />  
             ) : (
@@ -71,7 +65,6 @@ const Category = async({ params }: Props) => {
             )
           }
         </div>
-        {/* <LoadMore categories={ids} /> */}
       </section>
 
     </div>
