@@ -42,7 +42,7 @@ const CategoriesSwiper = ({ categories, path, className }: Props) => {
               className='w-full h-full py-2 px-1'
             >
               <Link
-                href={`/${path}/${category.id}`} 
+                href={`/${path}/${category.parentId||category.id}?t=${category.name}`} 
                 className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center
                 items-center shadow p-2 hover:shadow-primary/60'
               >

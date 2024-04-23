@@ -61,7 +61,6 @@ const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
   const initialValues = {
     name: formUpdateData?.name || "",
     description: formUpdateData?.description || "",
-    tags: formUpdateData?.tags || "",
     parentId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.parentId) : "",
     images: img,
   }
@@ -83,7 +82,6 @@ const CategoryForm = ({ className, categories, formUpdateData }: Props) => {
             onChange: (e: any) => {uploadImagesHandler(e, setImages), formik.setFieldValue("images", img)}
           },
           { lable: "Category", name: "parentId" },
-          { lable: "Category Tags", name: "tags", component:"textarea", rows: 3, value: formik.values.tags },
           ].map(({ lable, name, ...rest }, idx) => {
             if(name === "parentId") {
               return (
