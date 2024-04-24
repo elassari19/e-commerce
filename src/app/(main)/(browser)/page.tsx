@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import ProductCard from "@/components/cards/ProductCard"
 import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
 import SuspenseRoot from "@/components/SuspenseRoot"
+import { IProductData } from "../../../types/products"
 
 export const dynamic = "force-dynamic"
 
@@ -18,10 +19,10 @@ export default async function Home({ searchParams }: Props) {
     include: {
       images: true,
       properties: true,
-      reviews: true
+      reviews: true,
     },
     take: 10
-  })
+  }) as IProductData[]
 
   const categories = await db.category.findMany({
     include: {
