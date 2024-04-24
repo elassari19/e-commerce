@@ -11,7 +11,7 @@ interface IProps {
 const View = (props: ICellRendererParams) => {
   return (
     <UseMemo dependencies={[props.data]}>
-      <Link href={`/dashboard/product/${props.data.id}`} className='w-full h-full flex justify-start items-center'>
+      <Link href={`/products/${props.data.categoryId}/${props.data.id}`} className='w-full h-full flex justify-start items-center'>
         <MousePointerSquare size={24} color='#000e' />
       </Link>
     </UseMemo>

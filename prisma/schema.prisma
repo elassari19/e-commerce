@@ -105,10 +105,12 @@ model Product {
   name        String
   slug        String       @unique
   description String
+  tags        String[]
   images      ImageUrl[]
-  price       String
+  price       Float
+  sold        String?      @default("0")
   reviews     Reviews[]
-  quantity    String
+  quantity    Int
   properties  Properties[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -134,6 +136,7 @@ model Properties {
 model Reviews {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   rating    Int
+  comment   String?
   User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?  @db.ObjectId
   Product   Product? @relation(fields: [productId], references: [id])
@@ -160,6 +163,7 @@ model Category {
   name        String
   slug        String     @unique
   description String
+  tags        String[]
   parentId    String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

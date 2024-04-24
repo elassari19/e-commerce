@@ -29,20 +29,19 @@ const ProductsTable = ({ data, categories }: Props) => {
       editable: false
     },
     { field: "name" },
-    { field: "description", },
-    { field: "slug" },
-    { field: "brand", cellRenderer: (p: ICellRendererParams) => p.data?.Category?.name },
-    { field: "price" },
-    { field: "quantity" },
-    { field: "view", cellRenderer: View },
-    { field: "createdAt" },
+    // { field: "description", },
+    // { field: "slug", width: 100 },
+    { field: "brand", cellRenderer: (p: ICellRendererParams) => p.data?.Category?.name, width: 100 },
+    { field: "price", width: 100 },
+    { field: "quantity", width: 100 },
+    { field: "view", cellRenderer: View, width: 100 },
+    { field: "tags", cellRender: (p: ICellRendererParams) => p.data.tags.join(", "), width: 250},
     { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data?.User?.email },
     { 
       field: "Edit",
       cellRenderer: (p: ICellRendererParams) => (
         <EditButtons Form={ProductForm} data={categories} p={p} />
-      ),
-      width: 100
+      ), width: 100
     },
     { field: "Delete", cellRenderer: (p: ICellRendererParams) => (
       <DeleteButton p={p} route="products" />

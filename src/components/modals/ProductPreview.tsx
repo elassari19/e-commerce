@@ -1,37 +1,40 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import DialogPopup from '../DialogPopup'
-import { ImageUrl, Product, Properties } from '@prisma/client'
-import { Heart, Plus, ShoppingCart } from 'lucide-react'
+import { Plus, ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
-import { CustomTabs, PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import { db } from '../../lib/db'
+import { PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { db } from '@/lib/db'
 import { Button } from '../ui/button'
 import CartActions, { CartInput } from '../reduxtHandler/CartActions'
-import { auth } from '../../lib/getAuthSession'
+import { auth } from '@/lib/getAuthSession'
 import Link from 'next/link'
 import Signin from '../forms/Signin'
 import FavoriteAction from '../reduxtHandler/FavoriteAction'
+import ImageMagnify from '../cards/ImageMagnify'
+import Ratings from '../atoms/Ratings'
+import { cn } from '@/lib/utils'
+import { ratings } from '@/helpers/methods/functions'
+import { useSession } from 'next-auth/react'
+import { IProductData } from '../../types/products'
+import { getProductById } from '../../helpers/actions/Products'
 
-interface Props {
-  productId: string
+interface Props extends React.HTMLAttributes<HTMLDivElement>{
+  product: IProductData
+  dialogTrigger?: React.ReactNode
 }
 
-const ProductPreview = async ({ productId }: Props) => {
-  const user = await auth("email")
-  console.log("user", user)
-  const product = await db.product.findUnique({
-    where: { id: productId },
-    include: {
-      images: true,
-      properties: true,
-    }
-  }) as Product & { properties: (Properties&{images: ImageUrl[]})[], images: ImageUrl[] }
+const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
+  const { data } = useSession()
+
+  if (!product) return <div>d</div>
 
   return (
     <DialogPopup
-      className='w-[96%]'
+      className={cn('w-[96%]')}
       dialogTrigger={
-        <div className='cursor-pointer relative'>
+        dialogTrigger||<div className={cn('cursor-pointer relative', className)}>
           <ShoppingCart size={40} className='w-11 h-11 text-primary rounded-full p-1 bg-primary/10' />
           <span className='absolute right-1 top-2 w-6 pl-1 bg-[#e6f0e4]'>
             <Plus size={14} strokeWidth={4} className='text-primary' />
@@ -40,19 +43,14 @@ const ProductPreview = async ({ productId }: Props) => {
       }
       dialogContent={
         <div className='grid grid-cols-12 gap-4 h-[30rem]'>
-          {/* product image */}
+          {/* product overview images */}
           <div className='col-span-4'>
             <Tabs defaultValue={"pro2"} className="w-full h-full">
               <div>
               {
-                [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
+                [...product?.images, ...product?.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
                   <TabsContent key={idx} value={pro+idx.toString()} className="mb-4 w-full h-full" >
-                    <Image
-                      src={pro.secure_url!} alt="product"
-                      width={40} height={40}
-                      className='w-full h-[20rem] rounded-lg transform transition-transform duration-300 ease-in-out'
-                      loading="lazy"
-                    />
+                    <ImageMagnify src={pro.secure_url!} />
                   </TabsContent>
                 ))
               }
@@ -74,13 +72,12 @@ const ProductPreview = async ({ productId }: Props) => {
               }
             </TabsList>
             </Tabs>
-
           </div>
 
           {/* product details */}
           <div className='col-span-5 flex flex-col gap-4 h-full overflow-auto p-2'>
-            <div className='w-full bg-primary px-4 rounded-lg'>
-              <h2 className='text-xl font-bold text-white'>{product.name}</h2>
+            <div className='w-full bg-primary px-4 py-2 rounded-lg'>
+              <h2 className='text-xl font-bold text-white'>{product.name.toUpperCase()}</h2>
             </div>
 
             <div className='flex flex-col gap-2'>
@@ -89,10 +86,22 @@ const ProductPreview = async ({ productId }: Props) => {
             </div>
 
             <p className='font-bold px-2'>{product.description}</p>
+
+            {/* reviews */}
+            <div className='flex items-center gap-4 text-sm font-bold'>
+              <Ratings ratings={ratings(product.reviews)} />
+              {/* <div className='flex gap-1'>{Array(5).fill("").map((_, idx)=>(
+                <StarIcon key={idx} size={20} fill={idx<2?'black':'white'} className={"font-thin"} />
+              ))}</div>
+              <span> {ratings || 0} Rating</span> */}
+              <span>{product.reviews.length} Reviews</span>
+              <span>{product.sold || 0} Sold</span>
+            </div>
             <hr className='border border-primary/70 my-2' />
 
             {/* product colors and size */}
             <div className='flex flex-col gap-2'>
+              {/* images tags */}
               <PreviewTabs
                 tabList={
                   product.properties.filter((property) => property.color?.length! > 0 && property)
@@ -118,6 +127,7 @@ const ProductPreview = async ({ productId }: Props) => {
                 }
               />
 
+              {/* size tags */}
               <PreviewTabs
                 tabList={
                   product.properties.filter((property) => property.name == "size" && property)
@@ -145,7 +155,6 @@ const ProductPreview = async ({ productId }: Props) => {
             <hr className='border border-primary/70 my-2' />
           </div>
 
-
           {/* product order */}
           <div className='col-span-3 border flex flex-col gap-2 p-4 font-bold rounded-lg'>
             <h2>Delivery</h2>
@@ -160,23 +169,23 @@ const ProductPreview = async ({ productId }: Props) => {
             <div className='flex gap-4 p-2 h-12'>
               {/* merge redux action with server component */}
               <CartActions decrement product={product}>
-                <Button size="sm" variant="destructive" className='rounded-full'>-</Button>
+                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
               </CartActions>
               <CartInput id={product.id} />
               <CartActions increment product={product}>
-                <Button size="sm" variant="primary" className='rounded-full'>+</Button>
+                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
               </CartActions>
             </div>
 
             {/* checkout action */}
-            <div className='my-2'>
-              {user ? (
-                <Button size="sm" variant="primary" className='rounded-full py-7 text-lg'>
+            <div className='my-2 w-full'>
+              {data?.user ? (
+                <Button variant="primary" className='rounded-full'>
                   <Link href={"/checkout"}>Checkout now</Link>
                 </Button>
               ):(
                 <DialogPopup
-                  dialogTrigger={<Button size="sm" variant="primary" className='rounded-full py-7 text-lg'>
+                  dialogTrigger={<Button variant="primary" className='rounded-full w-72'>
                     Checkout now
                   </Button>}
                   dialogContent={<Signin />}
@@ -185,11 +194,10 @@ const ProductPreview = async ({ productId }: Props) => {
               )}
             </div>
             
-            {/* implement view details -> got product page */}
-            {/* implement add to favorite list */}
+            {/* implement details  add to favorite */}
             <div className='flex justify-between items-center gap-4'>
               <Button size="sm" variant="primary-outline" className='rounded-full py-5'>
-                <Link href={`${product.categoryId}/${product.id}`}>View Details</Link>
+                <Link href={`/products/${product.categoryId}/${product.id}`}>View Details</Link>
               </Button>
               <FavoriteAction productId={product.id} />
             </div>

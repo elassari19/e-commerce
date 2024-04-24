@@ -35,12 +35,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div
           className={cn(InputVariants({ variant, className }))}
         >
-          {preIcon}
-          <input
-            className="flex-1 h-8 w-full bg-inherit placeholder:text-slate-500 outline-none"
-            ref={ref}
-            {...props}
-          />
+          <div className="flex gap-1 items-center flex-1">
+            {preIcon}
+            <input
+              className="flex-1 h-8 w-full bg-inherit placeholder:text-slate-500 outline-none"
+              ref={ref}
+              {...props}
+            />
+          </div>
           {children}
           {sufIcon}
         </div>

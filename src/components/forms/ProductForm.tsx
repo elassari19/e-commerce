@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Form, Formik } from "formik"
+import { Form, Formik, FormikProps } from "formik"
 import toast from "react-hot-toast";
 import { productSchema } from "@/schema/productSchema";
 import FormikField from "../inputs/FormikField";
@@ -15,6 +15,7 @@ import OptionsProperties from "../OptionsProperties";
 import { uploadImagesHandler } from "@/helpers/methods/uploadImagesHandler";
 import { revalidatePathByAction } from "@/helpers/actions/revalidate";
 import { toggleIdToSlug, toggleSlugToId } from "@/helpers/methods/toggleIdName";
+import ProductTags from "../ProductTags";
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   categories: Category[]
@@ -23,6 +24,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const ProductForm = ({ className, categories, formUpdateData }: Props) => {
 
+  const [filterTag, setFilterTag] = useState<string>("")
   const [img, setImages] = useState<any[]>(formUpdateData?.images || [] )
   // color properties
   const [properties, setProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ color: "", quantity: "" } ])
@@ -30,6 +32,7 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
   const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ name: "", value: "" } ])
 
   const onSubmit = async (values: any) => {
+    // console.log("values", values.tags)
     values.categoryId = toggleSlugToId(categories, values.categoryId)
     values.images = img
     delete values.category
@@ -77,6 +80,7 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
     description: formUpdateData?.description || "",
     img,
     categoryId: formUpdateData ? toggleIdToSlug(categories, formUpdateData.categoryId) : "",
+    tags: formUpdateData?.tags || [],
     quantity: formUpdateData?.quantity || "",
     price: formUpdateData?.price || "",
     properties: formUpdateData?.properties || [{name: "", value: ""}],
@@ -100,11 +104,10 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
               onChange: (e: any) => {uploadImagesHandler(e, setImages), formik.setFieldValue("images", img)}
             },
             { lable: "Category", name: "category", value: formik.values?.categoryId},
+            { lable: "Product Tags", name: "tags", component: "textarea", rows: 3 , value: formik.values?.tags},
             { lable: "Product Price", name: "price", value: formik.values?.price },
             { lable: "Product Quantity", name: "quantity", value: formik.values?.quantity },
-            {
-              lable: "Product Properties", name: "properties"
-            },
+            { lable: "Product Properties", name: "properties" },
           ].map(({ lable, name, ...rest }, idx) => {
               return (
                 <div className="grid grid-cols-1 md:grid-cols-12" key={idx}>
@@ -122,10 +125,17 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
                       ? (
                         <SelectInput
                           placeholder="Select Category"
-                          data={categories.filter(item => item.parentId !== "")}
+                          data={categories.filter(item => item.parentId == "")}
                           onSelect={(e) => formik.setFieldValue("categoryId", e)}
                           value={formik.values.categoryId}
                         />)
+                      : name === "tags"
+                      ? (
+                        <ProductTags
+                          formik={formik}
+                          categories={categories}
+                        />
+                      )
                       : (<>
                           <FormikField
                             name={name}

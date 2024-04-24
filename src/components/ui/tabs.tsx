@@ -92,7 +92,7 @@ export const PreviewTabs = ({ tabList, tabContent, className}: PrewiewProps) => 
     <Tabs defaultValue={"value0"} className={cn("w-full", className)}>
       <div>
       {
-        tabContent.map((content, idx) => (
+        tabContent?.map((content, idx) => (
           <TabsContent key={idx} value={"value"+idx.toString()} className="mb-4" >
             {content}
           </TabsContent>
@@ -101,7 +101,7 @@ export const PreviewTabs = ({ tabList, tabContent, className}: PrewiewProps) => 
       </div>
       <TabsList className="w-full overflow-auto justify-start p-0 h-16">
       {
-        tabList.map((tab, idx) => (
+        tabList?.map((tab, idx) => (
           <TabsTrigger
             key={idx} value={"value"+idx.toString()}
             className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"

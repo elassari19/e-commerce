@@ -7,7 +7,7 @@ import { Input } from "../ui/input";
 import MotionSlide from "../framerMotion/MotionSlide";
 import { useEffect, useState, useTransition } from "react";
 import SearchProductsNav from "../nav/SearchProductsNav";
-import { getProducts } from "../../helpers/actions/Products";
+import { getSearchProducts } from "@/helpers/actions/Products";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -27,7 +27,7 @@ const Search = ({ placeholder }: Props) => {
     if (value && value.length > 2) {
       params.set("limit", '5');
       params.set("q", value);
-      setProducts(await getProducts(value)as any); 
+      setProducts(await getSearchProducts(value)as any); 
     } else {
       params.delete("q");
       params.delete("limit");
@@ -47,14 +47,14 @@ const Search = ({ placeholder }: Props) => {
         value={searchQuery}
         className="flex-1"
         onFocus={(e) => setToggleSearch(true)}
-        onBlur={(e) => setToggleSearch(false)}
+        onBlur={(e) => setTimeout(() => setToggleSearch(false), 200)}
       />
       <button type="submit">
       <SearchIcon className="text-primary mx-2 cursor-pointer" />
       </button>
       {
         toggleSearch && (
-          <MotionSlide top={10} className="absolute top-12 w-full max-h-56 overflow-y-auto shadow-md">
+          <MotionSlide top={10} className="absolute z-50 bg-white top-12 w-full max-h-56 overflow-y-auto shadow-md">
             <SearchProductsNav products={products} searchQuery={searchQuery} />
           </MotionSlide>
         )

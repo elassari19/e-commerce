@@ -2,7 +2,8 @@ import { db } from "@/lib/db"
 import { Suspense } from "react"
 import ProductCard from "@/components/cards/ProductCard"
 import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
-import { Loader2 } from "lucide-react"
+import SuspenseRoot from "@/components/SuspenseRoot"
+import { IProductData } from "../../../types/products"
 
 export const dynamic = "force-dynamic"
 
@@ -16,9 +17,12 @@ interface Props {
 export default async function Home({ searchParams }: Props) {
   const products = await db.product.findMany({
     include: {
-      images: true
-    }
-  })
+      images: true,
+      properties: true,
+      reviews: true,
+    },
+    take: 10
+  }) as IProductData[]
 
   const categories = await db.category.findMany({
     include: {
@@ -29,11 +33,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
-        <Suspense fallback={
-            <div className="w-full h-full flex justify-center items-center text-9xl">
-              <Loader2 className="h-48 w-48 animate-spin ease-in-out text-primary font-extrabold" />
-            </div>
-          }
+        <Suspense fallback={<SuspenseRoot />}
         >
           {/* categories */}
           <div className="col-span-full place-content-center">
@@ -52,7 +52,13 @@ export default async function Home({ searchParams }: Props) {
               Popular Products for Daily Shopping
             </h2>
           {
-            products.map((product) => (<ProductCard key={product.id} product={product} />))
+            products.map((product, index) => (
+              <ProductCard
+                key={product.id}
+                index={index}
+                product={product}
+              />
+            ))
           }
           </div>
         </Suspense>
