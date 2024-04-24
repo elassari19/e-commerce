@@ -1,4 +1,4 @@
-import { Product, Properties, ImageUrl } from "@prisma/client";
+import { Product, Properties, ImageUrl, Reviews, Category } from "@prisma/client";
 
 export type TImage = {
   secure_url: string
@@ -21,4 +21,6 @@ export interface TColorForm extends TImage {
 export interface IProductData extends Product {
   images: ImageUrl[];
   properties: Properties[];
+  reviews: Reviews[];
+  Category: Category
 }

@@ -62,6 +62,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
     const response = await db.product.create({
       data: {
         ...data,
+        tags:  ['Flat Sandals', 'Platform Sandals', 'Heeled Sandals'],
         price: parseFloat(data.price),
         quantity: parseInt(data.quantity),
         User: { connect: { id: "65a84b613bfb23665c6e3df1" } },
@@ -97,7 +98,7 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: ExtendsRequest) {
   const data = await req.json();
-  console.log(data)
+  // console.log(data)
 
   try {
     req.response = await db.product.update({
@@ -110,12 +111,6 @@ export async function PATCH(req: ExtendsRequest) {
         quantity: parseInt(data.quantity),
         Category: { connect: { id: data.categoryId }},
         tags: data.tags
-        // images: {
-        //   create: data.images
-        // },
-        // properties: {
-        //   create: data.properties
-        // },
       }
     })
     return NextResponse.json({ product: req.response }, { status: 202 })

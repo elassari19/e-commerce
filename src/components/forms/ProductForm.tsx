@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Form, Formik } from "formik"
+import { Form, Formik, FormikProps } from "formik"
 import toast from "react-hot-toast";
 import { productSchema } from "@/schema/productSchema";
 import FormikField from "../inputs/FormikField";
@@ -24,6 +24,7 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 
 const ProductForm = ({ className, categories, formUpdateData }: Props) => {
 
+  const [filterTag, setFilterTag] = useState<string>("")
   const [img, setImages] = useState<any[]>(formUpdateData?.images || [] )
   // color properties
   const [properties, setProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ color: "", quantity: "" } ])
@@ -31,6 +32,7 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
   const [optionsproperties, setOptionsProperties] = useState<Partial<Properties>[]>(formUpdateData?.properties || [{ name: "", value: "" } ])
 
   const onSubmit = async (values: any) => {
+    // console.log("values", values.tags)
     values.categoryId = toggleSlugToId(categories, values.categoryId)
     values.images = img
     delete values.category
@@ -129,30 +131,10 @@ const ProductForm = ({ className, categories, formUpdateData }: Props) => {
                         />)
                       : name === "tags"
                       ? (
-                        <>
-                          <ProductTags>
-                            {tags => tags.map((tag) =>(
-                              <div className="bg-primary/80 rounded-md p-2 flex items-center">
-                                <input
-                                  key={tag} type="checkbox"
-                                  name={tag} value={tag}
-                                  onChange={(e) => {
-                                    e.target.value
-                                    if(e.target.checked) {
-                                      formik.values.tags.indexOf(tag) === -1 && formik.setFieldValue("tags", [...formik.values.tags, tag])
-                                    } else {
-                                      const ind = formik.values.tags.indexOf(tag)
-                                      ind !== -1 && formik.setFieldValue("tags", formik.values.tags?.filter((item: string) => item !== tag))
-                                    }
-                                  }}
-                                  checked={formik.values.tags.indexOf(tag) !== -1}
-                                  className="p-1 bg-primary-foreground text-white rounded-lg w-4 h-4 border-primary"
-                                />
-                                <label htmlFor={tag} className="ml-1">{tag}</label>
-                              </div>
-                            ))}
-                          </ProductTags>
-                        </>
+                        <ProductTags
+                          formik={formik}
+                          categories={categories}
+                        />
                       )
                       : (<>
                           <FormikField

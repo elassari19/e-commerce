@@ -16,8 +16,11 @@ interface Props {
 export default async function Home({ searchParams }: Props) {
   const products = await db.product.findMany({
     include: {
-      images: true
-    }
+      images: true,
+      properties: true,
+      reviews: true
+    },
+    take: 10
   })
 
   const categories = await db.category.findMany({

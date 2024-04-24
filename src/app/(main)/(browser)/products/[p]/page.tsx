@@ -1,6 +1,5 @@
 import React from 'react'
 import { db } from '@/lib/db'
-import ProductCard from '@/components/cards/ProductCard'
 import { Button } from '@/components/ui/button'
 import SuspenseRoot from '@/components/SuspenseRoot'
 import { cn } from '@/lib/utils'
@@ -9,7 +8,7 @@ import { RadioGroup } from '@/components/ui/radio-group'
 import Ratings from '@/components/atoms/Ratings'
 import { redirect } from 'next/navigation'
 import { IProductData } from '@/types/products'
-import LoadMore from '../../../../../components/atoms/LoadMore'
+import LoadMore from '@/components/atoms/LoadMore'
 
 interface Props {
   params: {
@@ -24,6 +23,7 @@ interface Props {
     plaza?: string
     ship?: string
     radio?: string
+    t: string
   }
 }
 
@@ -31,12 +31,16 @@ const page = async ({ params, searchParams }: Props) => {
 
   const gteMin = searchParams.min ? (+searchParams.min*100) : 0
   const lteMax = searchParams.max ? (+searchParams.max*100) : 999999999
+  const tag = searchParams.t ? searchParams.t.split(",") : []
 
   const products = await db.product.findMany({
     where: {
-      categoryId: params.p,
+      tags: {
+        hasSome: tag
+      },
       price: {
         gte: gteMin,
+        lte: lteMax
       },
     },
     include: {
@@ -50,7 +54,7 @@ const page = async ({ params, searchParams }: Props) => {
       name: searchParams.sort === "match" ? "asc" : undefined,
       price: searchParams.sort === "price" ? "asc" : undefined,
     },
-    take: 10
+    take: 8
   }) as IProductData[]
   
   const handleForm = async(formData: FormData) => {
@@ -62,7 +66,7 @@ const page = async ({ params, searchParams }: Props) => {
     const ship = formData.get('ship')
     const { sort, view } = searchParams
 
-    redirect(`?sort=${sort||"order"}&view=${view||"grid"}&min=${min}&max=${max}&review=${review}&plaza=${plaza}&ship=${ship}`)
+    redirect(`?sort=${sort||"order"}&view=${view||"grid"}&min=${min}&max=${max}&review=${review}&plaza=${plaza}&ship=${ship}&t=${searchParams.t}`)
   }
 
   return (
@@ -179,15 +183,15 @@ const page = async ({ params, searchParams }: Props) => {
           <div className='flex gap-4 items-center text-sm font-bold'>
             <span>Sort by:</span>
             <div className='flex'>
-              <Button href={`?sort=order&&view=${searchParams.view||"grid"}`}
+              <Button href={`?sort=order&&view=${searchParams.view||"grid"}&t=${searchParams.t||""}`}
                 variant={!searchParams.sort||searchParams.sort === "order"? "secondary" :"outline"}
                 size="sm" className='rounded-full rounded-r-none w-28 font-normal'
               > Orders </Button>
-              <Button  href={`?sort=match&&view=${searchParams.view||"grid"}`}
+              <Button  href={`?sort=match&&view=${searchParams.view||"grid"}&t=${searchParams.t||""}`}
                 variant={searchParams.sort === "match"? "secondary" :"outline"} size="sm"
                 className='rounded-none w-28 font-normal'
               > Best Match </Button>
-              <Button href={`?sort=price&view=${searchParams.view||"grid"}`}
+              <Button href={`?sort=price&view=${searchParams.view||"grid"}&t=${searchParams.t||""}`}
                 variant={searchParams.sort === "price"? "secondary" :"outline"} size="sm" 
                 className='rounded-full rounded-l-none w-28 font-normal'
               > Price </Button>
@@ -199,13 +203,13 @@ const page = async ({ params, searchParams }: Props) => {
             <span className='mr-4 text-sm font-bold'>View: </span>
             <Button variant={!searchParams.view||searchParams.view === "grid" ?"secondary":"outline"}
               size="sm" className='rounded-full rounded-r-none w-20'
-              href={`?sort=${searchParams.sort||"order"}&view=grid`}
+              href={`?sort=${searchParams.sort||"order"}&view=grid&t=${searchParams.t||""}`}
             >
               Grid
             </Button>
             <Button variant={searchParams.view === "list" ?"secondary":"outline"}
               size="sm" className='rounded-full rounded-l-none w-20'
-              href={`?sort=${searchParams.sort||"order"}&view=list`}
+              href={`?sort=${searchParams.sort||"order"}&view=list&t=${searchParams.t||""}`}
             >
               List
             </Button>
@@ -214,24 +218,13 @@ const page = async ({ params, searchParams }: Props) => {
 
         {/* products list */}
         <SuspenseRoot>
-          <div
+          <LoadMore
+            categoryId={params.p!} productsList={products}
             className={cn(
               "grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-content-center px-2",
               searchParams.view === "list" && "grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
             )}
-          >
-            <LoadMore categoryId={params.p!} productsList={products} />
-            {/* {
-              products.map((product, index) => (
-                <ProductCard
-                  index={index}
-                  key={product.id}
-                  product={product}
-                  list={searchParams.view === "list"}
-                />
-              ))
-            } */}
-          </div>
+          />
         </SuspenseRoot>
       </section>
     </div>
