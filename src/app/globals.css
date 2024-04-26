@@ -110,4 +110,15 @@
   .preview:hover #preview {
     @apply block animate-accordion-down
   }
+
+  .tab-prev, .tab-next {
+    @apply py-4 border-none bg-transparent text-2xl;
+  }
+
+  .tab-prev {
+    @apply -left-2;
+  }
+  .tab-next {
+    @apply -right-2;
+  }
 }
