@@ -219,11 +219,12 @@ const page = async ({ params, searchParams }: Props) => {
         {/* products list */}
         <SuspenseRoot>
           <LoadMore
-            categoryId={params.p!} productsList={products}
+            categoryId={[params.p!]} productsList={products}
             className={cn(
               "grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-content-center px-2",
               searchParams.view === "list" && "grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
             )}
+            byTag
           />
         </SuspenseRoot>
       </section>

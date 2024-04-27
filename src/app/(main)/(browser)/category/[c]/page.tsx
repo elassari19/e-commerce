@@ -8,7 +8,7 @@ import { IProductData } from '@/types/products'
 
 interface Props {
   params: {
-    c?: string
+    c?: string,
   }
 }
 
@@ -54,8 +54,8 @@ const Category = async({ params }: Props) => {
               <CustomTabs
                 tabList={["Top Seller", "Latest Product"]}
                 tabContent={[
-                  <LoadMore key="top sellere" categoryId={params.c!} productsList={productsCategory} />,
-                  <LoadMore key="lates produ" categoryId={params.c!} productsList={productsCategory} />
+                  <LoadMore key="top sellere" categoryId={[params.c!]} productsList={productsCategory} />,
+                  <LoadMore key="lates produ" categoryId={[params.c!]} productsList={productsCategory} />
                 ]}
               />  
             ) : (

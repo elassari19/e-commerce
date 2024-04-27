@@ -55,22 +55,24 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                 ))
               }
               </div>
-              <TabsList className="w-full overflow-auto justify-start p-0 h-16">
-              {
-                [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
-                  <TabsTrigger key={idx} value={pro+idx.toString()}
-                    className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"
-                  >
-                    <Image
-                      src={pro.secure_url!} alt="product"
-                      width={40} height={40}
-                      className='w-full h-full rounded-lg transform transition-transform duration-300 ease-in-out'
-                      loading="lazy"
-                    />
-                  </TabsTrigger>
-                ))
-              }
-            </TabsList>
+              <div className='w-full overflow-auto'>
+                <TabsList className="h-full justify-start p-0">
+                {
+                    [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
+                      <TabsTrigger key={idx} value={pro+idx.toString()}
+                        className="w-20 h-20 p-1 rounded-lg data-[state=active]:bg-primary/50"
+                      >
+                        <Image
+                          src={pro.secure_url!} alt="product"
+                          width={40} height={40}
+                          className='w-full h-full rounded-lg transform transition-transform duration-300 ease-in-out'
+                          loading="lazy"
+                        />
+                      </TabsTrigger>
+                    ))
+                  }
+              </TabsList>
+              </div>
             </Tabs>
           </div>
 

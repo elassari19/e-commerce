@@ -17,9 +17,11 @@ export const getSearchProducts = async (searchQuery: string) => {
   return products;
 }
 
-export async function getProductsByCategory(categoryId: string, skip: number = 0) {
+export async function getProductsByTags(tags: string[], skip: number = 8, take: number=10) {
   const res = await db.product.findMany({
-    where: { categoryId },
+    where: {
+      tags: { hasSome: tags }
+    },
     include: {
       images: true,
       properties: true,
@@ -27,8 +29,25 @@ export async function getProductsByCategory(categoryId: string, skip: number = 0
       Category: true,
     },
     orderBy: { id: "asc" },
-    take: 10,
-    skip: skip * 10,
+    take: take,
+    skip: skip * take,
+  });
+
+  return res ?? [];
+}
+
+export async function getProductsByCategory(categoryId: string[], skip: number = 0, take: number=10) {
+  const res = await db.product.findMany({
+    where: { categoryId: { in: categoryId } },
+    include: {
+      images: true,
+      properties: true,
+      reviews: true,
+      Category: true,
+    },
+    orderBy: { id: "asc" },
+    take: take,
+    skip: skip * take,
   });
 
   return res ?? [];
