@@ -4,6 +4,7 @@ import ProductCard from "@/components/cards/ProductCard"
 import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
 import SuspenseRoot from "@/components/SuspenseRoot"
 import { IProductData } from "../../../types/products"
+import LoadMore from "../../../components/atoms/LoadMore"
 
 export const dynamic = "force-dynamic"
 
@@ -46,12 +47,16 @@ export default async function Home({ searchParams }: Props) {
               path="category"
             />
           </div>
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 place-content-center px-2">
+          <div className="">
 
             <h2 className="col-span-full font-bold text-lg">
               Popular Products for Daily Shopping
             </h2>
-          {
+            <LoadMore
+              categoryId={categories.map((category) => category.id && category.id)}
+              productsList={products}
+            />
+          {/* {
             products.map((product, index) => (
               <ProductCard
                 key={product.id}
@@ -59,7 +64,7 @@ export default async function Home({ searchParams }: Props) {
                 product={product}
               />
             ))
-          }
+          } */}
           </div>
         </Suspense>
       </div>

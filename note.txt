@@ -52,3 +52,22 @@
   √1- make function helper toggle between category id to category name
   √2- open category update form when click on the row of table category
   √3- add a button on table to delete item from table
+
+# root page
+  √add custome load more data 1 product for array of categoryid (reuse => take 1, page 1)
+
+# category/[c]
+  √add costume load more data 8 product for array of categoryid (reuse => take 8, page 1)
+
+# product/[p]
+  - left side nav sould be fixed on large screen
+  - md and sm screens should be a slid nav
+
+# product/[p]/[id]
+  - rigth side nav should be fixed on large screen
+  - md and sm screens should be a slid nav
+
+# all categories component
+  - should update ui
+  - add images to the categories name
+  - try make it like aliExpress ui

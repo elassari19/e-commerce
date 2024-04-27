@@ -64,7 +64,7 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
         ...data,
         price: parseFloat(data.price),
         quantity: parseInt(data.quantity),
-        User: { connect: { id: "65a84b613bfb23665c6e3df1" } },
+        User: { connect: { id: userId } },
         Category: { connect: { id: categoryId } },
         properties: {
           create: [ ...data.properties ],  
@@ -103,11 +103,11 @@ export async function PATCH(req: ExtendsRequest) {
     req.response = await db.product.update({
       where: { id: data.id },
       data: {
-        // name: data.name,
-        // description: data.description,
-        // slug: data.name.toLowerCase().replace(/\s/g, "-"),
+        name: data.name,
+        description: data.description,
+        slug: data.name.toLowerCase().replace(/\s/g, "-"),
         price: parseFloat(data.price),
-        // quantity: parseInt(data.quantity),
+        quantity: parseInt(data.quantity),
         Category: { connect: { id: data.categoryId }},
         tags: data.tags
       }
