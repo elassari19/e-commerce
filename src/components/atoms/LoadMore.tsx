@@ -3,28 +3,33 @@
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Loader2 } from 'lucide-react';
-import { getProductsByCategory } from '../../helpers/actions/Products';
+import { getProductsByCategory, getProductsByTags } from '../../helpers/actions/Products';
 import ProductCard from '../cards/ProductCard';
 import { ImageUrl, Product } from '@prisma/client';
-import { IProductData } from '../../types/products';
-import { cn } from '../../lib/utils';
+import { IProductData } from '@/types/products';
+import { cn } from '@/lib/utils';
+import useGetParmas from '@/hooks/useGetParmas';
 
 interface Props extends React.HTMLProps<HTMLDivElement>{
-  categoryId: string;
+  categoryId: string[];
   productsList: IProductData[];
+  byTag?: boolean;
 }
 
-const LoadMore = ({ categoryId, productsList, className }: Props) => {
+const LoadMore = ({ categoryId, productsList, byTag, className }: Props) => {
 
   const [ref, inView] = useInView();
   const [products, setProducts] = useState<IProductData[]>(productsList);
   const [offset, setOffset] = useState(1);
   const [done, setDone] = useState<boolean>(false)
+  const { tag } = useGetParmas()
 
   const handleLoadMore = async () => {
     setInterval(() => null, 1000)
     const nextOffset = offset + 1;
-    const res = await getProductsByCategory(categoryId, nextOffset);
+    const res = !byTag
+      ? await getProductsByCategory(categoryId, nextOffset, 10)
+      : await getProductsByTags([tag!], nextOffset, 8);
     if (!res.length) setDone(true);
     // @ts-ignore
     setProducts([...products, ...res]);

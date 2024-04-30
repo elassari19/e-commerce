@@ -48,7 +48,8 @@ const page = async ({ params }: Props) => {
             ))
           }
           </div>
-          <TabsList className="w-full overflow-auto justify-start p-0 h-16">
+          <div className='w-full overflow-auto'>
+            <TabsList className="h-full justify-start p-0">
             {
               [...product.images, ...product.properties.filter((p)=>p.secure_url)].map((pro, idx) => (
                 <TabsTrigger key={idx} value={idx.toString()}
@@ -63,7 +64,8 @@ const page = async ({ params }: Props) => {
                 </TabsTrigger>
               ))
             }
-          </TabsList>
+            </TabsList>
+          </div>
         </Tabs>
       </div>
 

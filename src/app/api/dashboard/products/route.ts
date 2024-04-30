@@ -62,10 +62,9 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
     const response = await db.product.create({
       data: {
         ...data,
-        tags:  ['Flat Sandals', 'Platform Sandals', 'Heeled Sandals'],
         price: parseFloat(data.price),
         quantity: parseInt(data.quantity),
-        User: { connect: { id: "65a84b613bfb23665c6e3df1" } },
+        User: { connect: { id: userId } },
         Category: { connect: { id: categoryId } },
         properties: {
           create: [ ...data.properties ],  

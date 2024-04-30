@@ -35,15 +35,15 @@ const BasketCard = ({  }: Props) => {
                       <div className='flex justify-between items-center'>
                         <h5 className='font-bold text-xl'>{+product.price/100}</h5>
                         <div className='flex gap-2 h-8'>
-                          <div onClick={() => dispatch(incrementQuantity(product))}>
-                            <button className='bg-primary text-white px-2 rounded-sm h-full'>+</button>
+                          <div onClick={() => dispatch(decrementQuantity(product))}>
+                            <button className='bg-primary text-white px-2 rounded-sm h-full'>-</button>
                           </div>
                           <Input
                             type='number' className=' px-2 rounded-sm w-12' value={product.qty}
                             onChange={(e) => dispatch(incrementQuantity({ ...product, value: +e.target.value }))}
                           />
-                          <div onClick={() => dispatch(decrementQuantity(product))}>
-                            <button className='bg-primary text-white px-2 rounded-sm h-full'>-</button>
+                          <div onClick={() => dispatch(incrementQuantity(product))}>
+                            <button className='bg-primary text-white px-2 rounded-sm h-full'>+</button>
                           </div>
                         </div>
                         <div onClick={() => dispatch(removeFromCart(product))}>

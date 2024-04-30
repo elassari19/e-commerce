@@ -33,7 +33,7 @@ const CategoriesSwiper = ({ categories, path, className }: Props) => {
           clickable: true,
         }}
         modules={[Navigation, Pagination]}
-        className="mySwiper h-44 md:h-56"
+        className="mySwiper h-56"
       >
         {
           categories.map((category, idx) => (
