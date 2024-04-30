@@ -39,18 +39,23 @@ export async function POST(req: ExtendsRequest, res: NextApiResponse) {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const skip = +(searchParams.get("page") ?? 0)
-  const page = +(searchParams.get("skip") ?? 20)
 
-  const data = await req.json();
-  data.response = await db.category.findMany({
-    skip: skip * page,
-    take: page,
-    
-  })
+  const page = +(searchParams.get("page") ?? 0)
+  const take = +(searchParams.get("take") ?? 20)
+
+  const data = await db.$transaction([
+    db.category.count(),
+    db.category.findMany({
+      skip: take * page,
+      take: take,
+      include: {
+        _count: true
+      }
+    })
+  ])
 
   return NextResponse.json({
-    categories: data.response
+    categories: data
   }, { status: 200 })
 }
 

@@ -8,17 +8,17 @@ import { dashboardHandler } from "@/store/dashboard/dashboard";
 import { RootState } from "@/store";import { Action } from "@/store/actions/dashboardStoreActions";
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import { CellEditingStoppedEvent, GridOptionsService } from "ag-grid-community";
-import toast from "react-hot-toast";
 // import "ag-grid-enterprise"
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   action: Action
   rowsData: any[]
   colsDefs: any[]
+  pageSize?: number
+  setPageSize?: any
 }
 
-const Table = ({ className, action, rowsData, colsDefs }: Props) => {
+const Table = ({ className, action, rowsData, colsDefs, pageSize, setPageSize }: Props) => {
 
   const [rowData, setRowData] = useState<any[]>([]);
 
@@ -54,7 +54,7 @@ const Table = ({ className, action, rowsData, colsDefs }: Props) => {
   return <div className={cn("ag-theme-quartz min-h-screen", className)} style={{ height: 100 }}>
     <AgGridReact
       ref={gridRef}
-      rowData={rowData}      
+      rowData={rowData}
       columnDefs={colDefs}
       readOnlyEdit={true}
       defaultColDef={defaultColDef}
@@ -63,7 +63,8 @@ const Table = ({ className, action, rowsData, colsDefs }: Props) => {
       stopEditingWhenCellsLoseFocus
       rowSelection="multiple"
       pagination
-      paginationPageSize={20}
+      paginationPageSize={pageSize}
+      onPaginationChanged={(e) => setPageSize(e.api.paginationGetPageSize())}
       className="h-full"
     /> 
   </div>

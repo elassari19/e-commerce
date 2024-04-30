@@ -8,6 +8,7 @@ import Image from "next/image";
 import EditButtons from "./EditButtons";
 import ProductForm from "../forms/ProductForm";
 import DeleteButton from "./DeleteButton";
+import { useState } from "react";
 
 interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   data: Product[]
@@ -15,6 +16,7 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const ProductsTable = ({ data, categories }: Props) => {
+  const [take, setPageSize] = useState(20)
 
   // structure head table
   const colDefs = [
@@ -29,23 +31,20 @@ const ProductsTable = ({ data, categories }: Props) => {
       editable: false
     },
     { field: "name" },
-    // { field: "description", },
-    // { field: "slug", width: 100 },
     { field: "brand", cellRenderer: (p: ICellRendererParams) => p.data?.Category?.name, width: 100 },
     { field: "price", width: 100 },
     { field: "quantity", width: 100 },
-    { field: "view", cellRenderer: View, width: 100 },
     { field: "tags", cellRender: (p: ICellRendererParams) => p.data.tags.join(", "), width: 250},
     { field: "createdBy", cellRenderer: (p: ICellRendererParams) => p.data?.User?.email },
     { 
       field: "Edit",
       cellRenderer: (p: ICellRendererParams) => (
-        <EditButtons Form={ProductForm} data={categories} p={p} />
-      ), width: 100
-    },
-    { field: "Delete", cellRenderer: (p: ICellRendererParams) => (
-      <DeleteButton p={p} route="products" />
-      ), width: 100
+        <div className="flex items-center justify-around">
+          <View {...p} />
+          <EditButtons Form={ProductForm} data={categories} p={p} />
+          <DeleteButton p={p} route="products" />
+        </div>
+      ), width: 150
     }
   ];
 
@@ -53,6 +52,8 @@ const ProductsTable = ({ data, categories }: Props) => {
     <Table
       rowsData={data!}
       colsDefs={colDefs}
+      pageSize={take}
+      setPageSize={setPageSize}
       action="products"
     /> 
   )

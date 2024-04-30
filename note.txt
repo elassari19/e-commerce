@@ -52,3 +52,15 @@
   √1- make function helper toggle between category id to category name
   √2- open category update form when click on the row of table category
   √3- add a button on table to delete item from table
+
+# table
+  fetch data based on table page
+
+# /checkout
+  scaffold ui page
+  add stripe
+  implement checkout function
+  save data on database
+
+# /statistic
+  connecte page with database
