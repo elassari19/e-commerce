@@ -111,7 +111,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                     <CartActions
                       key={property.color}
                       product={product}
-                      productOptions={{ color:property.color! }}
+                      productColor={property.color!}
                     >
                       <Image
                         src={property.secure_url!} alt="product" loading="lazy"
@@ -127,6 +127,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                       <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
                   ))
                 }
+                properties={product.tags}
               />
 
               {/* size tags */}
@@ -138,7 +139,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                     <CartActions
                       key={size} className='w-full h-full py-4'
                       product={product}
-                      productOptions={{ size }}
+                      productSize={size}
                     >
                       <p className="text-bold"><strong>{size}</strong></p>
                     </CartActions>
@@ -151,6 +152,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                     <p key={size} className="text-bold"><strong>Size</strong>: {size}</p>
                   ))
                 }
+                properties={product.tags}
               />
             </div>
 
@@ -173,7 +175,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
               <CartActions decrement product={product}>
                 <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
               </CartActions>
-              <CartInput id={product.id} />
+              <CartInput product={product} />
               <CartActions increment product={product}>
                 <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
               </CartActions>

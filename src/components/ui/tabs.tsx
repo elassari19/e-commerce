@@ -5,6 +5,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
 import Image from "next/image"
+import { Properties } from "@prisma/client"
 
 const Tabs = TabsPrimitive.Root
 
@@ -84,16 +85,17 @@ export const CustomTabs = ({ tabList, tabContent, className}: Props) => {
 interface PrewiewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   tabList: any[],
   tabContent: any[],
+  properties: string[],
 }
 
-export const PreviewTabs = ({ tabList, tabContent, className}: PrewiewProps) => {
-
+export const PreviewTabs = ({ tabList, tabContent, className, properties}: PrewiewProps) => {
+console.log("properties", properties)
   return (
-    <Tabs defaultValue={"value0"} className={cn("w-full", className)}>
+    <Tabs className={cn("w-full", className)} defaultValue={properties[0]}>
       <div>
       {
         tabContent?.map((content, idx) => (
-          <TabsContent key={idx} value={"value"+idx.toString()} className="mb-4" >
+          <TabsContent key={idx} value={properties[idx]} className="mb-4" >
             {content}
           </TabsContent>
         ))
@@ -103,7 +105,7 @@ export const PreviewTabs = ({ tabList, tabContent, className}: PrewiewProps) => 
       {
         tabList?.map((tab, idx) => (
           <TabsTrigger
-            key={idx} value={"value"+idx.toString()}
+            key={idx} value={properties[idx]}
             className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"
           >
             {tab}

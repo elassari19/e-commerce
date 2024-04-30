@@ -103,7 +103,7 @@ const page = async ({ params }: Props) => {
                 <CartActions
                   key={property.color}
                   product={product}
-                  productOptions={{ color:property.color! }}
+                  productColor={property.color!}
                 >
                   <Image
                     src={property.secure_url!} alt="product" loading="lazy"
@@ -119,6 +119,7 @@ const page = async ({ params }: Props) => {
                   <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
               ))
             }
+            properties={product.properties.filter((p) => p.name == "size").map((p) => p.value!)[0].split(",")}
           />
 
           <PreviewTabs
@@ -129,7 +130,7 @@ const page = async ({ params }: Props) => {
                 <CartActions
                   key={size} className='w-full h-full py-4'
                   product={product}
-                  productOptions={{ size }}
+                  productSize={size}
                 >
                   <p className="text-bold"><strong>{size}</strong></p>
                 </CartActions>
@@ -142,6 +143,7 @@ const page = async ({ params }: Props) => {
                 <p key={size} className="text-bold"><strong>Size</strong>: {size}</p>
               ))
             }
+            properties={product.properties.filter((p) => p.name == "size").map((p) => p.value!)[0]?.split(",")}
           />
         </div>
 
@@ -165,7 +167,7 @@ const page = async ({ params }: Props) => {
                   <CartActions
                     key={property.color}
                     product={product}
-                    productOptions={{ color:property.color! }}
+                    productColor={property.color!}
                   >
                     <Image
                       src={property.secure_url!} alt="product" loading="lazy"
@@ -181,6 +183,7 @@ const page = async ({ params }: Props) => {
                     <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
                 ))
               }
+              properties={product.properties.filter((p) => p.color).map((p) => p.color!)}
             />
             <hr className='border border-primary/30 my-4' />
           </div>
@@ -203,7 +206,7 @@ const page = async ({ params }: Props) => {
               <CartActions decrement product={product}>
                 <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
               </CartActions>
-              <CartInput id={product.id} className='w-20' />
+              <CartInput product={product} className='w-20' />
               <CartActions increment product={product}>
                 <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
               </CartActions>
