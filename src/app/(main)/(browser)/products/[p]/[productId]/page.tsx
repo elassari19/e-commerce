@@ -6,7 +6,7 @@ import ImageMagnify from '@/components/cards/ImageMagnify'
 import Image from 'next/image'
 import Ratings from '@/components/atoms/Ratings'
 import { ratings } from '@/helpers/methods/functions'
-import CartActions, { CartInput } from '@/components/reduxtHandler/CartActions'
+import CartActions from '@/components/reduxtHandler/CartActions'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import DialogPopup from '@/components/DialogPopup'
@@ -14,6 +14,7 @@ import FavoriteAction from '@/components/reduxtHandler/FavoriteAction'
 import { auth } from '@/lib/getAuthSession'
 import { StarIcon } from 'lucide-react'
 import Signin from '@/components/forms/Signin'
+import ProductQuantity from '@/components/reduxtHandler/ProductQuantity'
 
 interface Props {
   params: {
@@ -201,16 +202,7 @@ const page = async ({ params }: Props) => {
           {/* select quantity */}
           <div className='flex flex-col gap-2'>
             <h2>Quantity</h2>
-            <div className='flex gap-4 p-2 h-12'>
-              {/* merge redux action with server component */}
-              <CartActions decrement product={product}>
-                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
-              </CartActions>
-              <CartInput product={product} className='w-20' />
-              <CartActions increment product={product}>
-                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
-              </CartActions>
-            </div>
+            <ProductQuantity product={product} />
             <p className='font-normal text-sm px-4'>{product.quantity} Pieces available</p>
           </div>
 

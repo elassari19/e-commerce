@@ -22,10 +22,11 @@ const buttonVariants = cva(
           "border border-slate-500 text-slate-500 bg-foreground hover:bg-background hover:border-black hover:text-black",
         "primary-outline":
           "border border-primary/70 hover:border-primary text-primary/70 hover:text-primary",
+        "secondary-outline": "border-none text-semibold text-primary/70 hover:text-primary",
       },
       size: {
         default: "h-12",
-        sm: "h-8 px-2",
+        sm: "h-8 w-8 text-center text-lg",
         lg: "h-14 text-lg",
         icon: "h-10 w-28",
       },

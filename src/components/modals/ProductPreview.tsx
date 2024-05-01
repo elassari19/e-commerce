@@ -1,14 +1,10 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import DialogPopup from '../DialogPopup'
 import { Plus, ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import { PreviewTabs, Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import { db } from '@/lib/db'
 import { Button } from '../ui/button'
-import CartActions, { CartInput } from '../reduxtHandler/CartActions'
-import { auth } from '@/lib/getAuthSession'
+import CartActions from '../reduxtHandler/CartActions'
 import Link from 'next/link'
 import Signin from '../forms/Signin'
 import FavoriteAction from '../reduxtHandler/FavoriteAction'
@@ -18,7 +14,7 @@ import { cn } from '@/lib/utils'
 import { ratings } from '@/helpers/methods/functions'
 import { useSession } from 'next-auth/react'
 import { IProductData } from '../../types/products'
-import { getProductById } from '../../helpers/actions/Products'
+import ProductQuantity from '../reduxtHandler/ProductQuantity'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement>{
   product: IProductData
@@ -170,16 +166,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
             <hr className='border border-primary/70 my-2' />
             {/* select quantity */}
             <h2>Quantity</h2>
-            <div className='flex gap-4 p-2 h-12'>
-              {/* merge redux action with server component */}
-              <CartActions decrement product={product}>
-                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
-              </CartActions>
-              <CartInput product={product} />
-              <CartActions increment product={product}>
-                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
-              </CartActions>
-            </div>
+            <ProductQuantity product={product} />
 
             {/* checkout action */}
             <div className='my-2 w-full'>
@@ -200,7 +187,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
             
             {/* implement details  add to favorite */}
             <div className='flex justify-between items-center gap-4'>
-              <Button size="sm" variant="primary-outline" className='rounded-full py-5'>
+              <Button size="sm" variant="primary-outline" className='rounded-full py-5 w-auto px-4'>
                 <Link href={`/products/${product.categoryId}/${product.id}`}>View Details</Link>
               </Button>
               <FavoriteAction productId={product.id} />
