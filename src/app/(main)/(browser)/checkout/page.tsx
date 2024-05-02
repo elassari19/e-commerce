@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
@@ -9,14 +9,34 @@ import FavoriteAction from '@/components/reduxtHandler/FavoriteAction'
 import { removeFromCart } from '@/store/cartSlice'
 import { BaggageClaim, ShoppingBasket, Trash2 } from 'lucide-react'
 import ProductQuantity from '@/components/reduxtHandler/ProductQuantity'
-import CartActions from '../../../../components/reduxtHandler/CartActions'
-import DialogPopup from '../../../../components/DialogPopup'
-import { DialogClose } from '../../../../components/ui/dialog'
+import CartActions from '@/components/reduxtHandler/CartActions'
+import DialogPopup from '@/components/DialogPopup'
+import { DialogClose } from '@/components/ui/dialog'
+import { loadStripe } from "@stripe/stripe-js";
+import toast from 'react-hot-toast'
 
 const page = () => {
+
   const dispatch = useDispatch()
   const carte = useSelector((state: RootState) => state.cart)
   const total = (carte.items.reduce((acc, item) => acc + (+item.price * item.qty), 0)/100).toFixed(2)
+
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+  const handlePayment = async () => {
+    const stripe = await stripePromise;
+    const response = await fetch('/api/payment', {
+      method: 'POST',
+      body: JSON.stringify(carte.items),
+    })
+    const data = await response.json()
+    if(data.id){
+      const result = await stripe?.redirectToCheckout({
+        sessionId: data.id,
+      });
+    } else {
+      toast.error('Payment failed')
+    }
+  }
 
   return (
     <div className='grid grid-cols-12 bg-black/5'>
@@ -56,7 +76,7 @@ const page = () => {
               >
                 <Image
                   src={item.images[0].secure_url} alt={item.name}
-                  width={40} height={40}
+                  width={40} height={40} loading="lazy"
                   className='w-32 h-40 rounded-lg'
                 />
                 <div className='flex flex-col gap-2 w-full'>
@@ -109,6 +129,7 @@ const page = () => {
             <Button
               variant="primary" className='rounded-full'
               href=''
+              onClick={handlePayment}
             >
               Pay Now ({carte.items.length})
             </Button>
@@ -128,7 +149,7 @@ const page = () => {
                 ].map((img, idx) => (
                   <Image
                     key={idx} src={img} alt="imag src" className='h-8'
-                    width={idx == 4 ?100:50} height={50}
+                    width={idx == 4 ?100:50} height={50} loading="lazy"
                   />
                 ))
               }
@@ -137,7 +158,7 @@ const page = () => {
             <div className='flex gap-2 my-4'>
               <Image
                 src='https://res.cloudinary.com/elassari/image/upload/v1714586784/my-ecom-app/assets/goiidyjuuvtaahavbkdc.webp'
-                alt='secure payment' width={100} height={50} className='w-6 h-6'
+                alt='secure payment' width={100} height={50} className='w-6 h-6' loading="lazy"
               />
               <p> Get full refund if the item is not as described or if is not delivered</p>
             </div>
