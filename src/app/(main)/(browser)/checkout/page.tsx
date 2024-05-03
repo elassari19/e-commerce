@@ -1,49 +1,23 @@
-'use client'
+// 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Button } from '@/components/ui/button'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/store'
 import Image from 'next/image'
-import FavoriteAction from '@/components/reduxtHandler/FavoriteAction'
-import { removeFromCart } from '@/store/cartSlice'
-import { BaggageClaim, ShoppingBasket, Trash2 } from 'lucide-react'
-import ProductQuantity from '@/components/reduxtHandler/ProductQuantity'
+import { ShoppingBasket } from 'lucide-react'
 import CartActions from '@/components/reduxtHandler/CartActions'
 import DialogPopup from '@/components/DialogPopup'
 import { DialogClose } from '@/components/ui/dialog'
-import { loadStripe } from "@stripe/stripe-js";
-import toast from 'react-hot-toast'
+import ChekoutList from '@/components/cards/ChekoutList'
+import ChekoutInvoice from '@/components/cards/ChekoutInvoice'
 
 const page = () => {
 
-  const dispatch = useDispatch()
-  const carte = useSelector((state: RootState) => state.cart)
-  const total = (carte.items.reduce((acc, item) => acc + (+item.price * item.qty), 0)/100).toFixed(2)
-
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-  const handlePayment = async () => {
-    const stripe = await stripePromise;
-    const response = await fetch('/api/payment', {
-      method: 'POST',
-      body: JSON.stringify(carte.items),
-    })
-    const data = await response.json()
-    if(data.id){
-      const result = await stripe?.redirectToCheckout({
-        sessionId: data.id,
-      });
-    } else {
-      toast.error('Payment failed')
-    }
-  }
-
   return (
-    <div className='grid grid-cols-12 bg-black/5'>
+    <div className='grid grid-cols-12 bg-black/5 min-h-screen'>
       <div className='col-span-12 lg:col-span-10 lg:col-start-2 grid grid-cols-8 gap-2 my-4'>
         <div className='col-span-12 md:col-span-5 flex flex-col gap-2'>
           <section className='p-4 rounded bg-white flex justify-between items-center'>
-            <h2 className='text-xl font-bold flex-1'>Shopping Cart ({carte.items.length})</h2>
+            <h2 className='text-xl font-bold flex-1'>Shopping Cart</h2>
             <DialogPopup
               dialogTrigger={<div className=''>
                 <Button size="sm" variant="outline-destructive" className='font-semibold text-sm w-auto px-4 border-none'>
@@ -55,7 +29,8 @@ const page = () => {
               dialogDescription={<div className='flex gap-8 items-center p-4 px-8'>
                 <DialogClose>
                   <CartActions
-                    removeAll product={carte.items[0]}
+                    // @ts-ignore
+                    removeAll product={[]}
                     className='w-auto bg-transparent text-destructive cursor-pointer border border-destructive p-2 px-4 rounded hover:bg-destructive hover:text-white'
                   >
                     Delete selected items
@@ -70,69 +45,13 @@ const page = () => {
           </section>
 
           <section className='rounded bg-white overflow-hidden'>
-            {carte.items.map((item, index) => (
-              <div key={index}
-                className='flex items-start gap-4 p-4 w-[100%]'
-              >
-                <Image
-                  src={item.images[0].secure_url} alt={item.name}
-                  width={40} height={40} loading="lazy"
-                  className='w-32 h-40 rounded-lg'
-                />
-                <div className='flex flex-col gap-2 w-full'>
-                  {/* product desc */}
-                  <div className='flex items-center justify-between gap-1'>
-                    <h4 className='text-xs font-semibold w-[12rem] sm:w-[15rem] text-ellipsis whitespace-nowrap overflow-hidden'>{item.description}</h4>
-                    <div className='flex items-center justify-end gap-2'>
-                      <FavoriteAction productId={item.id} className='w-6 h-8 p-0 border-none'/>
-                      <div onClick={() => dispatch(removeFromCart(item))}>
-                        <Trash2 size={26} className='font-thin text-destructive cursor-pointer p-1' />
-                      </div>
-                    </div>
-                  </div>
-                  {/* product option selected options */}
-                  <div className='flex items-center justify-between'>
-                    <p className='text-sm font-semibold bg-black/10 rounded-full w-28 py-1 h-8 text-center'>{item?.color} - {item?.size}</p>
-                    <ProductQuantity product={item} />
-                  </div>
-                  <p className='font-bold'>{+item.price/100}$</p>
-                  <div className='flex gap-1 items-center'>
-                    <BaggageClaim size={14} className='text-primary' /> <span className='text-xs text-primary'>7-day delivery</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <ChekoutList />
           </section>
         </div>
 
         <aside className='col-span-12 md:col-span-3 flex flex-col gap-2'>
           <section className='p-4 rounded bg-white font-semibold'>
-            <h2 className='text-xl'>Summary</h2>
-            <div className='flex flex-col gap-2 my-4'>
-              <div className='flex justify-between items-center'>
-                <p className='text-sm'>Subtotal</p>
-                <p>{total}$</p>
-              </div>
-              <div className='flex justify-between items-center'>
-                <p className='text-sm'>Shipping fee</p>
-                <p>{(+total*0.25).toFixed(2)}$</p>
-              </div>
-
-              <div className='flex justify-between items-start'>
-                <p className='text-sm'>Total</p>
-                <div className='flex flex-col items-end'>
-                  <p>{(+total + (+total*0.25)).toFixed(2)}$</p>
-                  <p className='text-xs text-black/30'>Inclusive of VAT</p>
-                </div>
-              </div>
-            </div>
-            <Button
-              variant="primary" className='rounded-full'
-              href=''
-              onClick={handlePayment}
-            >
-              Pay Now ({carte.items.length})
-            </Button>
+            <ChekoutInvoice />
           </section>
 
           <section className='p-4 rounded bg-white font-semibold'>

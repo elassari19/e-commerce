@@ -29,12 +29,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const event = await stripe.checkout.sessions.create({
       line_items,
       mode: 'payment',
-      success_url: `${req.headers.get('origin')}/checkout/successfully`,
+      success_url: `${req.headers.get('origin')}/orders`,
       cancel_url: `${req.headers.get('origin')}/checkout`,
       metadata: { email }
     });
-    console.log('event', event)
-    return NextResponse.json({ id: event.id }, { status: 200});
+
+     return NextResponse.json({ id: event.id }, { status: 200});
   } catch (error: any) {
     console.log('error', error?.message)
     return NextResponse.json({message: 'Event Error'},{ status: 500});
