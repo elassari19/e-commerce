@@ -6,7 +6,7 @@ import ImageMagnify from '@/components/cards/ImageMagnify'
 import Image from 'next/image'
 import Ratings from '@/components/atoms/Ratings'
 import { ratings } from '@/helpers/methods/functions'
-import CartActions, { CartInput } from '@/components/reduxtHandler/CartActions'
+import CartActions from '@/components/reduxtHandler/CartActions'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import DialogPopup from '@/components/DialogPopup'
@@ -14,6 +14,7 @@ import FavoriteAction from '@/components/reduxtHandler/FavoriteAction'
 import { auth } from '@/lib/getAuthSession'
 import { StarIcon } from 'lucide-react'
 import Signin from '@/components/forms/Signin'
+import ProductQuantity from '@/components/reduxtHandler/ProductQuantity'
 
 interface Props {
   params: {
@@ -103,7 +104,7 @@ const page = async ({ params }: Props) => {
                 <CartActions
                   key={property.color}
                   product={product}
-                  productOptions={{ color:property.color! }}
+                  productColor={property.color!}
                 >
                   <Image
                     src={property.secure_url!} alt="product" loading="lazy"
@@ -119,6 +120,7 @@ const page = async ({ params }: Props) => {
                   <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
               ))
             }
+            properties={product.properties.filter((p) => p.name == "size").map((p) => p.value!)[0].split(",")}
           />
 
           <PreviewTabs
@@ -129,7 +131,7 @@ const page = async ({ params }: Props) => {
                 <CartActions
                   key={size} className='w-full h-full py-4'
                   product={product}
-                  productOptions={{ size }}
+                  productSize={size}
                 >
                   <p className="text-bold"><strong>{size}</strong></p>
                 </CartActions>
@@ -142,6 +144,7 @@ const page = async ({ params }: Props) => {
                 <p key={size} className="text-bold"><strong>Size</strong>: {size}</p>
               ))
             }
+            properties={product.properties.filter((p) => p.name == "size").map((p) => p.value!)[0]?.split(",")}
           />
         </div>
 
@@ -165,7 +168,7 @@ const page = async ({ params }: Props) => {
                   <CartActions
                     key={property.color}
                     product={product}
-                    productOptions={{ color:property.color! }}
+                    productColor={property.color!}
                   >
                     <Image
                       src={property.secure_url!} alt="product" loading="lazy"
@@ -181,6 +184,7 @@ const page = async ({ params }: Props) => {
                     <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
                 ))
               }
+              properties={product.properties.filter((p) => p.color).map((p) => p.color!)}
             />
             <hr className='border border-primary/30 my-4' />
           </div>
@@ -198,16 +202,7 @@ const page = async ({ params }: Props) => {
           {/* select quantity */}
           <div className='flex flex-col gap-2'>
             <h2>Quantity</h2>
-            <div className='flex gap-4 p-2 h-12'>
-              {/* merge redux action with server component */}
-              <CartActions decrement product={product}>
-                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>-</Button>
-              </CartActions>
-              <CartInput id={product.id} className='w-20' />
-              <CartActions increment product={product}>
-                <Button size="sm" variant="primary-outline" className='rounded-full px-3'>+</Button>
-              </CartActions>
-            </div>
+            <ProductQuantity product={product} />
             <p className='font-normal text-sm px-4'>{product.quantity} Pieces available</p>
           </div>
 

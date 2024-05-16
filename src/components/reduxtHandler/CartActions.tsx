@@ -2,13 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, decrementQuantity, incrementQuantity, removeFromCart, selectProductOptions } from '@/store/cartSlice'
+import { addToCart, decrementQuantity, incrementQuantity, removeAllFromCart, removeFromCart, selectProductOptions } from '@/store/cartSlice'
 import { Product } from '@prisma/client'
 import { Input } from '../ui/input'
 import { RootState } from '@/store'
 import { Badge } from '../ui/badge'
 import { cn } from '@/lib/utils'
-import { toggleFavorite } from '../../store/favoriteSlice'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement>{
   favorite?: boolean
@@ -16,32 +15,47 @@ interface Props extends React.HTMLAttributes<HTMLDivElement>{
   decrement?: boolean
   add?: boolean
   remove?: boolean
+  removeAll?: boolean
   product: Partial<Product>
-  productOptions?: {
-    color?: string
-    size?: string
-  }
+  productSize?: string
+  productColor?: string
 }
 
-function CartActions({ increment, add, remove, favorite, product, productOptions, children, className }: Props) {
+function CartActions({ increment, add, remove, removeAll, product, productSize, productColor, children, className }: Props) {
 
   const dispatch = useDispatch()
   const productCart = useSelector((state: RootState) => state.cart.items)
   const options = productCart.filter((c) => c.id === product.id)[0]
+  const defaultSize = options?.properties?.filter((p) => p.name == "size")[0]?.value?.split(",")[0] || null
+  const defaultColor = options?.properties?.filter((p) => p.color)[0]?.color || null
 
-  const action = (_product: Partial<Product>) => productOptions
+  const action = (_product: Partial<Product>) => productSize
   ? selectProductOptions({
-    id: _product.id,
-    color: productOptions.color || options?.color,
-    size: productOptions.size || options?.size
-  })
-  : increment
-    ? incrementQuantity(_product)
-    : add
-      ? addToCart(_product)
-      : remove
-        ? removeFromCart({ id: _product.id})
-        : decrementQuantity({ id: _product.id})
+    ..._product,
+    size: productSize || defaultSize || null
+    })
+    : productColor
+      ? selectProductOptions({
+        ..._product,
+        color: productColor || defaultColor
+      })
+      : increment
+      ? incrementQuantity({
+        ..._product,
+        color: productColor || defaultColor,
+        size: productSize || defaultSize || null
+      })
+      : add
+        ? addToCart({
+          ..._product,
+          color: productColor || defaultColor,
+          size: productSize || defaultSize || null
+        })
+        : remove
+          ? removeFromCart({ id: _product.id})
+          : removeAll
+            ? removeAllFromCart()
+            : decrementQuantity({ id: _product.id})
 
   return (
     <div
@@ -55,15 +69,15 @@ function CartActions({ increment, add, remove, favorite, product, productOptions
 
 export default CartActions
 
-export const CartInput = ({ id, className }: { id: string, className?: string}) => {
+export const CartInput = ({ product, className }: { product: Partial<Product>, className?: string}) => {
 
   const dispatch = useDispatch()
   const carts = useSelector((state: RootState) => state.cart.items)
 
   return (
     <Input
-      type='number' className={cn(' px-2 rounded-sm w-12', className)} value={carts.filter((c) => c.id === id)[0]?.qty || 0}
-      onChange={(e) => dispatch(incrementQuantity({ id: +id, value: +e.target.value }))}
+      type='number' className={cn(' px-2 rounded-sm w-12', className)} value={carts.filter((c) => c.id === product.id)[0]?.qty || 0}
+      onChange={(e) => dispatch(incrementQuantity({ ...product, value: +e.target.value }))}
     />
   )
 }

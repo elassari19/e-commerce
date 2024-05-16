@@ -57,9 +57,9 @@
   fetch data based on table page
 
 # /checkout
-  scaffold ui page
-  add stripe
-  implement checkout function
+  √- scaffold ui page
+  √-add stripe
+  √-implement checkout function
   save data on database
 
 # /statistic

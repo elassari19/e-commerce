@@ -1,9 +1,10 @@
 'use client'
 
-import { ImageUrl, Product } from "@prisma/client";
+import { ImageUrl } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
+import { IProductData } from "../types/products";
 
-type cartType = Product & { images: ImageUrl[], qty: number, color: string, size: string};
+type cartType = IProductData & { images: ImageUrl[], qty: number, color: string, size: string};
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -21,7 +22,10 @@ export const cartSlice = createSlice({
       return;
     },
     removeFromCart: (state, { payload }) => {
-      state.items = state.items.filter((item) => item.id !== payload.id);
+      state.items = state.items.filter((item) => item.id !== payload.id || !payload.id);
+    },
+    removeAllFromCart: (state) => {
+      state.items = [];
     },
     incrementQuantity: (state, { payload }) => {
       const index = state.items.findIndex((item) => item.id === payload.id);
@@ -39,8 +43,10 @@ export const cartSlice = createSlice({
         state.items[index].qty = payload.value;
         return;
       }
-      state.items[index].qty = state.items[index].qty + 1;
-      state.items.sort((a, b) => a.id > b.id ? 1 : -1);
+      const { quantity, qty } = state.items[index];
+      // in case the qty is equal to the quantity, we do nothing
+      state.items[index].qty = qty == quantity ? quantity : qty + 1;
+      // state.items.sort((a, b) => a.id > b.id ? 1 : -1);
     },
     decrementQuantity: (state, { payload }) => {
       const index = state.items.findIndex((item) => item.id === payload.id);
@@ -61,11 +67,11 @@ export const cartSlice = createSlice({
         state.items.sort((a, b) => a.id > b.id ? 1 : -1);
         return;
       }
-      state.items[index].color = payload.color;
-      state.items[index].size = payload.size;
+      state.items[index].color = payload.color ? payload.color : state.items[index].color;
+      state.items[index].size = payload.size ? payload.size : state.items[index].size;
     }
   },
 });
 
-export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, selectProductOptions } = cartSlice.actions;
+export const { addToCart, removeFromCart, removeAllFromCart, incrementQuantity, decrementQuantity, selectProductOptions } = cartSlice.actions;
 export default cartSlice.reducer;

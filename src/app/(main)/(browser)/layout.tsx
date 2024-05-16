@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <div className="bg-primary-foreground text-white">
+      <div className="bg-primary-foreground text-white top-0 sticky z-50">
         <HeaderNav />
       </div>
 
