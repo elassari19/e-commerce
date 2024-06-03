@@ -14,20 +14,21 @@ interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {}
 
 const Signin = ({  }: Props) => {
   const router = useRouter()
-  const { data } = useSession()
   const pathname = usePathname()
+  const session = useSession()
 
   useLayoutEffect(() => {
-    if(data?.user) {
+    if(session.data?.user) {
       return router.push(pathname)
     }
-  }, [data])
+  }, [session.data])
+  console.log("data", session)
 
   const signInWithGoogle = async () => {
     try {
       await signIn('google')
     } catch (error) {
-      // console.log(error)
+      console.log(error)
       toast.error(`Signing with Google Failed`)
     }
   }
@@ -80,7 +81,7 @@ const Signin = ({  }: Props) => {
                   disabled={!formik.isValid && formik.isSubmitting}
                 >Sign in</Button>
 
-                <hr className='flex-1 my-6'/>
+                <hr className='flex-1 mt-4'/>
 
               </div>
             </Form>
@@ -88,7 +89,7 @@ const Signin = ({  }: Props) => {
         }
       }
       </Formik>
-      <div className='col-span-full my-4'>
+      <div className='col-span-full'>
         <Button onClick={signInWithGoogle} variant='primary-outline' size="lg" className="gap-x-4 rounded-lg">
           Continue with Google
         </Button>

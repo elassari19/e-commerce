@@ -96,15 +96,29 @@
     @apply bg-background min-w-[100vw] min-h-[100vh];
   }
 
-  ::-webkit-inner-spin-button {
+  ::-webkit-scrollbar-thumb, 
+  ::-webkit-scrollbar-spin-button,
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  .scroll-cat::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    margin: 0;
+  }
+  .scroll-cat::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary));
+    border-radius: 0.25rem;
+    height: 1px;
+  }
+  .scroll-cat::-webkit-scrollbar {
+    height: 0.15rem;
+  }
+  .scroll-cat::-webkit-scrollbar-button {
+    width: 20px;
   }
 
-  ::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    padding: 0 !important;
+  a:hover {
+    @apply text-primary font-semibold;
   }
 
   .preview:hover #preview {

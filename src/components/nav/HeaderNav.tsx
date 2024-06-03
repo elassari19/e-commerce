@@ -25,7 +25,7 @@ const HeaderNav = async ({  }: Props) => {
   const Categories = await db.category.findMany()
 
   return (
-    <header className="relative mx-2 md:container md:mx-auto pt-4 pb-2">
+    <header className="relative mx-2 md:container md:mx-auto pt-2 pb-2">
       <MotionSlide top={10}>
         <nav className="flex justify-between items-center gap-4 md:gap-24">
           <div className='hidden md:block cursor-pointer'>
@@ -33,9 +33,6 @@ const HeaderNav = async ({  }: Props) => {
               <Image src={logo} loading="lazy" alt='app brand' width={100} height={50}  className='h-10 w-10' />
             </Link>
           </div>
-
-          {/* categories */}
-          <AllCategories Categories={Categories} />
 
           <SearchProductsInput />
 
@@ -108,6 +105,13 @@ const HeaderNav = async ({  }: Props) => {
           </ul>
         </nav>
       </MotionSlide>
+      <div className='scroll-cat mx-32 flex items-center gap-2 overflow-x-auto mt-2 text-sm whitespace-nowrap'>
+        {
+          Categories.filter((cat) => cat.parentId == '').map((cat, idx) => (
+            <Link href={`/category/${cat.id}`} key={cat.name} className='p-4'>{cat.name}</Link>
+          ))
+        }
+      </div>
     </header>
   );
 };

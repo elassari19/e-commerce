@@ -120,14 +120,14 @@ const page = async ({ params }: Props) => {
                   <p key={property.color} className="text-bold"><strong>Color</strong>: {property.color}</p>
               ))
             }
-            properties={product.properties.filter((p) => p.name == "size").map((p) => p.value!)[0].split(",")}
+            properties={product.properties.filter((p) => p.color).map((p) => p.color!)}
           />
 
           <PreviewTabs
             tabList={
               product.properties.filter((property) => property.name == "size" && property)
-              .map((property) => property.value!)[0]?.split(",")
-              .map((size) => (
+              ?.map((property) => property.value!)[0]?.split(",")
+              ?.map((size) => (
                 <CartActions
                   key={size} className='w-full h-full py-4'
                   product={product}
@@ -144,7 +144,7 @@ const page = async ({ params }: Props) => {
                 <p key={size} className="text-bold"><strong>Size</strong>: {size}</p>
               ))
             }
-            properties={product.properties.filter((p) => p.name == "size").map((p) => p.value!)[0]?.split(",")}
+            properties={product.properties.filter((p) => p.name == "size")?.map((p) => p.value!)[0]?.split(",")}
           />
         </div>
 
@@ -153,13 +153,14 @@ const page = async ({ params }: Props) => {
 
       {/* product order */}
       <div className='col-span-12 md:col-span-3 font-bold'>
-        <div className='min-w-[24%] fixed top-24 rigth-8 border flex flex-col gap-2 p-4 rounded-lg'>
+        <div className='min-w-[24%] fixed top-32 rigth-8 border flex flex-col gap-2 p-4 rounded-lg'>
           <div className=''>
             <p className='text-primary font-bold text-3xl'>{(+product.price)/100} $</p>
             <p className='text-xs text-black/60 mt-2'>Price includes VAT丨Extra 5% off with coins</p>
-            <hr className='border border-primary/30 my-4' />
+            <hr className='border border-primary/30 my-3' />
           </div>
 
+          {/* colors */}
           <div className='w-full overflow-auto'>
             <PreviewTabs
               tabList={
