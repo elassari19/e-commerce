@@ -59,11 +59,11 @@ export async function POST(req: Request, res: NextApiResponse) {
             iban: data.iban
           }
       },
-      image: {
-        create: [
-          ...data.image,
-        ],
-      }
+      // image: {
+      //   create: [
+      //     ...data.image,
+      //   ],
+      // }
     }
   })
 
@@ -111,12 +111,12 @@ export async function DELETE(req: Request) {
   // grab product images...
   const users = await db.user.findMany({
     where: { id: { in: data } },
-    include: { image: true }
+    // include: { image: true }
   })
 
   try { // delete images from cloudinary
     users.map(async (user) => {
-      await deleteImages(user.image)
+      // await deleteImages(user.image)
     })
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 })
