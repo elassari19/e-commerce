@@ -40,12 +40,12 @@ const Search = ({ placeholder }: Props) => {
   }, [searchQuery])  
 
   return (
-    <div className="relative flex-1 flex justify-between items-center rounded-sm bg-white text-black">
+    <div className="relative border max-w-[50%] flex-1 flex justify-between items-center rounded-xl overflow-hidden bg-white text-black">
       <Input
         placeholder={placeholder || "Search products"}
         onChange={(e) => setSearchQuery(e.target.value)}
         value={searchQuery}
-        className="flex-1"
+        className="flex-1 pl-8 border-none"
         onFocus={(e) => setToggleSearch(true)}
         onBlur={(e) => setTimeout(() => setToggleSearch(false), 200)}
       />

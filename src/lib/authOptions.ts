@@ -18,6 +18,17 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      profile(profile) {
+        return {
+          ...profile,
+          id: profile.sub,
+          email: profile.email,
+          firstName: profile.given_name,
+          lastName: profile.family_name,
+          image: profile.picture,
+          role: "user",
+        };
+      }
     }),
     CredentialsProvider({ 
       name: "credentials",
@@ -30,56 +41,27 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials.password) return null;
 
         const user = await db.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
+          where: { email: credentials.email },
         });
 
-        if (!user || !(await compare(credentials.password, user.password!))) {
-          return null;
-        }
-
-        return {
-          ...user,
-          password: null
-        };
+        if (!user || !(await compare(credentials.password, user.password!)))  return null;
+        return { ...user, password: null };
       },
     }),
   ],
   callbacks: {
     session: ({ session, token }) => {
-      return {
-        ...session,
-        token
-      };
+      return { ...session, token };
     },
     jwt: ({ token, user }) => {
       if (user) {
-        return {
-          ...token,
-          ...user
-        };
+        console.log("jwt", user)
+        return { ...token, ...user };
       }
       return token;
     },
-    // async signIn({ profile, account }) {
-    //   try {
-    //     const userExist = await db.user.findUnique({
-    //       where: { email: profile?.email }
-    //     })
-    //     if(userExist) {
-    //       return true
-    //     }
-    //     } catch (error) {
-    //     console.log(error)
-    //     return false
-    //   }
-    //   return true
-    // },
   },
 };

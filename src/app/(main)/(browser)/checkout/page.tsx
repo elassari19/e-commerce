@@ -68,7 +68,7 @@ const page = () => {
                 ].map((img, idx) => (
                   <Image
                     key={idx} src={img} alt="imag src" className='h-8'
-                    width={idx == 4 ?100:50} height={50} loading="lazy"
+                    width={idx == 4 ?100:50} height={50} loading="eager"
                   />
                 ))
               }
@@ -77,7 +77,7 @@ const page = () => {
             <div className='flex gap-2 my-4'>
               <Image
                 src='https://res.cloudinary.com/elassari/image/upload/v1714586784/my-ecom-app/assets/goiidyjuuvtaahavbkdc.webp'
-                alt='secure payment' width={100} height={50} className='w-6 h-6' loading="lazy"
+                alt='secure payment' width={100} height={50} className='w-6 h-6' loading="eager"
               />
               <p> Get full refund if the item is not as described or if is not delivered</p>
             </div>

@@ -28,7 +28,7 @@ const ImageMagnify = ({ src }: { src: string }) => {
       <Image
         src={src} alt="Product Image"
         width={400} height={400}
-        loading="lazy"
+        loading="eager"
         className="w-full h-full border rounded-lg"
         id='overview-image'
       />

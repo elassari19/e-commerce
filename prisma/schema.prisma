@@ -51,7 +51,7 @@ model User {
   birthDate DateTime?
   address   Address?
   bank      Bank?
-  image     ImageUrl[]
+  image     String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   accounts  Account[]
@@ -59,6 +59,7 @@ model User {
   product   Product[]
   category  Category[]
   reviews   Reviews[]
+  Orders    Orders[]
 }
 
 model Bank {
@@ -74,15 +75,16 @@ model Bank {
 }
 
 model Address {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   address    String?
   city       String?
   lat        String
   lng        String
   postalCode String?
   state      String?
-  User       User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String? @unique @db.ObjectId
+  User       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?  @unique @db.ObjectId
+  Orders     Orders[]
 }
 
 enum Gender {
@@ -118,6 +120,7 @@ model Product {
   userId      String?      @db.ObjectId
   Category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String?      @db.ObjectId
+  Orders      Orders[]
 }
 
 model Properties {
@@ -150,8 +153,6 @@ model ImageUrl {
   createdBy    String?
   Product      Product?    @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId    String?     @db.ObjectId
-  User         User?       @relation(fields: [userId], references: [id])
-  userId       String?     @db.ObjectId
   Properties   Properties? @relation(fields: [propertiesId], references: [id])
   propertiesId String?     @db.ObjectId
   Category     Category?   @relation(fields: [categoryId], references: [id])
@@ -171,6 +172,27 @@ model Category {
   images      ImageUrl[]
   User        User?      @relation(fields: [userId], references: [id])
   userId      String?    @db.ObjectId
+}
+
+model Orders {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderItems      Product  @relation(fields: [productId], references: [id])
+  shippingAddress Address  @relation(fields: [addressId], references: [id])
+  paymentMethod   String
+  itemsPrice      Float
+  taxPrice        Float
+  shippingPrice   Float
+  totalPrice      Float
+  isPaid          Boolean
+  paidAt          DateTime
+  isDelivered     Boolean
+  deliveredAt     DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  User            User?    @relation(fields: [userId], references: [id])
+  userId          String?  @db.ObjectId
+  productId       String[] @db.ObjectId
+  addressId       String   @db.ObjectId
 }
 
 // npx prisma generate

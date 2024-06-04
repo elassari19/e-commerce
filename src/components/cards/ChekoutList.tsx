@@ -23,7 +23,7 @@ const ChekoutList = (props: Props) => {
           >
             <Image
               src={item.images[0].secure_url} alt={item.name}
-              width={40} height={40} loading="lazy"
+              width={40} height={40} loading="eager"
               className='w-32 h-40 rounded-lg'
             />
             <div className='flex flex-col gap-2 w-full'>

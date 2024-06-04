@@ -91,11 +91,11 @@ interface PrewiewProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 export const PreviewTabs = ({ tabList, tabContent, className, properties}: PrewiewProps) => {
 console.log("properties", properties)
   return (
-    <Tabs className={cn("w-full", className)} defaultValue={properties[0]}>
+    <Tabs className={cn("w-full", className)} defaultValue={properties?.[0]}>
       <div>
       {
         tabContent?.map((content, idx) => (
-          <TabsContent key={idx} value={properties[idx]} className="mb-4" >
+          <TabsContent key={idx} value={properties?.[idx]} className="mb-4" >
             {content}
           </TabsContent>
         ))
@@ -105,7 +105,7 @@ console.log("properties", properties)
       {
         tabList?.map((tab, idx) => (
           <TabsTrigger
-            key={idx} value={properties[idx]}
+            key={idx} value={properties?.[idx]}
             className="w-16 h-full p-1 rounded-lg data-[state=active]:bg-primary/50"
           >
             {tab}

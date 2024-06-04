@@ -10,7 +10,13 @@ type Props = {}
 
 const ChekoutInvoice = (props: Props) => {
 
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+  let stripePromise: any
+  try {
+    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+  } catch (error) {
+    console.log("error stripePromise", error)
+  }
+
   const handlePayment = async (cart: IProductData[]) => {
     const stripe = await stripePromise;
     const response = await fetch('/api/payment', {

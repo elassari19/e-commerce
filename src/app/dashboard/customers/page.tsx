@@ -15,7 +15,7 @@ const page = async ({  }: Props) => {
     include: {
       address: true,
       bank: true,
-      image: true
+      // image: true
     }
   })
 
