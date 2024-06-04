@@ -1,12 +1,23 @@
-import { db } from "@/lib/db"
+import dynamic from 'next/dynamic'
 import { Suspense } from "react"
-import ProductCard from "@/components/cards/ProductCard"
-import CategoriesSwiper from "@/components/swipers/CategoriesSwiper"
-import SuspenseRoot from "@/components/SuspenseRoot"
-import { IProductData } from "../../../types/products"
-import LoadMore from "../../../components/atoms/LoadMore"
 
-export const dynamic = "force-dynamic"
+import { db } from "@/lib/db"
+import SuspenseRoot from "@/components/SuspenseRoot"
+import { IProductData } from "@/types/products"
+import { getRootCategories } from '@/helpers/actions/categories'
+import SwiperSuspense from '@/components/suspense/SwiperSuspense'
+import { Skeleton } from '@/components/ui/skeleton'
+
+const DynamicLoadMore = dynamic(() => import("@/components/atoms/LoadMore"), {
+  loading: () => <SwiperSuspense />,
+  ssr: false
+})
+
+const DynamicCategoriesSwiper = dynamic(() => import("@/components/swipers/CategoriesSwiper"), {
+  loading: () => <Skeleton className='w-full h-2/3' />,
+  ssr: false
+})
+
 
 interface Props {
   searchParams: {
@@ -25,48 +36,31 @@ export default async function Home({ searchParams }: Props) {
     take: 10
   }) as IProductData[]
 
-  const categories = await db.category.findMany({
-    include: {
-      images: true
-    }
-  })
+  const categories = await getRootCategories()
 
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
-        <Suspense fallback={<SuspenseRoot />}
-        >
-          {/* categories */}
-          <div className="col-span-full place-content-center">
-            <h1 className="font-bold text-lg pl-2">
-              Shop by categories
-            </h1>
+        {/* categories */}
+        <div className="col-span-full place-content-center">
+          <h1 className="font-bold text-lg pl-2">
+            Shop by categories
+          </h1>
+          <DynamicCategoriesSwiper
+            categories={categories.filter((category) => category.parentId === "" )}
+            path="category"
+          />
+        </div>
 
-            <CategoriesSwiper
-              categories={categories.filter((category) => category.parentId === "" )}
-              path="category"
-            />
-          </div>
-          <div className="">
-
-            <h2 className="col-span-full font-bold text-lg">
-              Popular Products for Daily Shopping
-            </h2>
-            <LoadMore
-              categoryId={categories.map((category) => category.id && category.id)}
-              productsList={products}
-            />
-          {/* {
-            products.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                index={index}
-                product={product}
-              />
-            ))
-          } */}
-          </div>
-        </Suspense>
+        <div className="">
+          <h2 className="col-span-full font-bold text-lg">
+            Popular Products for Daily Shopping
+          </h2>
+          <DynamicLoadMore
+            categoryId={categories.map((category) => category.id && category.id)}
+            productsList={products}
+          />
+        </div>
       </div>
     </div>
   )

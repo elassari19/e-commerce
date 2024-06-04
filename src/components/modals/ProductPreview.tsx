@@ -62,7 +62,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                           src={pro.secure_url!} alt="product"
                           width={40} height={40}
                           className='w-full h-full rounded-lg transform transition-transform duration-300 ease-in-out'
-                          loading="lazy"
+                          loading="eager"
                         />
                       </TabsTrigger>
                     ))
@@ -110,7 +110,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
                       productColor={property.color!}
                     >
                       <Image
-                        src={property.secure_url!} alt="product" loading="lazy"
+                        src={property.secure_url!} alt="product" loading="eager"
                         width={40} height={40}
                         className="w-16 h-full bg-white"
                       />

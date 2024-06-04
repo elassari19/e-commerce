@@ -23,7 +23,7 @@ const page = async () => {
           categories.map((category) => (
             <div key={category.id} className='col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 shadow-lg rounded-xl py-8 hover:shadow-primary/40 relative'>
               <Link href={`/category/${category.id}`} className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center items-center'>
-                <Image src={category?.images?.[0]?.secure_url} loading="lazy" priority={false}
+                <Image src={category?.images?.[0]?.secure_url} loading="eager" priority={false}
                   width={50} height={50} alt={`item image ${category.name}`}
                   className={`w-32 h-32 rounded-full hover:absolute hover:w-36 hover:h-36 transition-all duration-300 ease-in-out`}
                 />

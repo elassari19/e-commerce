@@ -31,7 +31,7 @@ const ImageSwiper = ({ swipersItems, ...rest }: Props) => {
     >
       {
         swipersItems.map((item, idx) => (<SwiperSlide key={idx}>
-          {<Image src={item} loading="lazy" alt={`item image ${idx}`} className={`w-full`}/>}
+          {<Image src={item} loading="eager" alt={`item image ${idx}`} className={`w-full`}/>}
         </SwiperSlide>))
       }
     </Swiper>
