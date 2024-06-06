@@ -1,50 +1,33 @@
-'use client'
-
-import React from 'react'
-import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
-
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import './styles.css'
-
-import { Navigation, Pagination } from 'swiper/modules';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Category, ImageUrl } from '@prisma/client';
+import React, { Suspense } from 'react'
 import { cn } from '@/lib/utils';
+import { getRootCategories, getSubCategories } from '../../helpers/actions/categories';
+import RootSwiper from './RootSwiper';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Skeleton } from '../ui/skeleton';
 
-interface Props extends SwiperProps {
-  categories: (Category&{images: ImageUrl[]})[],
+interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   path: string
+  param?: string
 }
 
-const CategoriesSwiper = ({ categories, path, className }: Props) => {
-  const perView = window.innerWidth > 1024 ? 5 : window.innerWidth > 768 ? 4 : 2.3;
-  const space = window.innerWidth > 768 ? 20 : 10;
+const CategoriesSwiper = async ({ path, param, className }: Props) => {
+  const categories = param === undefined
+    ? await getRootCategories()
+    : await getSubCategories(param!)
 
   return (
     <div className={cn('relative p-0 md:mx-8 mb-4', className)}>
-      <Swiper
-        slidesPerView={perView}
-        spaceBetween={space}
-        navigation={true} 
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Navigation, Pagination]}
-        className="mySwiper h-56"
-      >
-        {
-          categories.map((category, idx) => (
-            <SwiperSlide
+      <RootSwiper>
+        {categories.map((category, idx) => (
+            <Suspense
               key={idx}
-              className='w-full h-full py-2 px-1'
+              fallback={<Skeleton className='w-full h-full' />}
             >
               <Link
                 href={`/${path}/${category.parentId||category.id}?t=${category.name}`} 
                 className='w-full h-full rounded-2xl flex flex-col gap-2 justify-center
-                items-center shadow p-2 hover:shadow-primary/60 hover:border-green-100'
+                items-center shadow p-2 hover:shadow-primary/60'
               >
                 <Image src={category?.images?.[0]?.secure_url} loading="eager" priority={false}
                   width={50} height={50} alt={`item image ${idx}`}
@@ -52,10 +35,9 @@ const CategoriesSwiper = ({ categories, path, className }: Props) => {
                 />
                 <h4 className='font-bold text-sm text-center'>{category.name}</h4>
               </Link>
-            </SwiperSlide>
-          ))
-        } 
-      </Swiper>
+            </Suspense>
+        ))}
+      </RootSwiper>
     </div>
   )
 }

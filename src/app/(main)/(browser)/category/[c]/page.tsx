@@ -13,15 +13,15 @@ interface Props {
 }
 
 const Category = async({ params }: Props) => {
-  const categories = await db.category.findMany({
-    where: { OR: [
-      { id: params.c },
-      { parentId: params.c }
-    ] },
-    include: {
-      images: true,
-    }
-  })
+  // const categories = await db.category.findMany({
+  //   where: { OR: [
+  //     { id: params.c },
+  //     { parentId: params.c }
+  //   ] },
+  //   include: {
+  //     images: true,
+  //   }
+  // })
 
   const productsCategory = await db.product.findMany({
     where: { categoryId: params.c },
@@ -38,12 +38,12 @@ const Category = async({ params }: Props) => {
     <div>
       <div className="col-span-full place-content-center">
       <h1 className="font-semibold text-xl ml-2 md:pl-8 py-4 bg-foreground">
-        {categories[0].name}
+        {productsCategory[0].Category.name}
       </h1>
 
         <CategoriesSwiper
-          categories={categories.filter((category) => category.parentId )}
           path='products'
+          param={params.c!}
         />
       </div>
 

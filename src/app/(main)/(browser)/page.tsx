@@ -1,20 +1,13 @@
 import dynamic from 'next/dynamic'
-import { Suspense } from "react"
 
 import { db } from "@/lib/db"
-import SuspenseRoot from "@/components/SuspenseRoot"
 import { IProductData } from "@/types/products"
 import { getRootCategories } from '@/helpers/actions/categories'
 import SwiperSuspense from '@/components/suspense/SwiperSuspense'
-import { Skeleton } from '@/components/ui/skeleton'
+import CategoriesSwiper from '@/components/swipers/CategoriesSwiper'
 
 const DynamicLoadMore = dynamic(() => import("@/components/atoms/LoadMore"), {
   loading: () => <SwiperSuspense />,
-  ssr: false
-})
-
-const DynamicCategoriesSwiper = dynamic(() => import("@/components/swipers/CategoriesSwiper"), {
-  loading: () => <Skeleton className='w-full h-2/3' />,
   ssr: false
 })
 
@@ -46,8 +39,7 @@ export default async function Home({ searchParams }: Props) {
           <h1 className="font-bold text-lg pl-2">
             Shop by categories
           </h1>
-          <DynamicCategoriesSwiper
-            categories={categories.filter((category) => category.parentId === "" )}
+          <CategoriesSwiper
             path="category"
           />
         </div>
