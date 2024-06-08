@@ -14,7 +14,7 @@ const ToggleMenuNav = () => {
     <div className='md:hidden'>
     <DialogNav
       className="max-h-full overflow-y-auto p-4 top-0 rigth-0 translate-y-[0%]"
-      dialogTrigger={<User2 size={28} className="text-white" />}
+      dialogTrigger={<User2 size={28} className="" />}
       dialogHeader={<Brand className="border-b" />}
       dialogContent={<ul className='w-full h-full flex flex-col gap-4'>
         {

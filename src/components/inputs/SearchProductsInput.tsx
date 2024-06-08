@@ -1,17 +1,22 @@
 "use client";
 
-import { SearchIcon } from "lucide-react";
+import { ChevronDown, SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
 import MotionSlide from "../framerMotion/MotionSlide";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import SearchProductsNav from "../nav/SearchProductsNav";
 import { getSearchProducts } from "@/helpers/actions/Products";
+import Dropdown from "../DropdownMenu";
+import { Category } from "@prisma/client";
+import Link from "next/link";
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  categories: Category[];
+}
 
-const Search = ({ placeholder }: Props) => {
+const Search = ({ placeholder, categories }: Props) => {
 
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -40,7 +45,7 @@ const Search = ({ placeholder }: Props) => {
   }, [searchQuery])  
 
   return (
-    <div className="relative border max-w-[50%] flex-1 flex justify-between items-center rounded-xl overflow-hidden bg-white text-black">
+    <div className="relative border md:max-w-[50%] flex-1 flex justify-between items-center rounded-xl overflow-hidden bg-white text-black">
       <Input
         placeholder={placeholder || "Search products"}
         onChange={(e) => setSearchQuery(e.target.value)}
@@ -49,8 +54,22 @@ const Search = ({ placeholder }: Props) => {
         onFocus={(e) => setToggleSearch(true)}
         onBlur={(e) => setTimeout(() => setToggleSearch(false), 200)}
       />
-      <button type="submit">
-      <SearchIcon className="text-primary mx-2 cursor-pointer" />
+      <>
+        <Dropdown
+          menuTrigger={<div className="p-2 flex items-center gap-1 md:hidden">
+            <p className="font-demibold text-secondary">All</p>
+            <ChevronDown className="text-primary cursor-pointer" />
+          </div>}
+          menuContent={categories.map((cate, idx) => (
+            <li key={idx} className='text-sm list-none' title={cate.name}>
+              <Link href={`/category/${cate.id}`}>{cate.name}</Link>
+            </li>
+          ))}
+          className="h-76 overflow-auto mt-0"
+        />
+      </>
+      <button type="submit" className="hidden md:block">
+        <SearchIcon className="text-primary mx-2 cursor-pointer" />
       </button>
       {
         toggleSearch && (

@@ -33,7 +33,7 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <div className="grid grid-cols-12">
-      <div className="col-span-full md:col-span-10 md:col-start-2 my-8">
+      <div className="col-span-full md:col-span-10 md:col-start-2 my-8 px-2">
         {/* categories */}
         <div className="col-span-full place-content-center">
           <h1 className="font-bold text-lg pl-2">
@@ -45,7 +45,7 @@ export default async function Home({ searchParams }: Props) {
         </div>
 
         <div className="">
-          <h2 className="col-span-full font-bold text-lg">
+          <h2 className="col-span-full font-bold text-lg pl-2">
             Popular Products for Daily Shopping
           </h2>
           <DynamicLoadMore

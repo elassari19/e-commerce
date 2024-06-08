@@ -15,6 +15,7 @@ import { db } from '../../lib/db';
 import AllCategories from './AllCategories';
 import { list } from '../../helpers/constants/Categories';
 import UserAuth from '../auth/UserAuth';
+import { getRootCategories } from '../../helpers/actions/categories';
 
 interface Props {
 }
@@ -22,19 +23,19 @@ const logo = "https://res.cloudinary.com/elassari/image/upload/v1711499475/my-ec
 
 const HeaderNav = async ({  }: Props) => {
   const session = await getAuthSession()
-  const Categories = await db.category.findMany()
+  const Categories = await getRootCategories()
 
   return (
     <header className="relative mx-2 md:container md:mx-auto pt-2 pb-2">
       <MotionSlide top={10}>
-        <nav className="flex justify-between items-center gap-4 md:gap-24">
-          <div className='hidden md:block cursor-pointer'>
+        <nav className="flex justify-between items-center gap-8 md:gap-24">
+          <div className='cursor-pointer'>
             <Link href="/">
               <Image src={logo} loading="eager" alt='app brand' width={100} height={50}  className='h-10 w-10' />
             </Link>
           </div>
 
-          <SearchProductsInput />
+          <SearchProductsInput categories={Categories} />
 
           <ToggleMenuNav />
 
@@ -105,7 +106,8 @@ const HeaderNav = async ({  }: Props) => {
           </ul>
         </nav>
       </MotionSlide>
-      <div className='scroll-cat mx-32 flex items-center gap-2 overflow-x-auto mt-2 text-sm whitespace-nowrap'>
+
+      <div className='hidden md:flex scroll-cat mx-4 md:mx-32 items-center gap-2 overflow-x-auto text-sm whitespace-nowrap'>
         {
           Categories.filter((cat) => cat.parentId == '').map((cat, idx) => (
             <Link href={`/category/${cat.id}`} key={cat.name} className='p-4'>{cat.name}</Link>
