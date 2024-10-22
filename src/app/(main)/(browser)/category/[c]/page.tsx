@@ -26,7 +26,7 @@ const Category = async ({ params }: Props) => {
   return (
     <div>
       <div className="col-span-full place-content-center">
-        <h1 className="font-semibold text-xl ml-2 md:pl-8 py-4 bg-foreground">
+        <h1 className="font-semibold text-xl ml-2 md:pl-8 py-4">
           {productsCategory[0].Category.name}
         </h1>
 
