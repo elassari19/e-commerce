@@ -17,7 +17,6 @@ import { getRootCategories } from '../../helpers/actions/categories';
 import logo from '@/assets/logo.png';
 
 interface Props {}
-// const logo = "https://res.cloudinary.com/elassari/image/upload/v1711499475/my-ecom-app/assets/vcwujmu0yvc9k4bc1adw.png"
 
 const HeaderNav = async ({}: Props) => {
   const session = await getAuthSession();

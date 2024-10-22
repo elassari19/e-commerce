@@ -13,7 +13,12 @@ const SuccessfullOrders = () => {
   const carte = useSelector((state: RootState) => state.cart);
 
   const setOrders = async (items: IProductData[]) => {
-    const Products = items.map((item) => {productId: item.id, quantity: item.qty, price: item.price});
+    const Products = items.map((item) => ({
+      ...item,
+      productId: item.id,
+      price: item.price,
+    }));
+
     const res = await fetch('/api/dashboard/orders', {
       method: 'POST',
       body: JSON.stringify(Products),

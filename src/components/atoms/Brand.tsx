@@ -10,8 +10,6 @@ interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 const Brand = ({ className, nav = true }: Props) => {
-  // const logo = "https://res.cloudinary.com/elassari/image/upload/v1711499475/my-ecom-app/assets/vcwujmu0yvc9k4bc1adw.png"
-
   return (
     <RowStack className={cn('gap-2 px-4 py-2 justify-center', className)}>
       {/* <Store size={28} fill="#0f0" color="#0004" /> */}
