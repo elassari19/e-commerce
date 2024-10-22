@@ -1,18 +1,18 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { compare } from "bcryptjs";
-import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import { db } from "./db";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { compare } from 'bcryptjs';
+import type { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import { db } from './db';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db as any),
   pages: {
-    signIn: "/sign-in",
-    error: "/sign-in",
+    signIn: '/sign-in',
+    error: '/sign-in',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   providers: [
     GoogleProvider({
@@ -26,19 +26,19 @@ export const authOptions: NextAuthOptions = {
           firstName: profile.given_name,
           lastName: profile.family_name,
           image: profile.picture,
-          role: "user",
+          role: 'user',
         };
-      }
+      },
     }),
-    CredentialsProvider({ 
-      name: "credentials",
+    CredentialsProvider({
+      name: 'credentials',
       credentials: {
         email: {
-          label: "Email",
-          type: "email",
-          placeholder: "example@example.com",
+          label: 'Email',
+          type: 'email',
+          placeholder: 'example@example.com',
         },
-        password: { label: "Password", type: "password" },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
@@ -47,18 +47,19 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email },
         });
 
-        if (!user || !(await compare(credentials.password, user.password!)))  return null;
+        if (!user || !(await compare(credentials.password, user.password!)))
+          return null;
         return { ...user, password: null };
       },
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      return { ...session, token };
+    session: ({ session, token, user }) => {
+      return { ...session, token, user };
     },
     jwt: ({ token, user }) => {
       if (user) {
-        console.log("jwt", user)
+        console.log('jwt', user);
         return { ...token, ...user };
       }
       return token;

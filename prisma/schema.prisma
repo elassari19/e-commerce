@@ -84,7 +84,6 @@ model Address {
   state      String?
   User       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String?  @unique @db.ObjectId
-  Orders     Orders[]
 }
 
 enum Gender {
@@ -120,7 +119,6 @@ model Product {
   userId      String?      @db.ObjectId
   Category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String?      @db.ObjectId
-  Orders      Orders[]
 }
 
 model Properties {
@@ -174,25 +172,28 @@ model Category {
   userId      String?    @db.ObjectId
 }
 
+model ProductOrder {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  quantity Int
+  Orders  Orders[]
+}
+
 model Orders {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  orderItems      Product  @relation(fields: [productId], references: [id])
-  shippingAddress Address  @relation(fields: [addressId], references: [id])
-  paymentMethod   String
-  itemsPrice      Float
-  taxPrice        Float
-  shippingPrice   Float
-  totalPrice      Float
-  isPaid          Boolean
-  paidAt          DateTime
-  isDelivered     Boolean
-  deliveredAt     DateTime
+  productItems     ProductOrder  @relation(fields: [productId], references: [id])
+  productId       String[] @db.ObjectId
+  paymentMethod   String    @default("Card")
+  taxPrice        Float?
+  shippingPrice   Float?
+  totalPrice      Float?
+  isPaid          Boolean?
+  paidAt          DateTime @default(now())
+  isDelivered     Boolean?
+  deliveredAt     DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   User            User?    @relation(fields: [userId], references: [id])
   userId          String?  @db.ObjectId
-  productId       String[] @db.ObjectId
-  addressId       String   @db.ObjectId
 }
 
 // npx prisma generate
