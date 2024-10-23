@@ -11,9 +11,6 @@ export const authOptions: NextAuthOptions = {
     signIn: '/sign-in',
     error: '/sign-in',
   },
-  session: {
-    strategy: 'jwt',
-  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -53,16 +50,20 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  callbacks: {
-    session: ({ session, token, user }) => {
-      return { ...session, token, user };
-    },
-    jwt: ({ token, user }) => {
-      if (user) {
-        console.log('jwt', user);
-        return { ...token, ...user };
-      }
-      return token;
-    },
+  session: {
+    strategy: 'jwt',
   },
+  secret: process.env.NEXTAUTH_SECRET,
+  // callbacks: {
+  //   session: ({ session, token, user }) => {
+  //     return { ...session, token, user };
+  //   },
+  //   jwt: ({ token }) => {
+  //     // if (user) {
+  //     //   // console.log('jwt', user);
+  //     //   return { user };
+  //     // }
+  //     return { token };
+  //   },
+  // },
 };

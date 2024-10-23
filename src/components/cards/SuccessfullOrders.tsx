@@ -12,7 +12,7 @@ const SuccessfullOrders = () => {
   const dispatch = useDispatch();
   const carte = useSelector((state: RootState) => state.cart);
 
-  const setOrders = async (items: IProductData[]) => {
+  const saveOrders = async (items: IProductData[]) => {
     const Products = items.map((item) => ({
       ...item,
       productId: item.id,
@@ -24,15 +24,15 @@ const SuccessfullOrders = () => {
       body: JSON.stringify(Products),
     });
     console.log('success res', res);
-    const data = await res.json();
-    if (data.ok) {
+    console.log('success data', res);
+    if (res.ok) {
       dispatch(removeAllFromCart());
-      toast.success('Payment successfully');
+      return toast.success('Payment successfully');
     }
   };
 
   useEffect(() => {
-    setOrders(carte.items);
+    saveOrders(carte.items);
   }, []);
   return <div></div>;
 };

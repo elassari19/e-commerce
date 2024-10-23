@@ -93,7 +93,7 @@ export const PreviewTabs = ({
   className,
   properties,
 }: PrewiewProps) => {
-  console.log('properties', properties);
+  // console.log('properties', properties);
   return (
     <Tabs className={cn('w-full', className)} defaultValue={properties?.[0]}>
       <div>

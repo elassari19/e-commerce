@@ -91,6 +91,8 @@ const HeaderNav = async ({}: Props) => {
 
             <li>
               <ul className="">
+                {' '}
+                {/* @ts-ignore */}
                 {session?.user ? (
                   <Dropdown
                     menuTrigger={<User2 size={25} />}

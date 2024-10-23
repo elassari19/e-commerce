@@ -31,7 +31,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
   const { data } = useSession();
 
   if (!product) return <div>No Product</div>;
-  console.log('product', product);
+  // console.log('product', product);
 
   return (
     <DialogPopup

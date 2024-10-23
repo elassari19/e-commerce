@@ -39,27 +39,27 @@ model Session {
 }
 
 model User {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  role      String?    @default("user")
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  role      String?        @default("user")
   firstName String?
   lastName  String?
   gender    Gender?
   age       String?
-  email     String     @unique
+  email     String         @unique
   password  String?
   phone     String?
   birthDate DateTime?
   address   Address?
   bank      Bank?
   image     String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
   accounts  Account[]
   sessions  Session[]
   product   Product[]
   category  Category[]
   reviews   Reviews[]
-  Orders    Orders[]
+  Orders    ProductOrder[]
 }
 
 model Bank {
@@ -75,15 +75,15 @@ model Bank {
 }
 
 model Address {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   address    String?
   city       String?
   lat        String
   lng        String
   postalCode String?
   state      String?
-  User       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?  @unique @db.ObjectId
+  User       User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String? @unique @db.ObjectId
 }
 
 enum Gender {
@@ -109,7 +109,7 @@ model Product {
   tags        String[]
   images      ImageUrl[]
   price       Float
-  sold        String?      @default("0")
+  sold        Int?         @default(0)
   reviews     Reviews[]
   quantity    Int
   properties  Properties[]
@@ -119,6 +119,8 @@ model Product {
   userId      String?      @db.ObjectId
   Category    Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String?      @db.ObjectId
+  Orders      Orders?      @relation(fields: [ordersId], references: [id])
+  ordersId    String?      @db.ObjectId
 }
 
 model Properties {
@@ -173,27 +175,30 @@ model Category {
 }
 
 model ProductOrder {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  quantity Int
-  Orders  Orders[]
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  quantity      Int
+  price         Float
+  tax           Float
+  shipping      Float
+  total         Float
+  paymentMethod String   @default("Card")
+  Orders        Orders[]
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?  @db.ObjectId
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Orders {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  productItems     ProductOrder  @relation(fields: [productId], references: [id])
-  productId       String[] @db.ObjectId
-  paymentMethod   String    @default("Card")
-  taxPrice        Float?
-  shippingPrice   Float?
-  totalPrice      Float?
-  isPaid          Boolean?
-  paidAt          DateTime @default(now())
-  isDelivered     Boolean?
-  deliveredAt     DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  User            User?    @relation(fields: [userId], references: [id])
-  userId          String?  @db.ObjectId
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  productItems ProductOrder @relation(fields: [productId], references: [id])
+  productId    String[]     @db.ObjectId
+  product      Product[]
+  quantity     Int
+  isPaid       Boolean?     @default(false)
+  paidAt       DateTime?    @default(now())
+  isDelivered  Boolean?     @default(false)
+  deliveredAt  DateTime?    @default(now())
 }
 
 // npx prisma generate
