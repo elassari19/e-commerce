@@ -32,11 +32,15 @@ const UserAuth = ({ className }: Props) => {
             />
           }
           menuContent={[
-            <Link href={`/profile`} className="flex gap-4 items-center">
+            <Link
+              href={`/profile`}
+              className="flex gap-4 items-center"
+              key="profile"
+            >
               <Edit2 size={16} />
               <Typography>Edit Profile</Typography>
             </Link>,
-            <SignOut className={cn(className)} />,
+            <SignOut className={cn(className)} key="signout" />,
           ]}
           className="w-40"
         />
