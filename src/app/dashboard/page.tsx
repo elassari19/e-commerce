@@ -75,6 +75,7 @@ const page = ({}: Props) => {
             </GridItems>
           ))}
         </GridContainer>
+        {/* orders cards */}
         <GridContainer className="lg:grid-cols-12 xl:grid-cols-12">
           {[
             {
@@ -86,20 +87,20 @@ const page = ({}: Props) => {
             {
               variant: 'info',
               Icon: RefreshCcw,
-              status: 'Total Order',
+              status: 'Orders Pending',
               total: '625',
-              amount: 458054.45,
+              amount: 45805,
             },
             {
               variant: 'infoDark',
               Icon: Truck,
-              status: 'Total Order',
+              status: 'Orders Processing',
               total: '625',
             },
             {
               variant: 'primary',
               Icon: Check,
-              status: 'Total Order',
+              status: 'Orders Delivered',
               total: '625',
             },
           ].map((item, idx) => (
