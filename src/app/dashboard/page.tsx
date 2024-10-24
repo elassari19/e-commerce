@@ -36,7 +36,7 @@ const page = ({}: Props) => {
               cash: 34,
               card: 87,
               credit: 93,
-              variant: 'primaryDark',
+              variant: 'tail',
             },
             {
               Icon: BadgeDollarSign,
