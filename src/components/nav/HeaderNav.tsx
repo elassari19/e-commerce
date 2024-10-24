@@ -15,6 +15,7 @@ import { list } from '../../helpers/constants/Categories';
 import UserAuth from '../auth/UserAuth';
 import { getRootCategories } from '../../helpers/actions/categories';
 import logo from '@/assets/logo.png';
+import SignOut from '../auth/SignOut';
 
 interface Props {}
 
@@ -91,9 +92,7 @@ const HeaderNav = async ({}: Props) => {
 
             <li>
               <ul className="">
-                {' '}
-                {/* @ts-ignore */}
-                {session?.user ? (
+                {session ? (
                   <Dropdown
                     menuTrigger={<User2 size={25} />}
                     menuContent={[
@@ -111,7 +110,7 @@ const HeaderNav = async ({}: Props) => {
                         key={'userauth'}
                         className="font-semibold group list-none"
                       >
-                        <UserAuth className="flex items-center gap-2 group-hover:text-primary" />
+                        <SignOut className="" />
                       </li>,
                     ]}
                     className="w-[14rem]"

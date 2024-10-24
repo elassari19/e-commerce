@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import SuccessfullOrders from '@/components/cards/SuccessfullOrders';
 
-const SuccessfulPaymentPage = () => {
+const SuccessfulPaymentPage = async () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <SuccessfullOrders />

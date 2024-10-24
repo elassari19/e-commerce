@@ -15,8 +15,7 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: Props) => {
   // todo: check the user role (admin/gest/user)
   const session = await getAuthSession();
-  console.log('session', session);
-  if (!session?.user) {
+  if (!session) {
     return redirect('/sign-in');
   }
 
