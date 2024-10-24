@@ -8,8 +8,7 @@ interface Props {}
 
 const page = async ({}: Props) => {
   const session = await getAuthSession();
-  console.log('session', session);
-  if (session?.user) {
+  if (session) {
     return redirect('/');
   }
   const imagesSrc =

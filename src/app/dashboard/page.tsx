@@ -17,10 +17,33 @@ import HighCharts from '@/components/cards/HighCharts';
 import OrdersTable from '@/components/tabls/OrdersTable';
 import fakeData from '@/helpers/constants/fakeData.json';
 import MainCard from '@/components/cards/MainCard';
+import { db } from '@/lib/db';
 
 interface Props {}
 
-const page = ({}: Props) => {
+const page = async ({}: Props) => {
+  const orders = await db.orders.findMany({
+    include: {
+      Products: {
+        select: {
+          quantity: true,
+          isPaid: true,
+          isDelivered: true,
+        },
+      },
+    },
+  });
+  console.log('orders', orders);
+  const totlaOrders = orders.length;
+  const totalProducts = orders.reduce((acc, curr) => acc + curr.quantity, 0);
+  const totalAmount = orders.reduce((acc, curr) => acc + curr.total, 0);
+  const totalPaid = orders.filter((order) =>
+    order.Products.map((p) => p.isPaid)
+  ).length;
+  const totalDelivered = orders.filter((order) =>
+    order.Products.map((p) => p.isDelivered)
+  ).length;
+
   return (
     <main className="min-h-screen p-8 py-4 flex flex-col gap-6">
       <section className="flex flex-col gap-6">

@@ -44,14 +44,19 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email },
         });
 
-        if (!user || !(await compare(credentials.password, user.password!)))
-          return null;
-        return { ...user, password: null };
+        if (user && (await compare(credentials.password, user.password!))) {
+          const { id, email, firstName, lastName, image, age, role, gender } =
+            user;
+          return { id, email, firstName, lastName, image, age, role, gender };
+        } else {
+          throw new Error('Invalid credentials');
+        }
       },
     }),
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 1 * 24 * 60 * 60 * 10, // 10 day
   },
   secret: process.env.NEXTAUTH_SECRET,
   // callbacks: {

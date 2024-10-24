@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   );
 
   try {
-    const orderRes = await db.productOrder.create({
+    const orderRes = await db.orders.create({
       data: {
         userId,
         quantity,
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         tax: price * 0.2,
         shipping: price * 0.1,
         total: price * 1.2 + price * 0.1,
-        Orders: {
+        Products: {
           create: body.map((item: any) => ({
             quantity: +item.qty,
             isPaid: true,
@@ -41,7 +41,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
     for (const item of body) {
       await db.product.update({
         where: { id: item.productId },
-        data: { sold: { increment: item.qty }, userId },
+        data: {
+          sold: { increment: item.qty },
+          quantity: { decrement: item.qty },
+          userId,
+        },
       });
     }
     return NextResponse.json(
