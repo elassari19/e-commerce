@@ -1,138 +1,28 @@
-import {
-  BadgeAlert,
-  BadgeCheck,
-  BadgeDollarSign,
-  CalendarClock,
-  Check,
-  RefreshCcw,
-  ShoppingCart,
-  Truck,
-} from 'lucide-react';
-import CardOverview from '@/components/cards/CardOverview';
 import Typography from '@/components/layout/typography';
-import GridContainer from '@/components/layout/GridContainer';
-import CardOrders from '@/components/cards/CardOrders';
-import GridItems from '@/components/layout/GridItems';
 import HighCharts from '@/components/cards/HighCharts';
 import OrdersTable from '@/components/tabls/OrdersTable';
 import fakeData from '@/helpers/constants/fakeData.json';
 import MainCard from '@/components/cards/MainCard';
 import { db } from '@/lib/db';
+import OverviewSection from '@/components/page-section/overview-section';
 
 interface Props {}
 
 const page = async ({}: Props) => {
   const orders = await db.orders.findMany({
     include: {
-      Products: {
-        select: {
-          quantity: true,
-          isPaid: true,
-          isDelivered: true,
-        },
-      },
+      Products: true,
     },
   });
-  console.log('orders', orders);
-  const totlaOrders = orders.length;
-  const totalProducts = orders.reduce((acc, curr) => acc + curr.quantity, 0);
-  const totalAmount = orders.reduce((acc, curr) => acc + curr.total, 0);
-  const totalPaid = orders.filter((order) =>
-    order.Products.map((p) => p.isPaid)
-  ).length;
-  const totalDelivered = orders.filter((order) =>
-    order.Products.map((p) => p.isDelivered)
-  ).length;
 
   return (
     <main className="min-h-screen p-8 py-4 flex flex-col gap-6">
       <section className="flex flex-col gap-6">
+        {/* dashboard Statistics */}
         <Typography heading="h2" className="font-semibold text-lg">
           Dashboard Overview
         </Typography>
-        <GridContainer>
-          {[
-            {
-              Icon: BadgeAlert,
-              title: 'Total Orders',
-              amount: 3434.45,
-              cash: 34,
-              card: 87,
-              credit: 93,
-              variant: 'tail',
-            },
-            {
-              Icon: BadgeDollarSign,
-              title: 'Yesterday Orders',
-              amount: 3434.45,
-              cash: 34,
-              card: 87,
-              credit: 93,
-              variant: 'warning',
-            },
-            {
-              Icon: BadgeCheck,
-              title: 'This Month',
-              amount: 3434.45,
-              cash: 34,
-              card: 87,
-              credit: 93,
-              variant: 'info',
-            },
-            {
-              Icon: ShoppingCart,
-              title: 'Last Month',
-              amount: 3434.45,
-              variant: 'infoDark',
-            },
-            {
-              Icon: CalendarClock,
-              title: 'All-Time Sales',
-              amount: 3434.45,
-              variant: 'primary',
-            },
-          ].map((item, idx) => (
-            <GridItems key={idx}>
-              {/* @ts-ignore */}
-              <CardOverview {...item} className="w-full h-full" />
-            </GridItems>
-          ))}
-        </GridContainer>
-        {/* orders cards */}
-        <GridContainer className="lg:grid-cols-12 xl:grid-cols-12">
-          {[
-            {
-              variant: 'orange',
-              Icon: ShoppingCart,
-              status: 'Total Order',
-              total: '625',
-            },
-            {
-              variant: 'info',
-              Icon: RefreshCcw,
-              status: 'Orders Pending',
-              total: '625',
-              amount: 45805,
-            },
-            {
-              variant: 'infoDark',
-              Icon: Truck,
-              status: 'Orders Processing',
-              total: '625',
-            },
-            {
-              variant: 'primary',
-              Icon: Check,
-              status: 'Orders Delivered',
-              total: '625',
-            },
-          ].map((item, idx) => (
-            <GridItems key={idx} className="md:col-span-3 xl:col-span-3">
-              {/* @ts-ignore */}
-              <CardOrders {...item} className="h-full" />
-            </GridItems>
-          ))}
-        </GridContainer>
+        <OverviewSection orders={orders} />
       </section>
 
       {/* charts section */}

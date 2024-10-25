@@ -62,23 +62,20 @@ const CardOverview = ({
         </Typography>
       </div>
       <div className="flex items-center justify-center gap-4">
-        {cash &&
-          card &&
-          credit &&
-          [
-            { price: cash, name: 'Cash' },
-            { price: card, name: 'Card' },
-            { price: credit, name: 'Credit' },
-          ].map((item, idx) => (
-            <div key={idx} className="">
-              <Typography variant="h6" heading="p">
-                {item.name}
-              </Typography>
-              <Typography variant="h6" heading="p">
-                {item.price}
-              </Typography>
-            </div>
-          ))}
+        {[
+          { price: cash, name: 'Cash' },
+          { price: card, name: 'Card' },
+          { price: credit, name: 'Credit' },
+        ].map((item, idx) => (
+          <div key={idx} className="">
+            <Typography variant="h5" heading="p">
+              {item.name}
+            </Typography>
+            <Typography variant="h5" heading="p">
+              {item.price}
+            </Typography>
+          </div>
+        ))}
       </div>
     </MainCard>
   );
