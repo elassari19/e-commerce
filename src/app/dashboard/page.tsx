@@ -13,6 +13,12 @@ interface Props {}
 const page = async ({}: Props) => {
   const orders = await db.orders.findMany({
     include: {
+      User: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
       Products: {
         select: {
           id: true,
@@ -78,7 +84,7 @@ const page = async ({}: Props) => {
         <Typography heading="h2" className="font-semibold text-lg">
           Recent Order
         </Typography>
-        <OrdersTable data={fakeData} />
+        <OrdersTable data={orders} />
       </section>
     </main>
   );
