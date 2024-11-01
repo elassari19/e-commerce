@@ -5,13 +5,28 @@ import fakeData from '@/helpers/constants/fakeData.json';
 import MainCard from '@/components/cards/MainCard';
 import { db } from '@/lib/db';
 import OverviewSection from '@/components/page-section/overview-section';
+import { bestSellingProducts, monthSales } from '@/helpers/dashboard/orders';
+import { chartColors } from '@/helpers/constants/Categories';
 
 interface Props {}
 
 const page = async ({}: Props) => {
   const orders = await db.orders.findMany({
     include: {
-      Products: true,
+      Products: {
+        select: {
+          id: true,
+          quantity: true,
+          product: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              sold: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -30,12 +45,12 @@ const page = async ({}: Props) => {
         <MainCard className="col-span-12 md:col-span-6">
           <HighCharts
             type="line"
-            title="Weekly Sales"
+            title="Monthly Sales"
             series={[
               {
                 name: 'Sales',
                 color: '#f007',
-                data: [34, 43, 56, 73, 53, 35, 40, 90, 34],
+                data: monthSales(orders),
               },
             ]}
           />
@@ -47,13 +62,11 @@ const page = async ({}: Props) => {
             title="Best Selling Products"
             series={[
               {
-                data: [
-                  { name: 'Iphone 15 Pro Max', color: '#0f08', y: 5 },
-                  { name: 'Samsung Ultra S23', color: '#f007', y: 15 },
-                  { name: 'Haiwy Mate 20', color: '#00f8', y: 25 },
-                  { name: 'Nokia N71', color: '#0f48', y: 45 },
-                  { name: 'Sony Expirya', color: '#0f0', y: 10 },
-                ],
+                data: bestSellingProducts(orders).map((product, index) => ({
+                  name: product.name,
+                  color: chartColors[index],
+                  y: product.quantity,
+                })),
               },
             ]}
           />

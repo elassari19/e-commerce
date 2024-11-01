@@ -32,7 +32,7 @@ const SuccessfullOrders = () => {
   };
 
   useEffect(() => {
-    saveOrders(carte.items);
+    if (carte.items.length) saveOrders(carte.items);
   }, []);
   return <div></div>;
 };

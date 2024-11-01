@@ -1,4 +1,4 @@
-import { Orders } from '@prisma/client';
+import { Orders, Product, ProductsOrder } from '@prisma/client';
 
 // Helper function to filter orders by date
 export const filterOrdersByDate = (
@@ -52,6 +52,12 @@ const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
 // Get last day of this year
 const lastDayOfYear = new Date(today.getFullYear(), 11, 31);
 
+// converte date to days
+const dateToDays = (date: Date) => {
+  const today = new Date();
+  return Math.floor((today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+};
+
 // Calculate Orders
 export const ordersToday = (orders: Orders[]) =>
   filterOrdersByDate(orders, today, new Date());
@@ -67,3 +73,53 @@ export const ordersLastMonth = (orders: Orders[]) =>
 
 export const ordersAllTime = (orders: Orders[]) =>
   filterOrdersByDate(orders, firstDayOfYear, lastDayOfYear);
+
+// Calculate Monthly Sales
+export const monthSales = (orders: Orders[]) => {
+  const monthlySales = Array.from({ length: 30 }, () => 0);
+
+  orders.forEach((order) => {
+    const orderDate = new Date(order.createdAt);
+    monthlySales[orderDate.getDay()] += order.total / 100;
+  });
+
+  return monthlySales;
+};
+
+// Calculate Best Selling Products
+export const bestSellingProducts = (orders: any[]) => {
+  const products: {
+    [key: string]: { quantity: number; name: string; price: 0 };
+  } = {};
+  const handleOrders = orders.map((order) =>
+    order.Products.map((product: any) => ({
+      id: product.product.id,
+      quantity: product.quantity,
+      name: product.product.name,
+      price: product.product.price,
+    }))
+  );
+
+  handleOrders.forEach((order) => {
+    order.forEach((item: any) => {
+      if (products[item.id]) {
+        products[item.id] = {
+          ...products[item.id],
+          quantity: products[item.id].quantity + item.quantity,
+        };
+      } else {
+        products[item.id] = {
+          quantity: item.quantity,
+          name: item.name,
+          price: item.price,
+        };
+      }
+    });
+  });
+
+  const bestSelles = Object.values(products)
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 8);
+
+  return bestSelles;
+};

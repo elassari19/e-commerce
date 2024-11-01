@@ -101,26 +101,26 @@ model VerificationToken {
 }
 
 model Product {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
   brand         String?
   name          String
-  slug          String         @unique
+  slug          String          @unique
   description   String
   tags          String[]
   images        ImageUrl[]
   price         Float
-  sold          Int?           @default(0)
+  sold          Int?            @default(0)
   reviews       Reviews[]
   quantity      Int
   properties    Properties[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  User          User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String?        @db.ObjectId
-  Category      Category?      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId    String?        @db.ObjectId
-  ProductsOrder ProductsOrder? @relation(fields: [ordersId], references: [id])
-  ordersId      String?        @db.ObjectId
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  User          User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String?         @db.ObjectId
+  Category      Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    String?         @db.ObjectId
+  ProductsOrder ProductsOrder[]
+  ordersId      String?         @db.ObjectId
 }
 
 model Properties {
@@ -192,11 +192,12 @@ model Orders {
 }
 
 model ProductsOrder {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  Orders   Orders    @relation(fields: [orderId], references: [id])
-  orderId  String    @db.ObjectId
-  product  Product[]
-  quantity Int
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  Orders    Orders  @relation(fields: [orderId], references: [id])
+  orderId   String  @db.ObjectId
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
 }
 
 // npx prisma generate

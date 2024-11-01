@@ -20,12 +20,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
         price,
         tax: price * 0.2,
         shipping: price * 0.1,
+        isPaid: true,
+        isDelivered: true,
         total: price * 1.2 + price * 0.1,
         Products: {
           create: body.map((item: any) => ({
             quantity: +item.qty,
-            isPaid: true,
-            isDelivered: true,
             product: { connect: { id: item.productId } },
           })),
         },
@@ -56,6 +56,48 @@ export async function POST(req: NextRequest, res: NextResponse) {
     console.log('error', error);
     return NextResponse.json(
       { message: 'Save Orders Failed' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: NextRequest, res: NextResponse) {
+  console.log('put route');
+  const putorder = await db.productsOrder.findMany({
+    select: {
+      id: true,
+      quantity: true,
+      orderId: true,
+    },
+  });
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+    },
+    take: 25,
+  });
+  console.log('products-ids', putorder);
+  const randomProduct = products[Math.floor(Math.random() * products.length)];
+
+  try {
+    putorder.forEach(async (item) => {
+      await db.productsOrder.update({
+        where: { id: item.id },
+        data: {
+          productId: products[Math.floor(Math.random() * products.length)].id,
+          quantity: Math.ceil(Math.random() * 10),
+        },
+      });
+    });
+
+    return NextResponse.json(
+      { message: 'Update orders Succeeded' },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    console.log('error', error);
+    return NextResponse.json(
+      { message: 'Update Orders Failed' },
       { status: 500 }
     );
   }
