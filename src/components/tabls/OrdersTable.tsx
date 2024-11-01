@@ -15,10 +15,10 @@ const OrdersTable = ({ className, data }: Props) => {
       'ORDER TIME': item.updatedAt,
       'CUSTOMER NAME': `${item.User.firstName} ${item.User.lastName}`,
       METHOD: item.paymentMethod,
-      AMOUNT: (item.total / 10).toFixed(2),
-      STATUS: item.isPaid ? 'Paid' : 'Not Paid',
-      DELEVERED: item.isDelivered ? 'Delivered' : 'Not Delivered',
-      INVOICE: '',
+      AMOUNT: (item.total / 100).toFixed(2),
+      PAID: item.isPaid ? 'Paid' : 'Not Paid',
+      DELiVERED: item.isDelivered ? 'Delivered' : 'Not Delivered',
+      INVOICE: item.id,
     };
   });
 
@@ -30,15 +30,15 @@ const OrdersTable = ({ className, data }: Props) => {
     { field: 'METHOD' },
     {
       field: 'AMOUNT',
-      cellRenderer: ({ value }: { value: any }) => <span>${value}</span>,
+      cellRenderer: ({ value }: { value: number }) => <span>${value}</span>,
     },
-    { field: 'STATUS' },
-    { field: 'ACTION', editable: true },
+    { field: 'PAID', editable: true },
+    { field: 'DELiVERED', editable: true },
     {
       field: 'INVOICE',
-      cellRenderer: () => (
+      cellRenderer: ({ value }: { value: string }) => (
         <Link
-          href={'/order/10631'}
+          href={`/order/${value}`}
           className="h-full flex items-center justify-center"
         >
           <ZoomInIcon />
