@@ -1,3 +1,9 @@
-"use client"
+'use client';
 
-export type Action = "categories" | "products" | "attributes" | "order" | "customers" | "profile"
+export type Action =
+  | 'categories'
+  | 'products'
+  | 'attributes'
+  | 'orders'
+  | 'customers'
+  | 'profile';

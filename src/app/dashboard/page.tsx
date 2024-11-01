@@ -1,9 +1,7 @@
 import Typography from '@/components/layout/typography';
 import HighCharts from '@/components/cards/HighCharts';
 import OrdersTable from '@/components/tabls/OrdersTable';
-import fakeData from '@/helpers/constants/fakeData.json';
 import MainCard from '@/components/cards/MainCard';
-import { db } from '@/lib/db';
 import OverviewSection from '@/components/page-section/overview-section';
 import { bestSellingProducts, monthSales } from '@/helpers/dashboard/orders';
 import { chartColors } from '@/helpers/constants/Categories';
@@ -11,30 +9,9 @@ import { chartColors } from '@/helpers/constants/Categories';
 interface Props {}
 
 const page = async ({}: Props) => {
-  const orders = await db.orders.findMany({
-    include: {
-      User: {
-        select: {
-          firstName: true,
-          lastName: true,
-        },
-      },
-      Products: {
-        select: {
-          id: true,
-          quantity: true,
-          product: {
-            select: {
-              id: true,
-              name: true,
-              price: true,
-              sold: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const { orders } = await fetch('http://localhost:3000/api/dashboard/orders', {
+    method: 'GET',
+  }).then((res) => res.json());
 
   return (
     <main className="min-h-screen p-8 py-4 flex flex-col gap-6">

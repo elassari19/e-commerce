@@ -17,7 +17,7 @@ const OrdersTable = ({ className, data }: Props) => {
       METHOD: item.paymentMethod,
       AMOUNT: (item.total / 100).toFixed(2),
       PAID: item.isPaid ? 'Paid' : 'Not Paid',
-      DELiVERED: item.isDelivered ? 'Delivered' : 'Not Delivered',
+      DELIVERED: item.isDelivered ? 'Delivered' : 'Not Delivered',
       INVOICE: item.id,
     };
   });
@@ -33,7 +33,7 @@ const OrdersTable = ({ className, data }: Props) => {
       cellRenderer: ({ value }: { value: number }) => <span>${value}</span>,
     },
     { field: 'PAID', editable: true },
-    { field: 'DELiVERED', editable: true },
+    { field: 'DELIVERED', editable: true },
     {
       field: 'INVOICE',
       cellRenderer: ({ value }: { value: string }) => (

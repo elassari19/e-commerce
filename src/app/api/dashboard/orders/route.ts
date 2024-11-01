@@ -61,6 +61,47 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
 }
 
+export async function GET(req: NextRequest, res: NextResponse) {
+  const { searchParams } = new URL(req.url);
+
+  const page = +(searchParams.get('page') ?? 0);
+  const take = +(searchParams.get('take') ?? 25);
+
+  try {
+    const orders = await db.orders.findMany({
+      include: {
+        User: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        Products: {
+          select: {
+            id: true,
+            quantity: true,
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                sold: true,
+              },
+            },
+          },
+        },
+      },
+      skip: take * page,
+      take: take,
+    });
+
+    return NextResponse.json({ orders }, { status: 200 });
+  } catch (error: any) {
+    console.log('error', error);
+    return NextResponse.json({ message: 'Get Orders Failed' }, { status: 500 });
+  }
+}
+
 export async function PUT(req: NextRequest, res: NextResponse) {
   console.log('put route');
   const putorder = await db.productsOrder.findMany({
@@ -101,4 +142,26 @@ export async function PUT(req: NextRequest, res: NextResponse) {
       { status: 500 }
     );
   }
+}
+
+export async function PATCH(req: NextResponse) {
+  const data = await req.json();
+
+  try {
+    const res = await db.orders.update({
+      where: { id: data.id },
+      data,
+    });
+    return NextResponse.json({ categories: res }, { status: 202 });
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 400 });
+  }
+}
+
+export async function DELETE(req: NextResponse) {
+  const data = await req.json();
+
+  const res = await db.orders.deleteMany({ where: { id: { in: data } } });
+
+  return NextResponse.json({ categories: res }, { status: 202 });
 }
