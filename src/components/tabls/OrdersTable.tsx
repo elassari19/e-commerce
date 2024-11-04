@@ -1,14 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { ZoomInIcon } from 'lucide-react';
 import Table from './Table';
+import OrderDetails from '../modals/OrderDetails';
 
 interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
   data?: any;
 }
 
-const OrdersTable = ({ className, data }: Props) => {
+const OrdersTable = ({ data }: Props) => {
   const rowData = data?.map((item: any) => {
     return {
       'INVOICE NO': item.id,
@@ -18,7 +17,7 @@ const OrdersTable = ({ className, data }: Props) => {
       AMOUNT: (item.total / 100).toFixed(2),
       PAID: item.isPaid ? 'Paid' : 'Not Paid',
       DELIVERED: item.isDelivered ? 'Delivered' : 'Not Delivered',
-      INVOICE: item.id,
+      INVOICE: item,
     };
   });
 
@@ -36,18 +35,13 @@ const OrdersTable = ({ className, data }: Props) => {
     { field: 'DELIVERED', editable: true },
     {
       field: 'INVOICE',
-      cellRenderer: ({ value }: { value: string }) => (
-        <Link
-          href={`/order/${value}`}
-          className="h-full flex items-center justify-center"
-        >
-          <ZoomInIcon />
-        </Link>
-      ),
+      cellRenderer: (item: any) => {
+        return <OrderDetails order={item.data.INVOICE} />;
+      },
     },
   ];
 
-  return <Table rowsData={rowData} colsDefs={colDefs} action="order" />;
+  return <Table rowsData={rowData} colsDefs={colDefs} action="orders" />;
 };
 
 export default OrdersTable;

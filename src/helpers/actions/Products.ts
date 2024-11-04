@@ -1,13 +1,13 @@
-"use server"
+'use server';
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 export const getSearchProducts = async (searchQuery: string) => {
   const products = await db.product.findMany({
     where: {
       name: {
         contains: searchQuery,
-        mode: "insensitive",
+        mode: 'insensitive',
       },
     },
     include: {
@@ -15,12 +15,16 @@ export const getSearchProducts = async (searchQuery: string) => {
     },
   });
   return products;
-}
+};
 
-export async function getProductsByTags(tags: string[], skip: number = 8, take: number=10) {
+export async function getProductsByTags(
+  tags: string[],
+  skip: number = 8,
+  take: number = 10
+) {
   const res = await db.product.findMany({
     where: {
-      tags: { hasSome: tags }
+      tags: { hasSome: tags },
     },
     include: {
       images: true,
@@ -28,7 +32,7 @@ export async function getProductsByTags(tags: string[], skip: number = 8, take: 
       reviews: true,
       Category: true,
     },
-    orderBy: { id: "asc" },
+    orderBy: { id: 'asc' },
     take: take,
     skip: skip * take,
   });
@@ -36,7 +40,11 @@ export async function getProductsByTags(tags: string[], skip: number = 8, take: 
   return res ?? [];
 }
 
-export async function getProductsByCategory(categoryId: string[], skip: number = 0, take: number=10) {
+export async function getProductsByCategory(
+  categoryId: string[],
+  skip: number = 0,
+  take: number = 10
+) {
   const res = await db.product.findMany({
     where: { categoryId: { in: categoryId } },
     include: {
@@ -45,7 +53,7 @@ export async function getProductsByCategory(categoryId: string[], skip: number =
       reviews: true,
       Category: true,
     },
-    orderBy: { id: "asc" },
+    orderBy: { id: 'asc' },
     take: take,
     skip: skip * take,
   });
@@ -66,7 +74,15 @@ export async function getProductById(productId: string) {
 }
 
 export async function getCategories() {
-  const categories = await db.category.findMany({
-  });
+  const categories = await db.category.findMany({});
   return categories;
+}
+
+export async function getProducts() {
+  const products = await db.product.findMany({
+    include: {
+      images: true,
+    },
+  });
+  return products;
 }

@@ -35,7 +35,7 @@ const ProductPreview = ({ product, dialogTrigger, className }: Props) => {
 
   return (
     <DialogPopup
-      className={cn('w-[96%]')}
+      className={cn('w-full')}
       dialogTrigger={
         dialogTrigger || (
           <div className={cn('cursor-pointer relative', className)}>

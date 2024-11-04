@@ -7,11 +7,10 @@ import DeleteButtons from '@/components/buttons/DeleteButtons';
 import DialogForm from '@/components/modals/DialogForm';
 import { Button } from '@/components/ui/button';
 import CategoryForm from '@/components/forms/CategoryForm';
+import { getAllOrders } from '@/helpers/actions/orders';
 
 const page = async ({}) => {
-  const { orders } = await fetch('http://localhost:3000/api/dashboard/orders', {
-    method: 'GET',
-  }).then((res) => res.json());
+  const orders = await getAllOrders();
 
   return (
     <div>
@@ -53,8 +52,8 @@ const page = async ({}) => {
         </MainCard>
       </section>
 
-      <section>
-        <Typography heading="h2" className="font-semibold text-lg">
+      <section className="grid gap-4">
+        <Typography heading="h2" className="font-semibold text-lg p-4">
           Recent Order
         </Typography>
         <OrdersTable data={orders} />

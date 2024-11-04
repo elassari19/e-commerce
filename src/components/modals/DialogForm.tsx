@@ -1,23 +1,37 @@
-import { cn } from "../../lib/utils"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
+import { cn } from '../../lib/utils';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '../ui/sheet';
 
-interface Props  extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  sheetTrigger: React.ReactNode
-  sheetContent: React.ReactNode
-  sheetFooter?: React.ReactNode
-  sheetTitle: React.ReactNode
-  sheetDescription: React.ReactNode
+interface Props extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  sheetTrigger: React.ReactNode;
+  sheetContent: React.ReactNode;
+  sheetFooter?: React.ReactNode;
+  sheetTitle: React.ReactNode;
+  sheetDescription: React.ReactNode;
 }
 
-const DialogForm = ({ className, sheetTitle, sheetTrigger, sheetDescription, sheetContent, sheetFooter }: Props) => {
+const DialogForm = ({
+  className,
+  sheetTitle,
+  sheetTrigger,
+  sheetDescription,
+  sheetContent,
+  sheetFooter,
+}: Props) => {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        {sheetTrigger}
-      </SheetTrigger>
-      <SheetContent className={cn("h-screen overflow-x-auto bg-foreground", className)}>
+      <SheetTrigger asChild>{sheetTrigger}</SheetTrigger>
+      <SheetContent
+        className={cn('h-screen overflow-x-auto bg-foreground', className)}
+      >
         <SheetHeader className="p-8 py-4">
           <SheetTitle className="text-2xl">{sheetTitle}</SheetTitle>
           <SheetDescription className="text-black">
@@ -28,13 +42,11 @@ const DialogForm = ({ className, sheetTitle, sheetTrigger, sheetDescription, she
           {sheetContent}
         </div>
         <SheetFooter>
-          <SheetClose asChild>
-            {sheetFooter}
-          </SheetClose>
+          <SheetClose asChild>{sheetFooter}</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  )
-}
+  );
+};
 
-export default DialogForm
+export default DialogForm;

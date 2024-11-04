@@ -86,6 +86,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
                 name: true,
                 price: true,
                 sold: true,
+                images: {
+                  select: {
+                    secure_url: true,
+                  },
+                },
               },
             },
           },
@@ -161,7 +166,11 @@ export async function PATCH(req: NextResponse) {
 export async function DELETE(req: NextResponse) {
   const data = await req.json();
 
-  const res = await db.orders.deleteMany({ where: { id: { in: data } } });
-
-  return NextResponse.json({ categories: res }, { status: 202 });
+  try {
+    const res = await db.orders.deleteMany({ where: { id: { in: data } } });
+    return NextResponse.json({ categories: res }, { status: 202 });
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({ error }, { status: 400 });
+  }
 }
