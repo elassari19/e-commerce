@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/getAuthSession';
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: Request, res: NextResponse) {
   const body = await req.json();
   const userId = await auth('id');
 
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: Request, res: NextResponse) {
   const { searchParams } = new URL(req.url);
 
   const page = +(searchParams.get('page') ?? 0);
@@ -107,7 +107,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 }
 
-export async function PUT(req: NextRequest, res: NextResponse) {
+export async function PUT(req: Request, res: NextResponse) {
   console.log('put route');
   const putorder = await db.productsOrder.findMany({
     select: {
@@ -149,7 +149,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
   }
 }
 
-export async function PATCH(req: NextResponse) {
+export async function PATCH(req: Request) {
   const data = await req.json();
 
   try {
@@ -163,7 +163,7 @@ export async function PATCH(req: NextResponse) {
   }
 }
 
-export async function DELETE(req: NextResponse) {
+export async function DELETE(req: Request) {
   const data = await req.json();
 
   try {

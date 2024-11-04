@@ -17,7 +17,6 @@ interface IProps {
 }
 
 const OrderDetails = ({ order }: IProps) => {
-  console.log('order', order);
   return (
     <DialogSheet
       dialogTrigger={
