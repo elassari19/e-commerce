@@ -38,10 +38,10 @@ export const catalog = [
 
 export const list = [
   { href: '/dashboard', title: 'Dashboard', Icon: LayoutDashboard },
-  { href: '/notifications', title: 'Notifications', Icon: Bell },
-  { href: '/basket', title: 'basket', Icon: ShoppingBasket },
-  { href: '/my-orders', title: 'My Orders', Icon: List },
-  { href: '/update-profile', title: 'Update Profile', Icon: Settings },
+  // { href: '/notifications', title: 'Notifications', Icon: Bell },
+  // { href: '/basket', title: 'basket', Icon: ShoppingBasket },
+  // { href: '/my-orders', title: 'My Orders', Icon: List },
+  // { href: '/update-profile', title: 'Update Profile', Icon: Settings },
 ];
 
 export const chartColors = [
