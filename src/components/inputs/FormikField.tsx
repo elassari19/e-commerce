@@ -97,6 +97,9 @@ const FormikField = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <UseMemo dependencies={[props.value]}>
         {/* input section */}
+        <label htmlFor={name} className="text-sm">
+          {props.placeholder}
+        </label>
         <div className={cn(InputVariants({ variant, className }))}>
           {preIcon}
           <Field

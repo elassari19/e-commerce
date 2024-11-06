@@ -6,8 +6,8 @@ import { Upload, Download, Plus } from 'lucide-react';
 import DeleteButtons from '@/components/buttons/DeleteButtons';
 import DialogForm from '@/components/modals/DialogForm';
 import { Button } from '@/components/ui/button';
-import CategoryForm from '@/components/forms/CategoryForm';
 import { getAllOrders } from '@/helpers/actions/orders';
+import OrderForm from '@/components/forms/OrderForm';
 
 const page = async ({}) => {
   const orders = await getAllOrders();
@@ -41,10 +41,10 @@ const page = async ({}) => {
                 sheetDescription="Add your Category and necessary information from here"
                 sheetTrigger={
                   <Button variant="primary">
-                    <Plus size={16} /> Add Category
+                    <Plus size={16} /> Add Order
                   </Button>
                 }
-                sheetContent={<CategoryForm categories={[]} />}
+                sheetContent={<OrderForm />}
                 className="w-full md:w-3/4"
               />
             </div>
