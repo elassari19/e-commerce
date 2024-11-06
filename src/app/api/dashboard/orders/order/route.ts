@@ -27,6 +27,7 @@ export async function POST(req: Request, res: NextResponse) {
         isPaid: body.isPaid,
         isDelivered: body.isDelivered,
         total: price * 1.2 + price * 0.1,
+        paymentMethod: body.paymentMethod,
         Products: {
           create: body.products.map((item: any) => ({
             quantity: +item.qty,
