@@ -5,13 +5,21 @@ import MainCard from '@/components/cards/MainCard';
 import OverviewSection from '@/components/page-section/overview-section';
 import { bestSellingProducts, monthSales } from '@/helpers/dashboard/orders';
 import { chartColors } from '@/helpers/constants/Categories';
+import { db } from '@/lib/db';
 
 interface Props {}
 
 const page = async ({}: Props) => {
-  const { orders } = await fetch('http://localhost:3000/api/dashboard/orders', {
-    method: 'GET',
-  }).then((res) => res.json());
+  const orders = await db.orders.findMany({
+    include: {
+      Products: {
+        include: {
+          product: true,
+        },
+      },
+      User: true,
+    },
+  });
 
   return (
     <main className="min-h-screen p-8 py-4 flex flex-col gap-6">
